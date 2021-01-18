@@ -1,0 +1,161 @@
+.home {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #F0F2F5;
+    overflow: hidden;
+}
+
+.home-dark {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(37, 37, 37);
+    overflow: hidden; 
+}
+
+.mainHome {
+    width: 60%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    border-left: 1px solid #c2c2c2;
+}
+
+.mainHome-dark {
+    width: 60%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    border-left: 1px solid #000000;
+}
+
+/*
+//////////////////////// 
+Story
+//////////////////////// 
+*/
+
+.storys {
+    display: flex;
+}
+
+.story-box {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    border: 2px solid #4b7bff;
+    border-radius: 9px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.story-box:hover {
+    transition: 0.3s;
+    opacity: 0.85;
+}
+
+.story-name {
+    text-align: center;
+    font-size: 15px;
+    z-index: 10;
+}
+
+.story-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    border: 2px solid #000000;
+    border-radius: 9px;
+    opacity: 0.25;
+    cursor: pointer;
+}
+
+.story-add:hover {
+    transition: 0.3s;
+    opacity: 0.1;
+}
+
+.story-icon {
+    font-size: 25px;
+}
+
+.story-img {
+    height: 100%;
+}
+
+/*
+//////////////////////// 
+New Publication
+//////////////////////// 
+*/
+
+.new-publi {
+    margin: 5% 0 0 0;
+}
+
+.write-publi {
+    display: flex;
+    padding: 10px;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.write-publi-placeholder {
+    opacity: 0.5;
+}
+
+.icon-new-publi {
+    font-size: 25px;
+    opacity: 0.5;
+}
+
+.input-new-publi {
+    width: 100%;
+    margin-left: 10px;
+    border: none;
+    outline: none;
+}
+
+.bottom-new-publi {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.icon-bottom-new-publi {
+    opacity: 0.5;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.icon-bottom-new-publi:hover {
+    transition: 0.3s;
+    opacity: 1;
+}
+
+.icon-bottom-new-publi:nth-child(2) {
+    margin-left: 10px;
+}
+
+/*
+//////////////////////// 
+Publication
+//////////////////////// 
+*/
+
+.box-publi {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}

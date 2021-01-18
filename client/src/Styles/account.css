@@ -1,0 +1,138 @@
+.account {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
+
+.mainAccount {
+    width: 60%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #c2c2c2;
+    background-color: #F0F2F5;
+    overflow: scroll;
+}
+
+.mainAccount-dark {
+    width: 60%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(37, 37, 37);
+    border-left: 1px solid #000;
+    overflow: scroll;
+}
+
+/*
+//////////////////////// 
+Account Top
+//////////////////////// 
+*/
+
+.account-top {
+    width: 100%;
+    height: 75vh;
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+}
+
+.account-top-dark {
+    width: 100%;
+    height: 75vh;
+    background-color: #333333;
+    border: 1px solid #000
+}
+
+.account-bg {
+    position: relative;
+    height: 50%;
+    overflow: hidden;
+}
+
+.account-bg-img {
+    position: absolute;
+    max-width: 100%;
+    top: -50%;
+}
+
+.account-info-top {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -25px;
+    width: 100%;
+}
+
+.account-info-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-modify {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 0.65;
+    cursor: pointer;
+}
+
+.account-modify > p {
+    font-size: 15px;
+    margin: 10px;
+}
+
+.account-modify:hover {
+    transition: 0.3s;
+    opacity: 0.8;
+}
+
+.account-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-icon {
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0 25px 0;
+    width: 20%;
+    font-size: 20px;
+}
+
+.heart-icon {
+    color: #FF7272;
+}
+
+.user-friends-icon {
+    color: #72CBFF;
+}
+
+.pen-icon {
+    color: #8AFF72;
+}
+
+.account-icon-nbr {
+    color: #000;
+    font-size: 15px;
+}
+
+.account-icon-nbr-dark {
+    font-size: 15px;
+    color: #f1f1f1;
+}
+
+.account-icon-box {
+    text-align: center;
+}
+
+.account-bio {
+    width: 90%;
+    font-size: 15px;
+}

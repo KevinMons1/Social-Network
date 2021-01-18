@@ -1,0 +1,397 @@
+.publi {
+    width: 75%;
+    margin: 15px 0 15px 0;
+    border: 1px solid #c2c2c2;
+    border-radius: 10px;
+    background-color: #fff;
+    -webkit-box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+    -moz-box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+    box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+}
+
+.publi-dark {
+    width: 75%;
+    margin: 15px 0 15px 0;
+    border-radius: 10px;
+    border: 1px solid #333333;
+    background-color: #333333;
+    -webkit-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+    -moz-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+    box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+}
+
+.bg-publi {
+    max-height: 70vh;
+    overflow: hidden;
+}
+
+.bg-publi-img {
+    width: 100%;
+    cursor: pointer;
+}
+
+.textarea-dark {
+    background-color: #252525;
+    color: #fff;
+    border: none;
+}
+
+/*
+//////////////////////// 
+info-publi
+//////////////////////// 
+*/
+
+.info-publi {
+    display: flex;
+    justify-content: space-between;
+}
+
+.publi-top {
+    margin: 15px;
+}
+
+.left-publi {
+    display: flex;
+    height: 100%;
+}
+
+.left-publi-img-box {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.left-publi-img {
+    position: absolute;
+    width: 100%;
+    top: -25%;
+}
+
+.left-publi-info {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #707070;
+}
+
+.left-publi-info > p {
+    color: #2e2e2e;
+}
+
+.left-publi-info > small {
+    margin-left: 10px;
+    font-size: 10px;
+    color: #707070;
+}
+
+.right-publi {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #707070;
+}
+
+.right-publi > p {
+    padding: 5px;
+}
+
+.text-publi {
+    margin: 15px 0 30px 0;
+    font-size: 15px;
+}
+
+/*
+//////////////////////// 
+Icon social
+//////////////////////// 
+*/
+
+.social-publi {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 30px 0;
+}
+
+.icon-publi {
+    display: flex;
+    align-items: center;
+    margin: 0 5px 0 5px;
+}
+
+.icon-publi > p {
+    margin: 0 5px 0 5px;
+}
+
+.heart-publi {
+    color: #FF7272;
+    cursor: pointer;
+}
+
+.comment-publi {
+    color: #FFDA72;
+    cursor: pointer;
+}
+
+/*
+//////////////////////// 
+NewPubliBox
+//////////////////////// 
+*/
+
+.new-publi-opacity {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #707070;
+    opacity: 0.65;
+    z-index: 1000;
+}
+
+.new-publi-content {
+    position: absolute;
+    top: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    width: 50vw;
+    background-color: #F0F2F5;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.new-publi-content-dark {
+    position: absolute;
+    top: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    width: 50vw;
+    background-color: #252525;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.icon-new-publi-dark {
+    color: #707070;
+    font-size: 25px;
+}
+
+.new-publi-icon-btn {
+    border: none;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+.new-publi-icon-btn-dark {
+    margin-bottom: 15px;
+    background-color: #252525;
+    border: none;
+    outline: none;
+}
+
+.new-publi-close-icon {
+    font-size: 20px;
+    color: #FF7272;
+    cursor: pointer;
+}
+
+.new-publi-close-icon:hover {
+    transition: 0.3s;
+    color: #ff4747;
+}
+
+.new-publi-form {
+    width: 80%;
+    height: 80%;
+}
+
+.new-publi-box {
+    display: flex;
+    height: 60%;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #707070;
+    border-radius: 10px;
+}
+
+.new-publi-box-dark {
+    display: flex;
+    height: 60%;
+    padding: 5px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+}
+
+.new-publi-textarea {
+    width: 90%;
+    height: 100%;
+    padding: 5px;
+    border: none;
+    resize: none;
+    outline: none;
+}
+
+.new-publi-input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 3px;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    outline: none;
+}
+
+.icon-write-new-publi {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #707070;
+    cursor: pointer;
+}
+
+.icon-write-new-publi:hover {
+    transition: 0.3s;
+    color: #000;
+}
+
+.new-publi-btn {
+    width: 100%;
+    font-size: 20px;
+    padding: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    background-color: #707070;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.new-publi-btn-dark {
+    width: 100%;
+    font-size: 20px;
+    padding: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    border: 1px solid #fff;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.new-publi-btn-dark:hover {
+    transition: 0.3s;
+    background-color: rgb(43, 43, 43);
+    color: #fff;
+}
+
+.new-publi-btn:hover {
+    transition: 0.3s;
+    background-color: rgb(43, 43, 43);
+}
+
+/*
+//////////////////////// 
+Publication Open
+//////////////////////// 
+*/
+
+.publi-icon {
+    width: 100%;
+    text-align: center;
+}
+
+.publi-icon-btn {
+    background-color: #fff;
+    border: none;
+}
+
+.publi-icon-close {
+    font-size: 25px;
+    color: #FF7272;
+    cursor: pointer;
+}
+
+.publi-icon-close:hover {
+    transition: 0.3s;
+    color: #ff4747;
+}
+
+.publi-open-top {
+    display: flex;
+    justify-content: center;
+}
+
+.publi-open-name {
+    margin: 5px;
+    margin-left: 10%;
+}
+
+.publi-open-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.publi-open-img img{
+    width: 40px;
+}
+
+.publi-open-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.publi-open-txt {
+    width: 90%;
+    margin: 0 20px 0 20px;
+    font-size: 13px;
+}
+
+.publi-open-bottom {
+    margin: 20px;
+}
+
+.publi-open-textarea {
+    width: 100%;
+    height: 100%;
+    background-color: #F0F2F5;
+    border: none;
+    resize: none;
+    outline: none;
+}
+
+.border-none-dark {
+    border: none!important;
+}
+
+.publi-open-btn {
+    width: 10%;
+    border: 1px solid #707070;
+    background-color: #F0F2F5;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.publi-open-btn:hover {
+    transition: 0.3s;
+    background-color: #d1d1d1;
+}

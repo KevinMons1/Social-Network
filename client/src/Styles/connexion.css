@@ -1,0 +1,121 @@
+.connexion {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #F0F2F5;
+    overflow: hidden;
+}
+
+.connexion-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    -webkit-box-shadow: 10px 0px 5px 0px rgba(75, 75, 75, 0.5);
+    -moz-box-shadow: 10px 0px 5px 0px rgba(75, 75, 75, 0.5);
+    box-shadow: 10px 0px 5px 0px rgba(75, 75, 75, 0.5);
+}
+
+.connexion-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+}
+
+.connexion-title {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 50px;
+    font-size: 35px;
+    color: #353535;
+    font-weight: bold;
+}
+
+.connexion-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.connexion-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50%;
+    margin: 10px;
+}
+
+.connexion-name {
+    flex-direction: row;
+}
+
+.connexion-label {
+    margin-bottom: 10px;
+    font-size: 25px;
+    color: #353535;
+}
+
+.connexion-input {
+    padding: 10px;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    outline: none;
+}
+
+.connexion-checkbox {
+    align-items: center;
+    flex-direction: row;
+}
+
+.connexion-checkbox > input {
+    margin-right: 5px;
+}
+
+.connexion-label-checkbox {
+    font-size: 15px;
+}
+
+.connexion-submit {
+    width: 50%;
+}
+
+.connexion-btn {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0 10px 0;
+    background-color: #353535;
+    border: 1px solid #353535;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #f1f1f1;
+    cursor: pointer;
+}
+
+.connexion-btn:hover {
+    transition: 0.3s;
+    background-color: #1d1d1d;
+    border: 1px solid #1d1d1d;
+}
+
+.connexion-link-box {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.connexion-link {
+    color: #707070;
+    text-decoration: none;
+}
+
+.connexion-link:hover {
+    transition: 0.3s;
+    color: #000;
+}

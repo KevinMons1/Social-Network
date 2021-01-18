@@ -1,0 +1,129 @@
+.connected {
+    width: 20%;
+    height: 100vh;
+    border-left: 1px solid #c2c2c2;
+    background-color: #F0F2F5;
+}
+
+.connected-dark {
+    width: 20%;
+    height: 100vh;
+    border-left: 1px solid #000000;
+    background-color: #252525;
+}
+
+.connected-title {
+    padding-left: 15px;
+    color: #707070;
+    font-size: 25px;
+}
+
+.connected-title-dark {
+    padding-left: 15px;
+    color: #f1f1f1;
+    font-size: 25px;
+}
+
+/*
+//////////////////////// 
+Top || Input search style is in header.css
+//////////////////////// 
+*/
+
+.connected-top {
+    height: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0 0 15px;
+}
+
+.connected-search {
+    margin-top: 15px!important;
+    margin-bottom: 15px!important;
+}
+
+.search-icon {
+    opacity: 0.5;
+}
+
+.connected-name-dark {
+    color: #f1f1f1;
+}
+
+/*
+//////////////////////// 
+Bottom
+//////////////////////// 
+*/
+
+.connected-bottom {
+    height: 60%;
+    padding-left: 15px;
+}
+
+.friend-lastMsg-txt {
+    opacity: 0.5;
+}
+
+.connected-lastMsg-dark {
+    color: #f1f1f1;
+}
+
+/*
+//////////////////////// 
+UserCard
+//////////////////////// 
+*/
+
+/* !!! ICI LE friends-boxs dépasse de sa box en x à changer quand on change la taille en width !!!! */
+
+.friends-boxs {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.friend-connected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.friend-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.connected-img-friend {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.connected-img-friend img{
+    width: 40px;
+}
+
+.connected-name-friend {
+    font-size: 15px;
+    margin-left: 15px;
+}
+
+.connected-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #72FF8A;
+}
+
+.friend-text {
+    width: 100%;
+    margin-left: 62px;
+    font-size: 12px;
+    opacity: 0.5;
+}

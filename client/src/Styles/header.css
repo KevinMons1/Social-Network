@@ -1,0 +1,247 @@
+.header {
+    width: 20%;
+    height: 100vh;
+    background-color: #F0F2F5;
+}
+
+.header-dark {
+    width: 20%;
+    height: 100vh;
+    background-color: #252525;
+}
+
+/*
+//////////////////////// 
+Top 
+//////////////////////// 
+*/
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 30%;
+    background-image: url("../Assets/Images/bg_default.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+    padding: 5px;
+}
+
+.search-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 15%;
+    background-color: #fff;
+    border: 1px solid #707070;
+    border-radius: 10px;
+}
+
+.search-top-dark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 15%;
+    background-color: #333333;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    color: #fff;
+}
+.search {
+    width: 80%;
+    margin-left: 5px;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.search-icon {
+    opacity: 0.5;
+}
+
+.img-profile {
+    width: 70px;
+    border: 1px solid #707070;
+    border-radius: 50%;
+}
+
+/*
+//////////////////////// 
+Middle
+//////////////////////// 
+*/
+
+.header-middle {
+    height: 60%;
+    padding: 15px;
+}
+
+.header-middle-li {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    font-size: 25px;
+    margin: 10px;
+}
+
+.header-middle-text {
+    width: 50%;
+    margin-left: 15px;
+    text-align: start;
+}
+
+.header-middle-link {
+    text-decoration: none;
+    color: #424242;
+}
+
+.header-middle-link-dark {
+    text-decoration: none;
+    color: #f1f1f1;
+}
+
+.header-middle-link-dark:hover {
+    transition: 0.3s;
+    color: rgb(182, 182, 182)!important;
+}
+
+.header-middle-link:hover {
+    transition: 0.3s;
+    color: #000!important;
+}
+
+.header-middle-icon {
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 35px;
+    border: 1px solid #cecece;
+    background-color: #ffffff;
+}
+
+.header-middle-icon-dark {
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 35px;
+    border: 1px solid #414141;
+    background-color: rgb(36, 36, 36);
+}
+
+.home-icon {
+    color: #FFD072;
+}
+
+.header-account-icon {
+    color: #728AFF;
+}
+
+.gaming-icon {
+    color: #B972FF;
+}
+
+.friends-icon {
+    color: #FF72FA;
+}
+
+/*
+//////////////////////// 
+Bottom
+//////////////////////// 
+*/
+
+.header-bottom {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.header-bottom-btn {
+    width: 50%;
+    padding: 3px;
+    margin: 3px 0 3px 0;
+    border-radius: 9px;
+    border: 1px solid #707070;
+    color: rgb(82, 82, 82);
+    cursor: pointer;
+}
+
+.btnHelp:hover {
+    transition: 0.3s;
+    color: #000;
+}
+
+.btnDisconnection:hover {
+    transition: 0.3s;
+    color:crimson;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    padding: 2px;
+    margin-bottom: 5px;
+}
+  
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 0;
+    top: 5%;
+    background-color: #f6ff72;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .slider {
+    background-color: #000000;
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px #000000;
+}
+  
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+  
+.slider.round {
+    border-radius: 15px;
+}
+  
+.slider.round:before {
+    border-radius: 50%;
+}
+
