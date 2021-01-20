@@ -1,42 +1,64 @@
 import React, {useState} from 'react'
-import {Link} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
 import axios from "axios"
 import "../../Styles/connexion.css"
 import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
 
 export default function Signup() {
 
+    const history = useHistory()
+    const [alertMsg, setAlertMsg] = useState("")
+    const [passwordVerify, setPasswordVerify] = useState("")
     const [data, setData] = useState({
         last_name: "",
         first_name: "",
         email: "",
         password: ""
     })
-    const [alertMsg, setAlertMsg] = useState("")
 
     const verifyInformation = () => {
-        let regexp = // continue ici
+        let regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
+        let surname = data.last_name
+        let name = data.first_name
 
-        console.log(data.password.match(regexp))
-
-        if (data.password.match(regexp)) {
-            console.log('oui')
+        if (surname.length > 2 && name.length > 2) {
+            if (surname.match(regex) && name.match(regex)) {
+                if (data.password.length >= 6) {
+                    if (data.password === passwordVerify) {
+                        return true
+                    } else {
+                        setAlertMsg("Your passwords do not match !")
+                        return false
+                    }
+                } else {
+                    setAlertMsg("Your password must contain at least 6 characters !")
+                    return false
+                }
+            } else {
+                setAlertMsg("Do not use special characters for your name and surname !")
+                return false
+            }
+        } else {
+            setAlertMsg("Your name and surname must contain at least 2 characters !")
+            return false
         }
-        console.log('non')
     }
 
     const handleSubmit = e => {
         e.preventDefault()
 
-        verifyInformation()
-
-        axios.post("http://localhost:3001/api/auth/signup", data)
-            .then(res => {
-                setAlertMsg(res.data.message)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if (verifyInformation()) {
+            axios.post("http://localhost:3001/api/auth/signup", data)
+                .then(res => {
+                    setAlertMsg(res.data.message)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                setTimeout(() => {
+                    history.push({pathname: '/login'})
+                }, 1500)
+        }
     }
 
     const handleChange = e => {
@@ -76,10 +98,10 @@ export default function Signup() {
                     </div>
                     <div className="connexion-info">
                         <label htmlFor="passwordVerif" className="connexion-label">Verify Password</label>
-                        <input type="password" name="passwordVerif" className="connexion-input"/>
+                        <input required type="password" name="passwordVerif" className="connexion-input" onChange={e => setPasswordVerify(e.target.value)} />
                     </div>
                     <div className="connexion-submit">
-                        <button required type="submit" className="connexion-btn">SIGN IN</button>
+                        <button type="submit" className="connexion-btn">SIGN IN</button>
                     </div>
                 </form>
                 <div className="connexion-link-box">
