@@ -36,6 +36,12 @@
     font-weight: bold;
 }
 
+.connexion-alert {
+    padding: 5px;
+    border: 1px solid #707070;
+    border-radius: 4px;
+}
+
 .connexion-form {
     display: flex;
     flex-direction: column;

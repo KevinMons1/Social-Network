@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from "react-router-dom"
+import axios from "axios"
 import "../../Styles/connexion.css"
 import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
 
@@ -10,7 +11,7 @@ export default function Login() {
                 <div className="connexion-title">
                     <h1>Login</h1>
                 </div>
-                <form className="connexion-form">
+                <form action="/" method="POST" className="connexion-form">
                     <div className="connexion-info">
                         <label htmlFor="email" className="connexion-label">Mail address</label>
                         <input type="email" name="email" className="connexion-input"/>
