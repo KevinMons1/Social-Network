@@ -14,12 +14,13 @@ const authRoutes = require("./Routers/auth")
 // });
 
 app.use(cors())
-app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 // Path
 app.use('/api/auth', authRoutes)
 
+// Start server
 app.listen("3001", () => {
     console.log("Server started on port 3001")
 })

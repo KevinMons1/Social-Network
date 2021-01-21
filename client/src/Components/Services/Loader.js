@@ -1,5 +1,5 @@
 import React from 'react'
-import "./../../Styles/app.css"
+import "./../../Styles/services.css"
 
 export default function Loader() {
     return (

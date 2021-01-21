@@ -3,7 +3,7 @@ import "../../Styles/gaming.css"
 import {useSelector} from "react-redux"
 import api from "../../Api"
 import StreamCard from "./StreamCard"
-import Loader from "../Other/Loader"
+import Loader from "../Services/Loader"
 
 export default function MainGaming() {
 

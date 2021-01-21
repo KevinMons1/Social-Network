@@ -8,6 +8,7 @@ export default function Signup() {
 
     const history = useHistory()
     const [alertMsg, setAlertMsg] = useState("")
+    const [alertCss, setAletCss] = useState(true)
     const [passwordVerify, setPasswordVerify] = useState("")
     const [data, setData] = useState({
         last_name: "",
@@ -27,18 +28,22 @@ export default function Signup() {
                     if (data.password === passwordVerify) {
                         return true
                     } else {
+                        setAletCss(true)
                         setAlertMsg("Your passwords do not match !")
                         return false
                     }
                 } else {
+                    setAletCss(true)
                     setAlertMsg("Your password must contain at least 6 characters !")
                     return false
                 }
             } else {
+                setAletCss(true)
                 setAlertMsg("Do not use special characters for your name and surname !")
                 return false
             }
         } else {
+            setAletCss(true)
             setAlertMsg("Your name and surname must contain at least 2 characters !")
             return false
         }
@@ -50,14 +55,16 @@ export default function Signup() {
         if (verifyInformation()) {
             axios.post("http://localhost:3001/api/auth/signup", data)
                 .then(res => {
+                    setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)
+                    if (res.data.message === "Account created !") {
+                        setTimeout(() => {
+                            history.push({pathname: '/login'})
+                        }, 1500)
+                    }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
-                setTimeout(() => {
-                    history.push({pathname: '/login'})
-                }, 1500)
+                .catch(err => console.log(err))
+
         }
     }
 
@@ -71,9 +78,9 @@ export default function Signup() {
                 <div className="connexion-title">
                     <h1>Register</h1>
                 </div>
-                {alertMsg == "" 
+                {alertMsg === "" 
                 ?   null 
-                :   <div className="connexion-alert">
+                :   <div className={alertCss ? "connexion-alert-danger" : "connexion-alert-success"}>
                         <p>{alertMsg}</p>
                     </div>
                 }

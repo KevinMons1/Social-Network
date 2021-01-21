@@ -1,32 +1,62 @@
 const db = require("../db")
 const bcrypt = require("bcryptjs")
+const jwtUtils = require("../Utils/jwt")
 
 //
-// Signup
+// Function globale
 //
 
 // Verify if email is already use
-const verifyEmail = async email => {
+// Parameter choice is for change return bool resolve
+const verifyEmail = async (email, choice) => {
     return await new Promise((resolve) => {
-        db.query("SELECT email FROM users", (err, result) => {
+        db.query("SELECT email FROM users WHERE email = ?", [email], (err, result) => {
             if (err) {
                 throw err
             } else {
-                result.forEach(element => {
-                    if (element.email === email) {
-                        resolve(false)
-                    }
-                });
-                resolve(true)
+                if (result.length > 0) {
+                    resolve(choice)
+                } else {
+                    resolve(!choice)
+                }
             }
         })
     })
 }
 
+// Verify email with database
+const verifyPassword = async (password, email) => {
+    return new Promise((resolve) => {
+        db.query("SELECT password, id FROM users WHERE email = ?", [email], (err, result) => {
+            if (err) {
+                throw err
+            } else {
+                bcrypt.compare(password, result[0].password)
+                    .then(valide => {
+                        if (valide) {
+                            resolve({auth: true, id: result[0].id})
+                        } else {
+                            resolve({auth: false})
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        resolve({auth: false})
+                    })
+            }
+        })
+    })
+}
+
+//
+// Function exports 
+//
+
+// Signup
 exports.signup = async (req, res) => {
     const {last_name, first_name, email, password} = req.body
 
-    const awaitVerify = await verifyEmail(email)
+    const awaitVerify = await verifyEmail(email, false)
 
     if (awaitVerify) {
         // Hashing of password
@@ -39,10 +69,31 @@ exports.signup = async (req, res) => {
             if (err) {
                 throw err
             } else {
-                res.send({message: "Account created !"})
+                res.send({message: "Account created !", alert: false})
             }   
         })
     } else {
-        res.send({message: "Mail address is already use !"})
+        res.send({message: "Mail address is already use !", alert: true})
     }
+}
+
+// Login
+exports.login = async (req, res) => {
+    const {email, password} = req.body
+
+    const awaitVerifyEmail = await verifyEmail(email, true)
+
+    if (awaitVerifyEmail) {
+        const awaitVerifyPassword = await verifyPassword(password, email)
+
+        if (awaitVerifyPassword.auth) {
+            res.send({alert: false, token: jwtUtils.generateToekForUser(awaitVerifyPassword.id)})
+        } else {
+            res.send({message: "Your mail adress or your password is not match !", alert: true})
+        }
+    } else {
+        res.send({message: "Your mail adress or your password is not match !", alert: true})
+    }
+
+
 }

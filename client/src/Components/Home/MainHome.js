@@ -7,7 +7,7 @@ import StoryCard from './StoryCard'
 import PublicationCard from '../Publication/PublicationCard'
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationComments from '../Publication/PublicationComments'
-import Loader from "../Other/Loader"
+import Loader from "../Services/Loader"
 
 export default function MainHome() {
 
