@@ -28,8 +28,11 @@ export default function Login() {
                 if (!res.data.alert) {
                     if (check) {
                         Cookie.set('user', res.data.token, {expires: 30})
+                    } else {
+                        Cookie.set('user', res.data.token, {expires: 1})
                     }
                     history.push({pathname: '/'})
+                    window.location.reload()
                 }
                 setAletCss(res.data.alert)
                 setAlertMsg(res.data.message)

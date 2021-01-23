@@ -172,6 +172,7 @@ Bottom
     border: 1px solid #707070;
     color: rgb(82, 82, 82);
     cursor: pointer;
+    outline: none;
 }
 
 .btnHelp:hover {

@@ -6,6 +6,7 @@ const db = require("./db")
 
 // Routes
 const authRoutes = require("./Routers/auth")
+const userRoutes = require("./Routers/user")
 
 // app.use((req, res) => {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,6 +20,7 @@ app.use(bodyParser.json())
 
 // Path
 app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoutes)
 
 // Start server
 app.listen("3001", () => {

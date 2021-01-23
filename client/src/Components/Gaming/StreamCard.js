@@ -7,10 +7,10 @@ import "../../Assets/fontawesome"
 
 export default function StreamCard(props) {
 
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
     
     return (
-        <div className={themeReducer.Theme ? "stream-dark" : "stream"}>
+        <div className={themeReducer ? "stream-dark" : "stream"}>
             <div className="stream-top">  
                 <div className="info-stream">
                     <div className="left-stream">
@@ -18,16 +18,16 @@ export default function StreamCard(props) {
                             <img className="left-stream-img" src={props.channelImg} alt="Frame profile of streamer"/>
                         </div>
                         <div className="left-stream-info">
-                            <p className={themeReducer.Theme ? 'txt-dark' : null}>{props.name}</p>
+                            <p className={themeReducer ? 'txt-dark' : null}>{props.name}</p>
                         </div>
                     </div>
                     <div className="right-stream">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>{props.gamePlay}</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>{props.gamePlay}</p>
                     </div>
                 </div>
 
                 <div className="text-stream">
-                    <p className={themeReducer.Theme ? 'txt-dark' : null}><FontAwesomeIcon icon="eye" /> {props.viewerCount} </p>
+                    <p className={themeReducer ? 'txt-dark' : null}><FontAwesomeIcon icon="eye" /> {props.viewerCount} </p>
                 </div>
             </div>
             

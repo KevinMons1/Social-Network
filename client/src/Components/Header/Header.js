@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import "../../Styles/header.css"
 import {Link} from 'react-router-dom'
+import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import ProfilDefault from "../../Assets/Images/profil_default.jpg"
@@ -10,8 +11,9 @@ export default function Header() {
 
     const [theme, setTheme] = useState(true)
     const dispatch = useDispatch()
-    const themeReducer = useSelector(state => state)
-
+    const themeReducer = useSelector(state => state.Theme)
+    const userDataReducer = useSelector(state => state.UserData)
+    
     const handleTheme = () => {
         dispatch({
             type: 'CHANGE',
@@ -20,12 +22,17 @@ export default function Header() {
         setTheme(!theme)
     }
 
+    const handleDisconnect = () => {
+        Cookie.remove('user')
+        window.location.reload();
+    }
+
     return (
-        <header className={themeReducer.Theme ? "header-dark" : "header"}>
+        <header className={themeReducer ? "header-dark" : "header"}>
             <div className="header-top">
-                <div className={themeReducer.Theme ? "search-top-dark" : "search-top"}>
+                <div className={themeReducer ? "search-top-dark" : "search-top"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
-                    <input className={themeReducer.Theme ? "search txt-dark" : "search"} type="search" placeholder="Search..."/>
+                    <input className={themeReducer ? "search txt-dark" : "search"} type="search" placeholder="Search..."/>
                 </div>
                 <div className="img-profile-box">
                     <Link to="/account"><img className="img-profile" src={ProfilDefault} alt="Your frame profile"/></Link>
@@ -35,27 +42,27 @@ export default function Header() {
             <div className="header-middle">
                 <ul className="header-middle-ul">
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer.Theme ? "home-icon header-middle-icon-dark" : "home-icon header-middle-icon"} icon="home" />
+                        <FontAwesomeIcon className={themeReducer ? "home-icon header-middle-icon-dark" : "home-icon header-middle-icon"} icon="home" />
                         <div className="header-middle-text">
-                            <Link to="/" className={themeReducer.Theme ? "header-middle-link-dark" : "header-middle-link"} >Home</Link>
+                            <Link to="/" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Home</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer.Theme ? "header-account-icon header-middle-icon-dark" : "header-account-icon header-middle-icon"} icon="user-circle" />
+                        <FontAwesomeIcon className={themeReducer ? "header-account-icon header-middle-icon-dark" : "header-account-icon header-middle-icon"} icon="user-circle" />
                         <div className="header-middle-text">
-                            <Link to="/account" className={themeReducer.Theme ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
+                            <Link to={{pathname: `/account/${userDataReducer.id}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer.Theme ? "gaming-icon header-middle-icon-dark" : "gaming-icon header-middle-icon"} icon="gamepad" />
+                        <FontAwesomeIcon className={themeReducer ? "gaming-icon header-middle-icon-dark" : "gaming-icon header-middle-icon"} icon="gamepad" />
                         <div className="header-middle-text">
-                            <Link to="/gaming" className={themeReducer.Theme ? "header-middle-link-dark" : "header-middle-link"}>Gaming</Link>
+                            <Link to="/gaming" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"}>Gaming</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer.Theme ? "friends-icon header-middle-icon-dark" : "friends-icon header-middle-icon"} icon="comments" />
+                        <FontAwesomeIcon className={themeReducer ? "friends-icon header-middle-icon-dark" : "friends-icon header-middle-icon"} icon="comments" />
                         <div className="header-middle-text">
-                            <Link to="/tchat" className={themeReducer.Theme ? "header-middle-link-dark" : "header-middle-link"} >Friends</Link>
+                            <Link to="/tchat" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Friends</Link>
                         </div>
                     </li>
                 </ul>
@@ -67,7 +74,7 @@ export default function Header() {
                     <span className="slider round"></span>
                 </label>
                 <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button>
-                <button className="header-bottom-btn btnDisconnection">Disconnection</button>
+                <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
             </div>
         </header>
     )

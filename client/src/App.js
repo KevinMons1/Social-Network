@@ -1,6 +1,11 @@
+// * Pense bête * -> Protéger ces Routes plus tard
+
+import {useEffect, useState} from "react"
 import "./Styles/app.css"
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Cookie from "js-cookie"
+import axios from "axios"
+import {useDispatch, useSelector} from "react-redux"
 
 // Components
 import Home from "./Components/Home/Index"
@@ -15,16 +20,27 @@ import Error from "./Components/Services/Error"
 
 function App() {
 
-  const authCookie = Cookie.get("user")
-  console.log(authCookie)
+  const [authCookie, setAuthCookie] = useState({
+    cookie: Cookie.get("user")
+  })
+  const [authorization, setAuthorization] = useState(false)
+  const dispatch = useDispatch()
 
-  // Envoie le cookie en post dans une fonction que tu vas créer pour aller chercher les infos grace à l'id
-  // que tu auras en vérifiant le token dans jwt de Untils
-  // Avec une variable tu vas aussi vérifier le cookie pour voir si il est valide pour afficher ou pas les
-  // routes home ...
+  useEffect(() => {
+    axios.post("http://localhost:3001/api/auth/login-token", authCookie)
+      .then(res => {
+        setAuthorization(res.data.authorization)
+        dispatch({
+          type: "ADD_DATA",
+          payload: res.data.informations
+        })
+      })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
-    <Router>
+  authorization 
+  ? <Router>
       <div className="App">
         <Switch>
           <Route exact path="/" component={Home} /> 
@@ -32,14 +48,27 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/password-forget" component={PasswordForget} />
           <Route exact path="/tchat" component={Tchat} />
-          <Route exact path="/account" component={Account} />
+          <Route exact path="/account/:slug" component={Account} />
           <Route exact path="/gaming" component={Gaming} />
           <Route excat path="/gaming/live/:slug" component={Live} />
           <Route component={Error} />
         </Switch>
       </div>
     </Router>
+    
+  : <Router>
+      <div className="App">
+        <Switch>
+          <Route exact path={["/login", "/"]} component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/password-forget" component={PasswordForget} />
+          <Route component={Error} />
+        </Switch>
+      </div>
+    </Router> 
   );
+
 }
 
 export default App;
+

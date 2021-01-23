@@ -7,18 +7,18 @@ import UserCard from '../Connected/UserCard'
 
 export default function TchatDiv(props) {
 
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
 
     const choiceContainer = props.choiceCss ? "tchatDiv-container-mini" : "tchatDiv-container"
     const choiceInfo = props.choiceCss ? "tchatDiv-info-mini" : "tchatDiv-info"
 
     return (
-        <div className={themeReducer.Theme ? `${choiceContainer} tchatDiv-dark` : choiceContainer}>
+        <div className={themeReducer ? `${choiceContainer} tchatDiv-dark` : choiceContainer}>
             <div className="tchatDiv-top">
                 <div className="tchatDiv-icon">
                     {props.choiceCss ? <FontAwesomeIcon icon="times-circle" className="close-icon" onClick={props.closeTchat} /> : null}
                 </div>
-                <div className={themeReducer.Theme ? `${choiceInfo} tchatDiv-info-dark` : choiceInfo}>
+                <div className={themeReducer ? `${choiceInfo} tchatDiv-info-dark` : choiceInfo}>
                     <UserCard />
                 </div>
             </div>            

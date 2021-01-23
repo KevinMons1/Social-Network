@@ -8,7 +8,7 @@ import PublicationCard from "./PublicationCard"
 
 export default function PublicationComments(props) {
 
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
 
     return (
         <div className="publi-open">
@@ -22,71 +22,71 @@ export default function PublicationComments(props) {
 
                 <div className="publi-open-bottom">
                     <div className="publi-open-name">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>Tom Mohy</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>Tom Mohy</p>
                     </div>
                     <div className="publi-open-info">
                         <div className="publi-open-img">
                             <img src={ProfilDefault} alt="Frame profile"/>
                         </div>
-                        <p className={themeReducer.Theme ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
 
                 <div className="publi-open-bottom">
                     <div className="publi-open-name">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>Tom Mohy</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>Tom Mohy</p>
                     </div>
                     <div className="publi-open-info">
                         <div className="publi-open-img">
                             <img src={ProfilDefault} alt="Frame profile"/>
                         </div>
-                        <p className={themeReducer.Theme ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
 
                 <div className="publi-open-bottom">
                     <div className="publi-open-name">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>Tom Mohy</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>Tom Mohy</p>
                     </div>
                     <div className="publi-open-info">
                         <div className="publi-open-img">
                             <img src={ProfilDefault} alt="Frame profile"/>
                         </div>
-                        <p className={themeReducer.Theme ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
 
                 <div className="publi-open-bottom">
                     <div className="publi-open-name">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>Tom Mohy</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>Tom Mohy</p>
                     </div>
                     <div className="publi-open-info">
                         <div className="publi-open-img">
                             <img src={ProfilDefault} alt="Frame profile"/>
                         </div>
-                        <p className={themeReducer.Theme ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
 
                 <div className="publi-open-bottom">
                     <div className="publi-open-name">
-                        <p className={themeReducer.Theme ? 'txt-dark' : null}>Tom Mohy</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>Tom Mohy</p>
                     </div>
                     <div className="publi-open-info">
                         <div className="publi-open-img">
                             <img src={ProfilDefault} alt="Frame profile"/>
                         </div>
-                        <p className={themeReducer.Theme ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>Lorem ipsum Eos dolore debitis assumenda aspernatur commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
 
                 <div className="new-publi">
                     <form className="write-publi">
-                        <FontAwesomeIcon className={themeReducer.Theme ? "icon-new-publi txt-dark" : "icon-new-publi"} icon="comments" />
+                        <FontAwesomeIcon className={themeReducer ? "icon-new-publi txt-dark" : "icon-new-publi"} icon="comments" />
                         <div className="input-new-publi" type="text">
-                            <textarea className={themeReducer.Theme ? "publi-open-textarea input-dark border-none-dark" : "publi-open-textarea"} placeholder="What do you mean ?"></textarea>
+                            <textarea className={themeReducer ? "publi-open-textarea input-dark border-none-dark" : "publi-open-textarea"} placeholder="What do you mean ?"></textarea>
                         </div>
-                        <button className={themeReducer.Theme ? "publi-open-btn btn-dark" : "publi-open-btn"}>SEND</button>
+                        <button className={themeReducer ? "publi-open-btn btn-dark" : "publi-open-btn"}>SEND</button>
                     </form>
                 </div>
 

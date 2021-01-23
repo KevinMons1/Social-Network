@@ -5,9 +5,11 @@ import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux'
 import {createStore, combineReducers} from 'redux'
 import Theme from "./Reducer/themeReducer"
+import UserData from "./Reducer/userDataReducer"
 
 const rootReducer = combineReducers({
-  Theme
+  Theme,
+  UserData
 })
 
 const store = createStore(rootReducer,

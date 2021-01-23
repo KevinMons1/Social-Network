@@ -5,7 +5,7 @@ import ProfilDefault from "../../Assets/Images/profil_publication1.jpg"
 
 export default function UserCard(props) {
 
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
 
     return (
         <div className="friend-box">             
@@ -15,13 +15,13 @@ export default function UserCard(props) {
                         <img src={ProfilDefault} alt="Frame profile of your friend" onClick={props.open}/>
                     </div>
                     <div className="connected-name-friend">
-                        <p className={themeReducer.Theme ? "connected-name-dark" : null} onClick={props.open}>Tom Mohy</p>
+                        <p className={themeReducer ? "connected-name-dark" : null} onClick={props.open}>Tom Mohy</p>
                     </div>
                 </div>
                     <div className="connected-circle"></div>
             </div>
             <div className="friend-text">
-                {props.text ? <p className={themeReducer.Theme ? "connected-lastMsg-dark" : null}>Lorem ipsum dolor sit.</p> : null}             
+                {props.text ? <p className={themeReducer ? "connected-lastMsg-dark" : null}>Lorem ipsum dolor sit.</p> : null}             
             </div>
         </div>
     )

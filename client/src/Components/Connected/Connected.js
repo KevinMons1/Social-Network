@@ -12,7 +12,7 @@ export default function Connected(props) {
     const [usersCardTchat, setUsersCardTchat] = useState([])
     const [load, setLoad] = useState(false)
     const [tchat, setTchat] = useState(false)
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
 
     useEffect(() => {
         for (let i = 0; i < 10; i++) {
@@ -43,8 +43,8 @@ export default function Connected(props) {
     )
     
     return (
-        <section className={themeReducer.Theme ? "connected-dark" : "connected"}>
-            <div className={themeReducer.Theme ? "connected-title-dark" : "connected-title"}>
+        <section className={themeReducer ? "connected-dark" : "connected"}>
+            <div className={themeReducer ? "connected-title-dark" : "connected-title"}>
                 <p>Connected</p>
             </div>
 

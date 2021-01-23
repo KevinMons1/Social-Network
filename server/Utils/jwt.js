@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const JWT_SIGN_SECRET = "tokentemporaryfordev"
 
 module.exports = {
+    // Create unique token
     generateToekForUser: (id) => {
         return jwt.sign({
             userId: id
@@ -13,11 +14,9 @@ module.exports = {
         })
     },
 
-    getUserId: (authorization) => {
-        // Utilise cette fonction pour vérifier avec le cookie si le token est bon si oui tu prend l'id du user et tu feras une requête
-        // query pour aller chercher les infos etc
-        let userId = -1
-        let token = authorization
+    // Verify token
+    getUserId: (token) => {
+        let userId = -1 // Default value (id -1 do not exist so we can see if it is not exist)
 
         if (token != null) {
             try {

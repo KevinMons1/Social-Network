@@ -10,7 +10,7 @@ export default function MainGaming() {
     const [streams, setStreams] = useState([])
     const [getApi, setGetApi] = useState([])
     const [load, setLoad] = useState(false)
-    const themeReducer = useSelector(state => state)
+    const themeReducer = useSelector(state => state.Theme)
 
     // Take all informations for modify each url with good params
     useEffect(() => {
@@ -100,15 +100,15 @@ export default function MainGaming() {
     }
     
     return (
-        <section className={themeReducer.Theme ? "mainGaming-dark" : "mainGaming"}>
+        <section className={themeReducer ? "mainGaming-dark" : "mainGaming"}>
 
             <div className="gaming-lang">
-                <div className={themeReducer.Theme ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("all")}>
+                <div className={themeReducer ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("all")}>
                     <p>ALL</p>
                 </div>
-                <div className={themeReducer.Theme ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("en")}>
+                <div className={themeReducer ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("en")}>
                     <p>EN</p>
-                </div><div className={themeReducer.Theme ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("fr")}>
+                </div><div className={themeReducer ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("fr")}>
                     <p>FR</p>
                 </div>
             </div>
