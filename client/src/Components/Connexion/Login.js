@@ -48,7 +48,7 @@ export default function Login() {
                 </div>
                 {alertMsg === "" 
                 ?   null 
-                :   <div className={alertCss ? "connexion-alert-danger" : "connexion-alert-none"}>
+                :   <div className={alertCss ? "alert-danger" : "alert-none"}>
                         <p>{alertMsg}</p>
                     </div>
                 }

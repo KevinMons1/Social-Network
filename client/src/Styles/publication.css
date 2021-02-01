@@ -1,4 +1,5 @@
 .publi {
+    position: relative;
     width: 75%;
     margin: 15px 0 15px 0;
     border: 1px solid #c2c2c2;
@@ -10,6 +11,7 @@
 }
 
 .publi-dark {
+    position: relative;
     width: 75%;
     margin: 15px 0 15px 0;
     border-radius: 10px;
@@ -18,6 +20,45 @@
     -webkit-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
     -moz-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
     box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+}
+
+.publi-none {
+    display: none;
+}
+
+.publi-delete-box {
+    position: absolute;
+    width: 100%;
+    text-align: end;
+    padding: 5px;
+
+}
+
+.publi-delete-btn {
+    background-color: #fff;
+    border: none;
+    opacity: 0.5;
+    cursor: pointer;
+    outline: none;
+    z-index: 2;
+}
+
+.publi-delete-btn-dark {
+    background-color: #333333;
+    color: #fff;
+    opacity: 0.5;
+    border: none;
+    cursor: pointer;
+}
+
+.publi-delete-btn:hover {
+    transition: 0.3s;
+    opacity: 1;
+}
+
+.publi-delete-btn-dark:hover {
+    transition: 0.3s;
+    opacity: 1;
 }
 
 .bg-publi {
@@ -68,7 +109,6 @@ info-publi
 .left-publi-img {
     position: absolute;
     width: 100%;
-    top: -25%;
 }
 
 .left-publi-info {
@@ -142,7 +182,7 @@ NewPubliBox
 //////////////////////// 
 */
 
-.new-publi-opacity {
+.new-publi-opacity, .deleteMsg-opacity {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -157,12 +197,12 @@ NewPubliBox
 
 .new-publi-content {
     position: absolute;
-    top: 25%;
+    top: 15%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: 70vh;
     width: 50vw;
     background-color: #F0F2F5;
     border: 1px solid #707070;
@@ -172,17 +212,70 @@ NewPubliBox
 
 .new-publi-content-dark {
     position: absolute;
-    top: 25%;
+    top: 15%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: 70vh;
     width: 50vw;
     background-color: #252525;
     border: 1px solid #707070;
     border-radius: 10px;
     z-index: 1001;
+}
+
+.deleteMsg-box {
+    position: absolute;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    width: 100%;
+    background-color: #F0F2F5;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.deleteMsg-box-dark {
+    position: absolute;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    width: 100%;
+    background-color: #252525;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.deleteMsg-btn {
+    border: none;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.deleteMsg-btn:hover {
+    transition: 0.3s;
+    opacity: 0.5;
+}
+
+.delBtn1 {
+    background-color: #FF7272;
+}
+
+.delBtn2 {
+    background-color: #72ff72;
 }
 
 .icon-new-publi-dark {
@@ -204,6 +297,7 @@ NewPubliBox
 }
 
 .new-publi-close-icon {
+    margin-top: 15px;
     font-size: 20px;
     color: #FF7272;
     cursor: pointer;
@@ -266,6 +360,102 @@ NewPubliBox
     color: #000;
 }
 
+.new-publi-hashtag-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 3px;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    outline: none;
+}
+
+.new-publi-hashtag-box-dark  {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 3px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    outline: none;
+}
+
+.new-publi-hashtag-txt {
+    margin: 0 5px;
+}
+
+.new-publi-hashtag-txt-box {
+    display: flex;
+    align-items: center;
+}
+
+.new-publi-hashtag-txt-dark {
+    margin: 0 5px;
+    color: #fff;
+}
+
+.new-publi-hashtag-btn {
+    width: 20%;
+    background-color: #707070;
+    border: 1px solid #707070;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.new-publi-hashtag-btn-dark {
+    width: 20%;
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    border-radius: 3px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.new-publi-hashtag-btn-dark:hover {
+    transition: 0.3s;
+    background-color: #272727;
+    color: #f1f1f1;
+}
+
+.new-publi-hashtag-btn:hover {
+    transition: 0.3s;
+    border: 1px solid #272727;
+    background-color: #272727;
+}
+
+.new-publi-input-hashtag {
+    width: 100%;
+    padding: 0 5px 0 5px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.new-publi-input-hashtag-dark {
+    width: 100%;
+    padding: 0 5px 0 5px;
+    color: #fff;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.input-dark-hashtag {
+    width: 100%;
+    padding: 0 5px 0 5px;
+    color: #fff;
+    border: none;
+    background: none;
+    outline: none;
+}
+
 .new-publi-btn {
     width: 100%;
     font-size: 20px;
@@ -277,6 +467,7 @@ NewPubliBox
     color: #fff;
     font-weight: bold;
     cursor: pointer;
+    outline: none;
 }
 
 .new-publi-btn-dark {
@@ -291,6 +482,7 @@ NewPubliBox
     color: #000;
     font-weight: bold;
     cursor: pointer;
+    outline: none;
 }
 
 .new-publi-btn-dark:hover {

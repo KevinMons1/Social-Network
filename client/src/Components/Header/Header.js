@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import "../../Styles/header.css"
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -9,6 +9,7 @@ import ProfilDefault from "../../Assets/Images/profil_default.jpg"
 
 export default function Header() {
 
+    const history = useHistory()
     const [theme, setTheme] = useState(true)
     const dispatch = useDispatch()
     const themeReducer = useSelector(state => state.Theme)
@@ -24,6 +25,7 @@ export default function Header() {
 
     const handleDisconnect = () => {
         Cookie.remove('user')
+        history.push({pathname: '/'})
         window.location.reload();
     }
 
@@ -35,7 +37,7 @@ export default function Header() {
                     <input className={themeReducer ? "search txt-dark" : "search"} type="search" placeholder="Search..."/>
                 </div>
                 <div className="img-profile-box">
-                    <Link to="/account"><img className="img-profile" src={ProfilDefault} alt="Your frame profile"/></Link>
+                    <Link to={{pathname: `/account/${userDataReducer.id}`}}><img className="img-profile" src={ProfilDefault} alt="Your frame profile"/></Link>
                 </div>
             </div>
 

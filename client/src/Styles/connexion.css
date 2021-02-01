@@ -36,24 +36,6 @@
     font-weight: bold;
 }
 
-.connexion-alert-danger {
-    padding: 5px;
-    background-color: #ff72726e;
-    border: 1px solid #ff7272;
-    border-radius: 4px;
-}
-
-.connexion-alert-success {
-    padding: 5px;
-    background-color: #72ff726e;
-    border: 1px solid #72ff72;
-    border-radius: 4px;
-}
-
-.connexion-alert-none {
-    display: none;
-}
-
 .connexion-form {
     display: flex;
     flex-direction: column;

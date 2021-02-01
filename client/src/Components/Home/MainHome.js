@@ -3,6 +3,7 @@ import {useSelector} from "react-redux"
 import "../../Styles/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
+import axios from "axios"
 import StoryCard from './StoryCard'
 import PublicationCard from '../Publication/PublicationCard'
 import NewPubliBox from '../Publication/NewPubliBox'
@@ -11,32 +12,30 @@ import Loader from "../Services/Loader"
 
 export default function MainHome() {
 
-    const [publicationCard, setPublicationCard] = useState([])
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
     const [open, setOpen] = useState(false)
+    const [data, setData] = useState(null)
     const themeReducer = useSelector(state => state.Theme)
 
-    const handleOpen = () => {
+    const handleOpenCommentsPubli = () => {
         setOpen(true)
     }
 
-    useEffect(() => {
-        for (let i = 0; i < 10; i++) {
-            setPublicationCard(publicationCard => [...publicationCard, <PublicationCard open={handleOpen} />])
-        }
+    useEffect(async () => {
+        // Get all publications
+        await axios.get("http://localhost:3001/api/publications/all")
+        .then(res => {
+                setData(res.data)
+            })
+        .catch(err => console.log(err))
+
         setLoad(true)
     }, [])
 
     const handleClose = () => {
         setOpen(false)
     }
-
-    const publicationHtml = (
-        publicationCard.map((item, index) => {
-            return <div className="box-publi" key={index}>{item}</div>
-        })                 
-    )
 
     return (
         <section className={themeReducer ? "mainHome-dark" : "mainHome"}>
@@ -67,7 +66,16 @@ export default function MainHome() {
                 </div>
 
                 <div>
-                    {load ? publicationHtml : <div><Loader /></div>}
+                    {load 
+                    ? data.map((item, index) => {
+                        return (
+                            <div key={index} className="box-publi">
+                                <PublicationCard open={handleOpenCommentsPubli} data={item} />
+                            </div>
+                        )
+                    })
+                    : <Loader />
+                    }
                 </div>
 
             </div>

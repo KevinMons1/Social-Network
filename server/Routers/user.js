@@ -4,6 +4,8 @@ const user = require("../Controllers/user")
 
 // Routes
 
-router.post('/account/informations', user.getAccountInformations)
+router.get('/account/informations/:id', user.getAccountInformations)
+
+router.put('/account/informations/update', user.updateAccountInformations)
 
 module.exports = router

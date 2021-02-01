@@ -49,3 +49,29 @@ Scroll bar
     border: 1px solid #a7a7a7;
     border-radius: 10px;
 }
+
+/*
+//////////////////////// 
+Scroll bar
+//////////////////////// 
+*/
+
+.alert-danger {
+    margin: 5px;
+    padding: 5px;
+    background-color: #ff72726e;
+    border: 1px solid #ff7272;
+    border-radius: 4px;
+}
+
+.alert-success {
+    margin: 5px;
+    padding: 5px;
+    background-color: #72ff726e;
+    border: 1px solid #72ff72;
+    border-radius: 4px;
+}
+
+.alert-none {
+    display: none;
+}

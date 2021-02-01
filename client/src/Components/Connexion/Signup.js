@@ -17,10 +17,10 @@ export default function Signup() {
         password: ""
     })
 
-    const verifyInformation = () => {
+    const verifyInformations = () => {
         let regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
-        let surname = data.last_name
-        let name = data.first_name
+        let name = data.last_name
+        let surname = data.first_name
 
         if (surname.length > 2 && name.length > 2) {
             if (surname.match(regex) && name.match(regex)) {
@@ -52,7 +52,7 @@ export default function Signup() {
     const handleSubmit = e => {
         e.preventDefault()
 
-        if (verifyInformation()) {
+        if (verifyInformations()) {
             axios.post("http://localhost:3001/api/auth/signup", data)
                 .then(res => {
                     setAletCss(res.data.alert)
@@ -80,7 +80,7 @@ export default function Signup() {
                 </div>
                 {alertMsg === "" 
                 ?   null 
-                :   <div className={alertCss ? "connexion-alert-danger" : "connexion-alert-success"}>
+                :   <div className={alertCss ? "alert-danger" : "alert-success"}>
                         <p>{alertMsg}</p>
                     </div>
                 }

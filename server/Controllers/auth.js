@@ -50,7 +50,7 @@ const verifyPassword = async (password, email) => {
 
 const getInfomations = async (userId) => {
     return new Promise((resolve) => {
-        db.query("SELECT id, email, last_name, first_name FROM users WHERE id = ?", [userId], (err, result) => {
+        db.query("SELECT id, email, last_name, first_name, bio FROM users WHERE id = ?", [userId], (err, result) => {
             if (err) {
                 throw err
             } else {
@@ -77,7 +77,7 @@ exports.signup = async (req, res) => {
             let hash = await bcrypt.hash(password, salt)
     
             // Create account
-            db.query("INSERT INTO users (last_name, first_name, email, password) Values (?, ?, ?, ?)",
+            db.query("INSERT INTO users (last_name, first_name, email, password) VALUES (?, ?, ?, ?)",
             [last_name, first_name, email, hash], (err, result) => {
                 if (err) {
                     throw err
