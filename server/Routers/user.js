@@ -1,11 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const user = require("../Controllers/user")
+const multer = require("../Middleware/multer.config")
 
 // Routes
 
 router.get('/account/informations/:id', user.getAccountInformations)
 
-router.put('/account/informations/update', user.updateAccountInformations)
+router.put('/account/informations/update/:id', user.updateAccountInformations)
+router.put('/account/image/profile/:id', multer.single("file"), user.uploadImageProfile)
+router.put('/account/image/banner/:id', multer.single("file"), user.uploadImageBanner)
 
 module.exports = router

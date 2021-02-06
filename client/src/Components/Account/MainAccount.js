@@ -6,8 +6,6 @@ import axios from "axios"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import Loader from "../Services/Loader"
-import ProfilDefault from "../../Assets/Images/profil_default.jpg"
-import BgDefault from "../../Assets/Images/bg_default.jpg"
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationCard from '../Publication/PublicationCard'
 import PublicationComments from '../Publication/PublicationComments'
@@ -23,9 +21,10 @@ export default function MainAccount() {
     const [openNewPubli, setOpenNewPubli] = useState(false)
     const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [openModifyAccount, setOpenModifyAccount] = useState(false)
-    const [dataPublications, setDataPublications] = useState(null)
-    const [isEmpty, setIsEmpty] = useState(true)
     const [dataUser, setDataUser] = useState(null)
+    const [dataPublications, setDataPublications] = useState(null)
+    const [dataPubliClick, setDataPubliClick] = useState(null)
+    const [isEmpty, setIsEmpty] = useState(true)
     const [url, setUrl] = useState(history.listen((location) => setUrl(location.pathname)))
     
     history.listen((location) => {
@@ -36,7 +35,12 @@ export default function MainAccount() {
             setDataUser({
                 last_name: "",
                 first_name: "",
-                bio: ""
+                bio: "",
+                likes_total: "",
+                publications_total: "",
+                friends_total: "",
+                profile_image_url: "",
+                banner_image_url: ""
             })
         }
     })
@@ -46,35 +50,42 @@ export default function MainAccount() {
         
         // Get informations for account
         const id = slug
+
         await axios.get(`http://localhost:3001/api/user/account/informations/${id}`)
         .then(res => {
             if (res.data.alert) {
                 return history.push({pathname: '/error404'})
             } else {
+                const data = res.data.userData
                 setDataUser({
-                    last_name: res.data.userData.last_name,
-                    first_name: res.data.userData.first_name,
-                    bio: res.data.userData.bio
+                    last_name: data.last_name,
+                    first_name: data.first_name,
+                    bio: data.bio,
+                    likes_total: data.likes_total,
+                    publications_total: data.publications_total,
+                    friends_total: data.friends_total,
+                    profile_image_url: data.profile_image_url,
+                    banner_image_url: data.banner_image_url
                 })
             }
         })
         .catch(err => console.log(err))
         
-        await axios.get(`http://localhost:3001/api/publications/account/${slug}`)
-        .then(res => {
-            if (res.data.length == 0) {
-                setIsEmpty(true)
-            } else {
-                setDataPublications(res.data)
-                setIsEmpty(false)
+        await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+            .then(res => {
+                if (res.data.length == 0) {
+                    setIsEmpty(true)
+                } else {
+                    setDataPublications(res.data)
+                    setIsEmpty(false)
                     }
                 })
-                .catch(err => console.log(err))
-
-        setLoad(true)
+            .catch(err => console.log(err))
+            setLoad(true)
     }, [url])
     
-    const handleOpenCommentsPubli = () => {
+    const handleOpenCommentsPubli = (dataPubli) => {
+        setDataPubliClick(dataPubli)
         setOpenCommentsPubli(!openCommentsPubli)
     }
 
@@ -87,7 +98,7 @@ export default function MainAccount() {
 
         {load 
         ? openCommentsPubli 
-            ? <PublicationComments close={handleOpenCommentsPubli} /> 
+            ? <PublicationComments close={handleOpenCommentsPubli} data={dataPubliClick} /> 
             : <div className="account-content">
 
                 {openNewPubli ? <NewPubliBox /*publi={openNewPubli}*/ setPubli={setOpenNewPubli} />  : null}
@@ -95,18 +106,18 @@ export default function MainAccount() {
 
                 <div className={themeReducer ? "account-top-dark" : "account-top"}>
                     <div className="account-bg">
-                        <img className="account-bg-img" src={BgDefault} alt="Your profile banner"/>
+                        <img className="account-bg-img" src={dataUser.banner_image_url} alt="Your banner image"/>
                     </div>
                     <div className="account-info">
                         <div className="account-info-top">
                             <div className="account-info-img">
-                                <img className="img-profile" src={ProfilDefault} alt="Your frame profile"/>
-                                <div>
-                                    <p className={themeReducer ? "txt-dark" : null}>{dataUser.first_name} {dataUser.last_name}</p>
-                                </div>
+                                <img className="img-profile" src={dataUser.profile_image_url} alt="Your profile image"/>
+                            </div>
+                            <div>
+                                <p className={themeReducer ? "txt-dark" : null}>{dataUser.first_name} {dataUser.last_name}</p>
                             </div>
 
-                        {slug != userDataReducer.id
+                        {slug != userDataReducer.user_id
                         ? null 
                         :   <div className="account-modify">
                                 <p className={themeReducer ? "txt-dark" : null} onClick={() => handleOpenModifyAccount()}>Modify my account</p>
@@ -119,15 +130,15 @@ export default function MainAccount() {
                             <div className="account-icon">
                                 <div className="account-icon-box">
                                     <FontAwesomeIcon icon="heart" className="heart-icon"/>
-                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>398</p>
+                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser.likes_total}</p>
                                 </div>
                                 <div className="account-icon-box">
                                     <FontAwesomeIcon icon="user-friends" className="user-friends-icon"/>
-                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>106</p>
+                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser.friends_total}</p>
                                 </div>
                                 <div className="account-icon-box">
                                     <FontAwesomeIcon icon="pen" className="pen-icon"/>
-                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>36</p>
+                                    <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser.publications_total}</p>
                                 </div>
                             </div>
                             <div className="account-bio">
@@ -138,7 +149,7 @@ export default function MainAccount() {
                 </div>
 
                 <div className="account-publi">
-                    {slug != userDataReducer.id
+                    {slug != userDataReducer.user_id
                     ? null 
                     :   <div className="new-publi">
                             <div className="write-publi" onClick={() => setOpenNewPubli(true)}>

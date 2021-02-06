@@ -197,13 +197,14 @@ NewPubliBox
 
 .new-publi-content {
     position: absolute;
-    top: 15%;
+    top: 25%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: auto;
     width: 50vw;
+    padding: 15px;
     background-color: #F0F2F5;
     border: 1px solid #707070;
     border-radius: 10px;
@@ -212,13 +213,14 @@ NewPubliBox
 
 .new-publi-content-dark {
     position: absolute;
-    top: 15%;
+    top: 25%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: auto;
     width: 50vw;
+    padding: 15px;
     background-color: #252525;
     border: 1px solid #707070;
     border-radius: 10px;
@@ -297,7 +299,6 @@ NewPubliBox
 }
 
 .new-publi-close-icon {
-    margin-top: 15px;
     font-size: 20px;
     color: #FF7272;
     cursor: pointer;
@@ -315,7 +316,7 @@ NewPubliBox
 
 .new-publi-box {
     display: flex;
-    height: 60%;
+    height: 200px;
     padding: 5px;
     background-color: #fff;
     border: 1px solid #707070;
@@ -324,7 +325,7 @@ NewPubliBox
 
 .new-publi-box-dark {
     display: flex;
-    height: 60%;
+    height: 200px;
     padding: 5px;
     border: 1px solid #fff;
     border-radius: 10px;

@@ -6,18 +6,18 @@ import "../../Assets/fontawesome"
 import ProfilDefault from "../../Assets/Images/profil_publication1.jpg"
 import PublicationCard from "./PublicationCard"
 
-export default function PublicationComments(props) {
+export default function PublicationComments({close, data}) {
 
     const themeReducer = useSelector(state => state.Theme)
 
     return (
         <div className="publi-open">
             <div className="publi-icon">
-                <FontAwesomeIcon icon="times-circle" className="publi-icon-close" onClick={props.close} />
+                <FontAwesomeIcon icon="times-circle" className="publi-icon-close" onClick={close} />
             </div>
             <div className="publi-open-bottom-container">
                 <div className="publi-open-top">
-                    <PublicationCard />
+                    <PublicationCard data={data} />
                 </div>
 
                 <div className="publi-open-bottom">

@@ -62,41 +62,26 @@ Account Top
 .account-bg-img {
     position: absolute;
     max-width: 100%;
-    top: -50%;
 }
 
 .account-info-top {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    top: -25px;
+    top: -35px;
     width: 100%;
 }
 
 .account-info-img {
     display: flex;
-    flex-direction: column;
     align-items: center;
-}
-
-.account-modify {
-    position: absolute;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    opacity: 0.65;
-    cursor: pointer;
-}
-
-.account-modify > p {
-    font-size: 15px;
-    margin: 10px;
-}
-
-.account-modify:hover {
-    transition: 0.3s;
-    opacity: 0.8;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #fff;
+    overflow: hidden;
 }
 
 .account-bottom {
@@ -173,13 +158,14 @@ Modify account
 
 .account-modify-content {
     position: absolute;
-    top: 25%;
+    top: 15%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    height: auto;
     width: 50vw;
+    padding: 15px;
     background-color: #F0F2F5;
     border: 1px solid #707070;
     border-radius: 10px;
@@ -188,13 +174,14 @@ Modify account
 
 .account-modify-content-dark {
     position: absolute;
-    top: 25%;
+    top: 15%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: auto;
     width: 50vw;
+    padding: 15px;
     background-color: #252525;
     border: 1px solid #707070;
     border-radius: 10px;
@@ -239,6 +226,43 @@ Modify account
 
 .account-modify-info-box > label {
     margin-right: 10px;
+}
+
+.account-modify-img-box {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 15px;
+}
+
+.account-modify-img {
+    margin-bottom: 10px;
+    padding: 0 15px;
+    border: 1px solid #707070;
+    border-radius: 5px;
+}
+
+.account-modify {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 0.65;
+    cursor: pointer;
+}
+
+.account-modify > p {
+    font-size: 15px;
+    margin: 10px;
+}
+
+.account-modify:hover {
+    transition: 0.3s;
+    opacity: 0.8;
+}
+
+.account-modify-inputFile {
+    outline: none;
+    resize: none;
 }
 
 .account-modify-input {

@@ -46,7 +46,7 @@ export default function NewPubliBox({ setPubli }) {
         e.preventDefault()
         
         if (verifyInformations()) {
-            axios.post(`http://localhost:3001/api/publications/add/${userDataReducer.id}`, data)
+            axios.post(`http://localhost:3001/api/publications/add/${userDataReducer.user_id}`, data)
                 .then(res => {
                     setAletCss(false)
                     setAlertMsg(res.data.message)

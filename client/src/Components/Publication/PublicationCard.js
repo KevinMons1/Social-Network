@@ -17,17 +17,17 @@ export default function PublicationCard({open, data}) {
     const [deleteMsg, setDeleteMsg] = useState(true)
 
     useEffect(() => {
-        let _hashtag = data.hashtag
-
-        _hashtag = _hashtag.replace(";", " #")
-        _hashtag = "#" + _hashtag
-
-        setHashtag(_hashtag)
+        if (data.hashtag.length > 0) {
+            let _hashtag = data.hashtag
+            _hashtag = _hashtag.replace(";", " #")
+            _hashtag = "#" + _hashtag
+            setHashtag(_hashtag)
+        }
     }, [])
 
     const handleDelete = () => {
-        if (data.id_user == userDataReducer.id) {
-            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.id}`)
+        if (data.user_id == userDataReducer.user_id) {
+            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.user_id}`)
                 .then(res => {
                     if (res.data.alert) {
                         setDeleteMsg(true)
@@ -55,7 +55,7 @@ export default function PublicationCard({open, data}) {
               </div>
             : null
             }
-            {data.id_user == userDataReducer.id
+            {data.user_id == userDataReducer.user_id
             ? <div className="publi-delete-box"> 
                 <button className={themeReducer ? "publi-delete-btn-dark" : "publi-delete-btn"} onClick={() => setDeleteAlert(true)}>Delete</button>
               </div>
@@ -64,7 +64,7 @@ export default function PublicationCard({open, data}) {
                 <div className="info-publi">
                     <div className="left-publi">
                         <div className="left-publi-img-box">
-                            <img className="left-publi-img" src={ProfilDefault} alt="Frame profile"/>
+                            <img className="left-publi-img" src={ProfilDefault} alt="Profile image"/>
                         </div>
                         <div className="left-publi-info">
                             <p className={themeReducer ? 'txt-dark' : null}>{data.first_name} {data.last_name}</p>
@@ -81,14 +81,14 @@ export default function PublicationCard({open, data}) {
                 </div>
             </div>
              
-                <div className="bg-publi" onClick={open}>
+                <div className="bg-publi" onClick={() => open(data)}>
                     <img className="bg-publi-img" src={Publication} alt="Frame of publication"/>
                 </div>
 
                 <div className="social-publi">
                     <div className="icon-publi">
                         <FontAwesomeIcon className="heart-publi" icon="heart" />
-                        <p className={themeReducer ? 'txt-dark' : null}>{data.like_total}</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>{data.likes_total}</p>
                     </div>
                     <div className="icon-publi">
                         <FontAwesomeIcon className="comment-publi" icon="comment" />

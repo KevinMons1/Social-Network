@@ -1,32 +1,38 @@
 const db = require("../db")
 
 //
-// Function exports 
+// Functions exports 
 //
 
 // Add a new publication
-exports.newPublication = (req, res) => {
+exports.newPublication = async (req, res) => {
     const {text, hashtag} = req.body
     const id = req.params.id
-    let hashtageTxt = hashtag.join(";")
+    let hashtagTxt = hashtag.join(";")
 
-    db.query("INSERT INTO publications (id_user, text, hashtag) VALUES (?, ?, ?)",
-    [id, text, hashtageTxt], (err, result) => {
+    await db.query("INSERT INTO publications (user_id, text, hashtag) VALUES (?, ?, ?)",
+    [id, text, hashtagTxt], async (err, result) => {
         if (err) {
             throw err
         } else {
+            await db.query("UPDATE users SET publications_total = publications_total + 1 WHERE user_id = ?",
+            [id], (_err, _result) => {
+                if (_err) {
+                    throw _err
+                }
+            })
             res.send({message: "Publications published !"})
         }
     })
 }
 
 // get all publication by all users
-exports.getAllPublications = (req, res) => {
-    const queryPublications = "p.id, p.id_user, p.text, p.hashtag, p.like_total, p.comments_total, p.date"
+exports.getAllPublications = async (req, res) => {
+    const queryPublications = "p.publication_id, p.user_id, p.text, p.hashtag, p.likes_total, p.comments_total, p.date"
     const queryUsers = "u.last_name, u.first_name"
 
     //Order by id DESC to sort from new to oldest
-    db.query(`SELECT ${queryPublications}, ${queryUsers} FROM publications p LEFT JOIN users u ON u.id = p.id_user ORDER BY p.id DESC`,
+    await db.query(`SELECT ${queryPublications}, ${queryUsers} FROM publications p LEFT JOIN users u ON u.user_id = p.user_id ORDER BY p.publication_id DESC`,
     (err, result) => {
         if (err) {
             throw err
@@ -37,14 +43,14 @@ exports.getAllPublications = (req, res) => {
 }
 
 // Get all publications in this account
-exports.getAccountPublications = (req, res) => {
+exports.getAccountPublications = async (req, res) => {
     const id = req.params.id
 
-    const queryPublications = "p.id, p.id_user, p.text, p.hashtag, p.like_total, p.comments_total, p.date"
+    const queryPublications = "p.publication_id, p.user_id, p.text, p.hashtag, p.likes_total, p.comments_total, p.date"
     const queryUsers = "u.last_name, u.first_name"
 
     //Order by id DESC to sort from new to oldest
-    db.query(`SELECT ${queryPublications}, ${queryUsers} FROM publications p LEFT JOIN users u ON u.id = p.id_user WHERE p.id_user = ? ORDER BY p.id DESC`,
+    await db.query(`SELECT ${queryPublications}, ${queryUsers} FROM publications p LEFT JOIN users u ON u.user_id = p.user_id WHERE p.user_id = ? ORDER BY p.publication_id DESC`,
     [id], (err, result) => {
         if (err) {
             throw err
@@ -55,13 +61,19 @@ exports.getAccountPublications = (req, res) => {
 }
 
 // Delete publications
-exports.deletePublication = (req, res) => {
+exports.deletePublication = async (req, res) => {
     const id = req.params.id
     
-    db.query("DELETE FROM publications WHERE id = ?", [id], (err, result) => {
+    await db.query("DELETE FROM publications WHERE user_id = ?", [id], async (err, result) => {
         if (err) {
             throw err
         } else {
+            await db.query("UPDATE users SET publications_total = publications_total - 1 WHERE user_id = ?",
+            [id], (_err, _result) => {
+                if (_err) {
+                    throw _err
+                }
+            })
             res.send({message: "Publications deleted !", alert: true})
         }
     })

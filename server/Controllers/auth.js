@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs")
 const jwtUtils = require("../Utils/jwt")
 
 //
-// Function globale
+// Functions globale
 //
 
 // Verify if email is already use
@@ -27,14 +27,14 @@ const verifyEmail = async (email, choice) => {
 // Verify email with database
 const verifyPassword = async (password, email) => {
     return new Promise((resolve) => {
-        db.query("SELECT password, id FROM users WHERE email = ?", [email], (err, result) => {
+        db.query("SELECT password, user_id FROM users WHERE email = ?", [email], (err, result) => {
             if (err) {
                 throw err
             } else {
                 bcrypt.compare(password, result[0].password)
                     .then(valide => {
                         if (valide) {
-                            resolve({auth: true, id: result[0].id})
+                            resolve({auth: true, id: result[0].user_id})
                         } else {
                             resolve({auth: false})
                         }
@@ -48,9 +48,17 @@ const verifyPassword = async (password, email) => {
     })
 }
 
-const getInfomations = async (userId) => {
+const getInfomations = async (id) => {
     return new Promise((resolve) => {
-        db.query("SELECT id, email, last_name, first_name, bio FROM users WHERE id = ?", [userId], (err, result) => {
+        const queryUser = "u.user_id, u.email, u.last_name, u.first_name, u.bio"
+        const queryImgProfile = "ip.profile_image_url"
+        const queryImgBanner = "ib.banner_image_url"
+
+        db.query(`SELECT ${queryUser}, ${queryImgProfile}, ${queryImgBanner}
+                  FROM users u
+                  LEFT JOIN profile_images ip ON ip.user_id = ?
+                  LEFT JOIN banner_images ib ON ib.user_id = ?
+                  WHERE u.user_id = ?`, [id, id, id], (err, result) => {
             if (err) {
                 throw err
             } else {
@@ -61,7 +69,7 @@ const getInfomations = async (userId) => {
 }
 
 //
-// Function exports 
+// Functions exports 
 //
 
 // Signup
@@ -72,17 +80,49 @@ exports.signup = async (req, res) => {
         const awaitVerify = await verifyEmail(email, false)
 
         if (awaitVerify) {
+            let id;
+
+            // Images default
+            const imageProfileUrl = `${req.protocol}://${req.get('host')}/Images/profile_default.jpg`
+            const imageBannerUrl = `${req.protocol}://${req.get('host')}/Images/banner_default.jpg`
+
             // Hashing of password
             let salt = await bcrypt.genSalt(10)
             let hash = await bcrypt.hash(password, salt)
     
             // Create account
-            db.query("INSERT INTO users (last_name, first_name, email, password) VALUES (?, ?, ?, ?)",
-            [last_name, first_name, email, hash], (err, result) => {
+            // Create user
+            await db.query("INSERT INTO users (last_name, first_name, email, password) VALUES (?, ?, ?, ?)",
+            [last_name, first_name, email, hash], async (err, result) => {
                 if (err) {
                     throw err
                 } else {
-                    res.send({message: "Account created !", alert: false})
+                    // GET user_id
+                    await db.query("SELECT user_id FROM users WHERE email = ?",
+                    [email], async (err2, result2) => {
+                        if (err2) {
+                            throw err2
+                        } else {
+                            id = await result2[0].user_id
+                            // Create line on profile_images with user_id
+                            await db.query("INSERT INTO profile_images (user_id, image_profile_url) VALUES (?, ?)",
+                            [id, imageProfileUrl], async (err3, result3) => {
+                                if (err3) {
+                                    throw err3
+                                } else {
+                                    // Create line on images_banner with user_id
+                                    await db.query("INSERT INTO banner_images (user_id, banner_image_url) VALUES (?, ?)",
+                                    [id, imageBannerUrl], async (err4, result4) => {
+                                        if (err4) {
+                                            throw err4
+                                        } else {
+                                            res.send({message: "Account created !", alert: false})
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
                 }   
             })
         } else {
@@ -118,7 +158,7 @@ exports.login = async (req, res) => {
 
 // Login by token
 exports.loginToken = async (req, res) => {
-    const verifyToken = jwtUtils.getUserId(req.body.cookie)
+    const verifyToken = await jwtUtils.getUserId(req.body.cookie)
 
     if (verifyToken === -1) {
         res.send({authorization: false})

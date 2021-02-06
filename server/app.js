@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const db = require("./db")
+const path = require("path")
 
 // Routes
 const authRoutes = require("./Routers/auth")
@@ -18,6 +19,7 @@ const publicationsRoutes = require("./Routers/publications")
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
+app.use('/Images', express.static(path.join(__dirname, 'Images'))) // Send folder Images on server
 
 // Path
 app.use('/api/auth', authRoutes)

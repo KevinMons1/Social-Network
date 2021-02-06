@@ -1,10 +1,11 @@
 const INITIAL_STATE = {
-    id: "",
+    user_id: "",
     email: "",
     last_name: "",
     first_name: "",
     bio: "",
-    image_profile: ""
+    image_profile_url: "",
+    image_banner_url: ""
 }
 
 const userDataReducer = (state = INITIAL_STATE, action) => {
