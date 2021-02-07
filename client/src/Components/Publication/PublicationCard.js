@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
 import "../../Styles/publication.css"
-import Publication from "../../Assets/Images/publication1.jpg"
-import ProfilDefault from "../../Assets/Images/profil_default.jpg"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import moment from "moment"
@@ -17,6 +15,7 @@ export default function PublicationCard({open, data}) {
     const [deleteMsg, setDeleteMsg] = useState(true)
 
     useEffect(() => {
+        // To separate a long string into several hashtags if there is a need
         if (data.hashtag.length > 0) {
             let _hashtag = data.hashtag
             _hashtag = _hashtag.replace(";", " #")
@@ -26,11 +25,11 @@ export default function PublicationCard({open, data}) {
     }, [])
 
     const handleDelete = () => {
-        if (data.user_id == userDataReducer.user_id) {
-            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.user_id}`)
+        if (data.user_id === userDataReducer.user_id) {
+            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.user_id + "-" + data.publication_id}`)
                 .then(res => {
                     if (res.data.alert) {
-                        setDeleteMsg(true)
+                        // setDeleteMsg(true)
                         setDeleteMsg(false)
                     }
                 })
@@ -55,7 +54,7 @@ export default function PublicationCard({open, data}) {
               </div>
             : null
             }
-            {data.user_id == userDataReducer.user_id
+            {data.user_id === userDataReducer.user_id
             ? <div className="publi-delete-box"> 
                 <button className={themeReducer ? "publi-delete-btn-dark" : "publi-delete-btn"} onClick={() => setDeleteAlert(true)}>Delete</button>
               </div>
@@ -64,7 +63,7 @@ export default function PublicationCard({open, data}) {
                 <div className="info-publi">
                     <div className="left-publi">
                         <div className="left-publi-img-box">
-                            <img className="left-publi-img" src={ProfilDefault} alt="Profile image"/>
+                            <img className="left-publi-img" src={data.profile_image_url} alt="Profile frame"/>
                         </div>
                         <div className="left-publi-info">
                             <p className={themeReducer ? 'txt-dark' : null}>{data.first_name} {data.last_name}</p>
@@ -77,12 +76,12 @@ export default function PublicationCard({open, data}) {
                 </div>
 
                 <div className="text-publi">
-                    <p className={themeReducer ? 'txt-dark' : null}>{data, data.text}</p>
+                    <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
                 </div>
             </div>
              
                 <div className="bg-publi" onClick={() => open(data)}>
-                    <img className="bg-publi-img" src={Publication} alt="Frame of publication"/>
+                    <img className="bg-publi-img" src={data.publication_image_url} alt="Publication frame"/>
                 </div>
 
                 <div className="social-publi">

@@ -105,7 +105,7 @@ exports.signup = async (req, res) => {
                         } else {
                             id = await result2[0].user_id
                             // Create line on profile_images with user_id
-                            await db.query("INSERT INTO profile_images (user_id, image_profile_url) VALUES (?, ?)",
+                            await db.query("INSERT INTO profile_images (user_id, profile_image_url) VALUES (?, ?)",
                             [id, imageProfileUrl], async (err3, result3) => {
                                 if (err3) {
                                     throw err3

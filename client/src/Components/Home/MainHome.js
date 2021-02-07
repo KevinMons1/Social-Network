@@ -24,15 +24,17 @@ export default function MainHome() {
         setOpen(true)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         // Get all publications
-        await axios.get("http://localhost:3001/api/publications/all")
-        .then(res => {
-                setData(res.data)
-            })
-        .catch(err => console.log(err))
-
-        setLoad(true)
+        async function fetchData() {
+            await axios.get("http://localhost:3001/api/publications/all")
+                .then(res => {
+                        setData(res.data)
+                    })
+                .catch(err => console.log(err))
+                setLoad(true)
+        }
+        fetchData()
     }, [])
 
     const handleCloseCommentsPubli = () => {

@@ -5,7 +5,6 @@ import {Link, useHistory} from 'react-router-dom'
 import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
-import ProfilDefault from "../../Assets/Images/profil_default.jpg"
 
 export default function Header() {
 
@@ -33,7 +32,7 @@ export default function Header() {
         <header className={themeReducer ? "header-dark" : "header"}>
             <div className="header-top">
                 <div className="header-banner-box">
-                    <img src={userDataReducer.banner_image_url} alt="Your banner image"/>
+                    <img src={userDataReducer.banner_image_url} alt="Your banner frame"/>
                 </div>
                 <div className={themeReducer ? "search-top-dark" : "search-top"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
@@ -41,7 +40,7 @@ export default function Header() {
                 </div>
                 <div className="img-profile-box">
                     <Link to={{pathname: `/account/${userDataReducer.user_id}`}}>
-                        <img className="img-profile" src={userDataReducer.profile_image_url} alt="Your profile image"/>
+                        <img className="img-profile" src={userDataReducer.profile_image_url} alt="Your profile frame"/>
                     </Link>
                 </div>
             </div>

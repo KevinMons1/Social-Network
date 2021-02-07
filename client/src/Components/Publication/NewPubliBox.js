@@ -18,10 +18,11 @@ export default function NewPubliBox({ setPubli }) {
     })
 
     const verifyInformations = () => {
-        let regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
+        let regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
 
+        console.log(data.text.length)
         if (data.text.length > 2) {
-            if (data.hashtag.length == 0) {
+            if (data.hashtag.length === 0) {
                 return true
             } else {
                 for (let i = 0; i < data.hashtag.length; i++) {
@@ -87,7 +88,7 @@ export default function NewPubliBox({ setPubli }) {
                 <form className="new-publi-form" onSubmit={e => handleSubmit(e)}>          
                     <div className={themeReducer ? "new-publi-box-dark" : "new-publi-box"}>
                         <FontAwesomeIcon className={themeReducer ? "icon-new-publi-dark" : "icon-new-publi"} icon="comments" />
-                        <textarea name="newPubli" className={themeReducer ? "new-publi-textarea textarea-dark" : "new-publi-textarea"} name="text" placeholder="What do you mean ?" onChange={e => handleChange(e)}></textarea>
+                        <textarea name="text" className={themeReducer ? "new-publi-textarea textarea-dark" : "new-publi-textarea"} placeholder="What do you mean ?" onChange={e => handleChange(e)}></textarea>
                     </div>
                     <div className="bottom-new-publi">
                         <FontAwesomeIcon icon="image" className="icon-write-new-publi"/>

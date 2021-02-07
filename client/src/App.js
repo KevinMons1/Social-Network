@@ -1,5 +1,5 @@
 //TODO -> Protéger ces Routes plus tard
-//TODO -> thème ne cookie
+//TODO -> thème en cookie
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
@@ -22,15 +22,13 @@ import Loader from "./Components/Services/Loader"
 
 function App() {
 
-  const [authCookie, setAuthCookie] = useState({
-    cookie: Cookie.get("user")
-  })
+  const authCookie = Cookie.get("user")
   const [authorization, setAuthorization] = useState(false)
   const [load, setLoad] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    axios.post("http://localhost:3001/api/auth/login-token", authCookie)
+    axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
       .then(res => {
         setAuthorization(res.data.authorization)
         dispatch({
@@ -39,6 +37,7 @@ function App() {
         })
       })
       .catch(err => console.log(err))
+      
       setLoad(true)
   }, [])
 

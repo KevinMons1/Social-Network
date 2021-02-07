@@ -13,6 +13,8 @@ export default function ModifyAccount({ setClose, slug }) {
     const [bannerImage, setBannerImage] = useState(null)
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
+    const [dataProfileImgTxt, setDataProfileImgTxt] = useState("")
+    const [dataBannerImgTxt, setDataBannerImgTxt] = useState("")
     const [data, setData] = useState({
         last_name: userDataReducer.last_name,
         first_name: userDataReducer.first_name,
@@ -20,12 +22,12 @@ export default function ModifyAccount({ setClose, slug }) {
     })
 
     const verifyInformations = () => {
-        let regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
+        let regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
         let name = data.last_name
         let surname = data.first_name
         let bio = data.bio
 
-        if (surname != userDataReducer.first_name || name != userDataReducer.last_name || bio != userDataReducer.bio) {
+        if (surname !== userDataReducer.first_name || name !== userDataReducer.last_name || bio !== userDataReducer.bio) {
          if (surname.length > 2 && name.length > 2) {
                 if (surname.match(regex) && name.match(regex)) {
                     if (bio.length < 250) {
@@ -52,29 +54,29 @@ export default function ModifyAccount({ setClose, slug }) {
         e.preventDefault()
 
         // Modify image profile
-        if (profileImage != null) {
+        if (profileImage !== null) {
             let formData = new FormData()
             formData.append('file', profileImage)
+            formData.append('txt', dataProfileImgTxt)
             
             await axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
                 .then(res => {
                     setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)
-                     
                 })
                 .catch(err => console.log(err))
         }
 
         // Modify image banner
-        if (profileImage != null) {
+        if (bannerImage != null) {
             let formData = new FormData()
             formData.append('file', bannerImage)
+            formData.append('txt', dataBannerImgTxt)
             
             await axios.put(`http://localhost:3001/api/user/account/image/banner/${slug}`, formData)
                 .then(res => {
                     setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)
-                     
                 })
                 .catch(err => console.log(err))
         }
@@ -84,24 +86,28 @@ export default function ModifyAccount({ setClose, slug }) {
             await axios.put(`http://localhost:3001/api/user/account/informations/update/${slug}`, data)
                 .then(res => {
                     setAletCss(res.data.alert)
-                    setAlertMsg(res.data.message)           
+                    setAlertMsg(res.data.message)  
                 })
                 .catch(err => console.log(err))
-        }    
+        }   
 
-        if (alertMsg == "Modified information !") {
-            setTimeout(() => {
-                window.location.reload()
-            }, 1500)
-        } 
-    }
-
+        window.location.reload()
+    } 
+    
     const handleCloseModifyAccount = () => {
         setClose(false)
     }
 
     const handleChange = e => {
         setData({...data, [e.target.name]: e.target.value})
+    }
+
+    const handleChangeProfileImgTxt = e => {
+        setDataProfileImgTxt(e.target.value)
+    }
+
+    const handleChangeBannerImgTxt = e => {
+        setDataBannerImgTxt(e.target.value)
     }
 
     return (
@@ -126,7 +132,7 @@ export default function ModifyAccount({ setClose, slug }) {
                                     <input type="file" name="profile_image" onChange={e => setProfileImage(e.target.files[0])} id="profile_image" className={themeReducer ? "account-modify-inputFile txt-dark" : "account-modify-inputFile"}/>
                                 </div>
                                 <div>
-                                    <input type="text" name="last_name" className="account-modify-input" onChange={e => handleChange(e)} placeholder="What do you mean ?"/>
+                                    <input type="text" name="profile_image_txt" className="account-modify-input" onChange={e => handleChangeProfileImgTxt(e)} placeholder="What do you mean ?"/>
                                 </div>
                             </div>
                             <div className="account-modify-img">
@@ -135,7 +141,7 @@ export default function ModifyAccount({ setClose, slug }) {
                                     <input type="file" name="banner_image" onChange={e => setBannerImage(e.target.files[0])} id="banner_image" className={themeReducer ? "account-modify-inputFile txt-dark" : "account-modify-inputFile"}/>
                                 </div>
                                 <div>
-                                    <input type="text" name="last_name" className="account-modify-input" onChange={e => handleChange(e)} placeholder="What do you mean ?"/>
+                                    <input type="text" name="banner_image_txt" className="account-modify-input" onChange={e => handleChangeBannerImgTxt(e)} placeholder="What do you mean ?"/>
                                 </div>
                             </div>
                         </div>

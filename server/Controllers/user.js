@@ -6,19 +6,17 @@ const publications = require("./publications")
 //
 
 // Publication when your modify a statu as profile image
-const publicationsDefault = async (id, type, imageUrl) => {
-    let text, hashtag, publi_id;
-    //! ICI change le text pour ce que la personne va passer depuis le front
+const publicationsDefault = async (id, type, imageUrl, txt) => {
+    let hashtag, publi_id;
+
     if (type === "profile") {
-        text = "To change your profile image !"
         hashtag = "newProfileImage"
     } else if (type === "banner") {
-        text = "To change your banner image !"
         hashtag = "newBannerImage"
     } 
 
     await db.query("INSERT INTO publications (user_id, text, hashtag) VALUES (?, ?, ?)",
-    [id, text, hashtag], async (err, result) => {
+    [id, txt, hashtag], async (err, result) => {
         if (err) {
             throw err
         } else {
@@ -32,8 +30,6 @@ const publicationsDefault = async (id, type, imageUrl) => {
                     [id], (err3, result3) => {
                         if (err3) {
                             throw err3
-                        } else {
-                            res.send({message: "Publications published !"})
                         }
                     })
                 }
@@ -114,6 +110,8 @@ exports.updateAccountInformations = async (req, res) => {
 exports.uploadImageProfile = async (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
     const id = req.params.id 
+    const txt = req.body.txt
+
     
     db.query("UPDATE profile_images SET profile_image_url = ? WHERE user_id = ?",
     [imageUrl, id], async (err, result) => {
@@ -121,7 +119,7 @@ exports.uploadImageProfile = async (req, res) => {
             res.send({message: "An error has occurred !", alert: true})
             throw err
         } else {
-            await publicationsDefault(id, "profile", imageUrl)
+            await publicationsDefault(id, "profile", imageUrl, txt)
             res.send({message: "Modified information !", alert: false})
         }
     })
@@ -131,13 +129,15 @@ exports.uploadImageProfile = async (req, res) => {
 exports.uploadImageBanner = async (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
     const id = req.params.id 
+    const txt = req.body.txt
     
     db.query("UPDATE banner_images SET banner_image_url = ? WHERE user_id = ?",
-    [imageUrl, id], (err, result) => {
+    [imageUrl, id], async (err, result) => {
         if (err) {
             res.send({message: "An error has occurred !", alert: true})
             throw err
         } else {
+            await publicationsDefault(id, "banner", imageUrl, txt)
             res.send({message: "Modified information !", alert: false})
         }
     })

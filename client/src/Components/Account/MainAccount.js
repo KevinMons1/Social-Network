@@ -28,60 +28,57 @@ export default function MainAccount() {
     const [url, setUrl] = useState(history.listen((location) => setUrl(location.pathname)))
     
     history.listen((location) => {
-        if (location.pathname != url) {
+        if (location.pathname !== url) {
             setUrl(location.pathname)
             setIsEmpty(true)
             setDataPublications(null)
-            setDataUser({
-                last_name: "",
-                first_name: "",
-                bio: "",
-                likes_total: "",
-                publications_total: "",
-                friends_total: "",
-                profile_image_url: "",
-                banner_image_url: ""
-            })
+            setDataUser(null)
         }
     })
 
-    useEffect(async () => {
-        setLoad(false)
-        
+    useEffect(() => {
         // Get informations for account
+        setLoad(false)
         const id = slug
 
-        await axios.get(`http://localhost:3001/api/user/account/informations/${id}`)
-        .then(res => {
-            if (res.data.alert) {
-                return history.push({pathname: '/error404'})
-            } else {
-                const data = res.data.userData
-                setDataUser({
-                    last_name: data.last_name,
-                    first_name: data.first_name,
-                    bio: data.bio,
-                    likes_total: data.likes_total,
-                    publications_total: data.publications_total,
-                    friends_total: data.friends_total,
-                    profile_image_url: data.profile_image_url,
-                    banner_image_url: data.banner_image_url
-                })
-            }
-        })
-        .catch(err => console.log(err))
-        
-        await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+        const fetchDataInfo = async () => {
+            await axios.get(`http://localhost:3001/api/user/account/informations/${id}`)
             .then(res => {
-                if (res.data.length == 0) {
-                    setIsEmpty(true)
+                if (res.data.alert) {
+                    return history.push({pathname: '/error404'})
                 } else {
-                    setDataPublications(res.data)
-                    setIsEmpty(false)
-                    }
-                })
+                    const data = res.data.userData
+                    setDataUser({
+                        last_name: data.last_name,
+                        first_name: data.first_name,
+                        bio: data.bio,
+                        likes_total: data.likes_total,
+                        publications_total: data.publications_total,
+                        friends_total: data.friends_total,
+                        profile_image_url: data.profile_image_url,
+                        banner_image_url: data.banner_image_url
+                    })
+                }
+            })
             .catch(err => console.log(err))
-            setLoad(true)
+        }
+        
+        const fetchDataPublications = async () => {
+            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+                .then(res => {
+                    if (res.data.length === 0) {
+                        setIsEmpty(true)
+                    } else {
+                        setDataPublications(res.data)
+                        setIsEmpty(false)
+                        }
+                    })
+                .catch(err => console.log(err))
+                setLoad(true)
+        }
+
+        fetchDataInfo()
+        fetchDataPublications()
     }, [url])
     
     const handleOpenCommentsPubli = (dataPubli) => {
@@ -106,18 +103,18 @@ export default function MainAccount() {
 
                 <div className={themeReducer ? "account-top-dark" : "account-top"}>
                     <div className="account-bg">
-                        <img className="account-bg-img" src={dataUser.banner_image_url} alt="Your banner image"/>
+                        <img className="account-bg-img" src={dataUser.banner_image_url} alt="Your banner frame"/>
                     </div>
                     <div className="account-info">
                         <div className="account-info-top">
                             <div className="account-info-img">
-                                <img className="img-profile" src={dataUser.profile_image_url} alt="Your profile image"/>
+                                <img className="img-profile" src={dataUser.profile_image_url} alt="Your profile frame"/>
                             </div>
                             <div>
                                 <p className={themeReducer ? "txt-dark" : null}>{dataUser.first_name} {dataUser.last_name}</p>
                             </div>
 
-                        {slug != userDataReducer.user_id
+                        {parseInt(slug) !== userDataReducer.user_id
                         ? null 
                         :   <div className="account-modify">
                                 <p className={themeReducer ? "txt-dark" : null} onClick={() => handleOpenModifyAccount()}>Modify my account</p>
@@ -149,7 +146,7 @@ export default function MainAccount() {
                 </div>
 
                 <div className="account-publi">
-                    {slug != userDataReducer.user_id
+                    {parseInt(slug) !== userDataReducer.user_id
                     ? null 
                     :   <div className="new-publi">
                             <div className="write-publi" onClick={() => setOpenNewPubli(true)}>

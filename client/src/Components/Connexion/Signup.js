@@ -18,7 +18,7 @@ export default function Signup() {
     })
 
     const verifyInformations = () => {
-        let regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
+        let regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
         let name = data.last_name
         let surname = data.first_name
 
