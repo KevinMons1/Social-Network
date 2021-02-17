@@ -25,15 +25,15 @@ export default function MainAccount() {
     const [dataPublications, setDataPublications] = useState(null)
     const [dataPubliClick, setDataPubliClick] = useState(null)
     const [isEmpty, setIsEmpty] = useState(true)
-    const [url, setUrl] = useState(history.listen((location) => setUrl(location.pathname)))
+    const [callUseEffect, setCallUseEffect] = useState(true)
     
-    history.listen((location) => {
-        if (location.pathname !== url) {
-            setUrl(location.pathname)
-            setIsEmpty(true)
-            setDataPublications(null)
-            setDataUser(null)
-        }
+    // For refresh informations when user navigate in url /account
+    history.listen(() => {
+        setLoad(false)
+        setCallUseEffect(!callUseEffect)
+        setIsEmpty(true)
+        setDataPublications(null)
+        setDataUser(null)
     })
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function MainAccount() {
 
         fetchDataInfo()
         fetchDataPublications()
-    }, [url])
+    }, [callUseEffect])
     
     const handleOpenCommentsPubli = (dataPubli) => {
         setDataPubliClick(dataPubli)
@@ -107,7 +107,7 @@ export default function MainAccount() {
                     </div>
                     <div className="account-info">
                         <div className="account-info-top">
-                            <div className="account-info-img">
+                            <div className={themeReducer ? "account-info-img-dark" : "account-info-img"}>
                                 <img className="img-profile" src={dataUser.profile_image_url} alt="Your profile frame"/>
                             </div>
                             <div>

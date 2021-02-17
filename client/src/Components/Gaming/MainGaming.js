@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import "../../Styles/gaming.css"
 import {useSelector} from "react-redux"
-import api from "../../Api"
+import {apiTwitch} from "../../Api"
 import StreamCard from "./StreamCard"
 import Loader from "../Services/Loader"
 
@@ -15,7 +15,7 @@ export default function MainGaming() {
     // Take all informations for modify each url with good params
     useEffect(() => {
         const fetchData = async () => {
-            const res = await api.get('https://api.twitch.tv/helix/streams?first=100')
+            const res = await apiTwitch.get('https://api.twitch.tv/helix/streams?first=100')
             let dataArray = res.data.data
             setGetApi(dataArray)
 
@@ -46,8 +46,8 @@ export default function MainGaming() {
             let urlFinalUsers = urlUsers + queryParamsUser
 
             // Call URL
-            let gamesCall = await api.get(urlFinalGames)
-            let usersCall = await api.get(urlFinalUsers)
+            let gamesCall = await apiTwitch.get(urlFinalGames)
+            let usersCall = await apiTwitch.get(urlFinalUsers)
 
             let gamesCallArray = gamesCall.data.data
             let usersCallArray = usersCall.data.data

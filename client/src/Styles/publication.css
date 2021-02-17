@@ -119,6 +119,10 @@ info-publi
     color: #707070;
 }
 
+.left-publi-info-link {
+    color: black;
+}
+
 .left-publi-info > p {
     color: #2e2e2e;
 }
@@ -143,6 +147,10 @@ info-publi
 .text-publi {
     margin: 15px 0 30px 0;
     font-size: 15px;
+}
+
+.text-publi > p {
+    cursor: pointer;
 }
 
 /*
@@ -198,7 +206,9 @@ NewPubliBox
 
 .new-publi-content {
     position: absolute;
-    top: 25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -214,7 +224,9 @@ NewPubliBox
 
 .new-publi-content-dark {
     position: absolute;
-    top: 25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -226,59 +238,6 @@ NewPubliBox
     border: 1px solid #707070;
     border-radius: 10px;
     z-index: 1001;
-}
-
-.deleteMsg-box {
-    position: absolute;
-    top: 35%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 20vh;
-    width: 100%;
-    background-color: #F0F2F5;
-    border: 1px solid #707070;
-    border-radius: 10px;
-    z-index: 1001;
-}
-
-.deleteMsg-box-dark {
-    position: absolute;
-    top: 35%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 20vh;
-    width: 100%;
-    background-color: #252525;
-    border: 1px solid #707070;
-    border-radius: 10px;
-    z-index: 1001;
-}
-
-.deleteMsg-btn {
-    border: none;
-    border-radius: 3px;
-    margin: 5px;
-    padding: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-}
-
-.deleteMsg-btn:hover {
-    transition: 0.3s;
-    opacity: 0.5;
-}
-
-.delBtn1 {
-    background-color: #FF7272;
-}
-
-.delBtn2 {
-    background-color: #72ff72;
 }
 
 .icon-new-publi-dark {
@@ -299,13 +258,29 @@ NewPubliBox
     outline: none;
 }
 
+.new-publi-icon-btn-img {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 2;
+}
+
+.new-publi-close-icon-img {
+    font-size: 35px;
+    color: #FF7272;
+    cursor: pointer;
+}
+
 .new-publi-close-icon {
     font-size: 20px;
     color: #FF7272;
     cursor: pointer;
 }
 
-.new-publi-close-icon:hover {
+.new-publi-close-icon:hover, .new-publi-close-icon-img:hover {
     transition: 0.3s;
     color: #ff4747;
 }
@@ -325,11 +300,27 @@ NewPubliBox
 }
 
 .new-publi-box-dark {
-    display: flex;
-    height: 200px;
+    min-height: 200px;
     padding: 5px;
     border: 1px solid #fff;
     border-radius: 10px;
+}
+
+.new-publi-img-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    width: 100%;
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.new-publi-img {
+    position: absolute;
+    width: 100%;
 }
 
 .new-publi-textarea {
@@ -339,6 +330,7 @@ NewPubliBox
     border: none;
     resize: none;
     outline: none;
+    cursor: pointer;
 }
 
 .new-publi-input {
@@ -350,6 +342,12 @@ NewPubliBox
     outline: none;
 }
 
+.new-publi-btn-noVisible {
+    background: none;
+    border: none;
+    outline: none;
+}
+
 .icon-write-new-publi {
     margin-right: 10px;
     font-size: 20px;
@@ -357,7 +355,15 @@ NewPubliBox
     cursor: pointer;
 }
 
-.icon-write-new-publi:hover {
+.icon-write-new-publi-gif {
+    margin-right: 10px;
+    font-size: 15px;
+    color: #707070;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.icon-write-new-publi:hover, .icon-write-new-publi-gif:hover {
     transition: 0.3s;
     color: #000;
 }
@@ -504,13 +510,42 @@ Publication Open
 //////////////////////// 
 */
 
+
+.publi-open {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 60%;
+    padding: 15px;
+    background-color: #F0F2F5;
+    border-left: 1px solid #c2c2c2;
+    overflow-y: scroll;
+    z-index: 1001;
+}
+
+.publi-open-dark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 60%;
+    padding: 15px;
+    background-color: #2e2e2e;
+    border-left: 1px solid #c2c2c2;
+    overflow-y: scroll;
+    z-index: 1001;
+}
+
 .publi-icon {
     width: 100%;
     text-align: center;
 }
 
 .publi-icon-btn {
-    background-color: #fff;
+    background-color: rgb(236, 236, 236);
     border: none;
 }
 
@@ -531,8 +566,15 @@ Publication Open
 }
 
 .publi-open-name {
-    margin: 5px;
-    margin-left: 10%;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.publi-open-name > small {
+    margin-left: 5px;
+    font-size: 9px;
+    opacity: 0.7;
 }
 
 .publi-open-img {
@@ -560,7 +602,16 @@ Publication Open
 }
 
 .publi-open-bottom {
+    display: flex;
+    padding: 5px;
+    border-radius: 9px;
     margin: 20px;
+    background-color: #fff;
+}
+
+.publi-open-info-txt-box {
+    text-align: start;
+    width: 100%;
 }
 
 .publi-open-textarea {
@@ -588,4 +639,63 @@ Publication Open
 .publi-open-btn:hover {
     transition: 0.3s;
     background-color: #d1d1d1;
+}
+
+/*
+//////////////////////// 
+Delete publication
+//////////////////////// 
+*/
+
+.deleteMsg-box {
+    position: absolute;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    width: 100%;
+    background-color: #F0F2F5;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.deleteMsg-box-dark {
+    position: absolute;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    width: 100%;
+    background-color: #252525;
+    border: 1px solid #707070;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.deleteMsg-btn {
+    border: none;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.deleteMsg-btn:hover {
+    transition: 0.3s;
+    opacity: 0.5;
+}
+
+.delBtn1 {
+    background-color: #FF7272;
+}
+
+.delBtn2 {
+    background-color: #72ff72;
 }

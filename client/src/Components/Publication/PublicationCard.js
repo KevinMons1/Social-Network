@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
+import {Link} from "react-router-dom"
 import "../../Styles/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -63,10 +64,12 @@ export default function PublicationCard({open, data}) {
                 <div className="info-publi">
                     <div className="left-publi">
                         <div className="left-publi-img-box">
-                            <img className="left-publi-img" src={data.profile_image_url} alt="Profile frame"/>
+                            <Link to={`/account/${data.user_id}`}>
+                                <img className="left-publi-img" src={data.profile_image_url} alt="Profile frame"/>
+                            </Link>
                         </div>
                         <div className="left-publi-info">
-                            <p className={themeReducer ? 'txt-dark' : null}>{data.first_name} {data.last_name}</p>
+                            <Link to={`/account/${data.user_id}`} className={themeReducer ? 'txt-dark' : "left-publi-info-link"}>{data.first_name} {data.last_name}</Link>
                             <small className={themeReducer ? 'txt-dark' : null}>{moment(data.date).fromNow()}</small>
                         </div>
                     </div>
@@ -76,13 +79,15 @@ export default function PublicationCard({open, data}) {
                 </div>
 
                 <div className="text-publi">
-                    <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
+                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => open(data)}>{data.text}</p>
                 </div>
             </div>
              
-                <div className="bg-publi" onClick={() => open(data)}>
-                    <img className="bg-publi-img" src={data.publication_image_url} alt="Publication frame"/>
-                </div>
+                {data.publication_image_url != null 
+                ? <div className="bg-publi">
+                    <img className="bg-publi-img" src={data.publication_image_url} onClick={() => open(data)} alt="Publication frame"/>
+                  </div>
+                : null}
 
                 <div className="social-publi">
                     <div className="icon-publi">

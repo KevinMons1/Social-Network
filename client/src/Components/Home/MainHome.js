@@ -16,6 +16,7 @@ export default function MainHome() {
     const [newPubli, setNewPubli] = useState(false)
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
+    // const [hide, setHide] = useState(false)
     const [dataPubliClick, setDataPubliClick] = useState(null)
     const themeReducer = useSelector(state => state.Theme)
 
@@ -43,9 +44,11 @@ export default function MainHome() {
 
     return (
         <section className={themeReducer ? "mainHome-dark" : "mainHome"}>
+            
             {open 
             ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> 
-            : 
+            : null } 
+
             <div>
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
 
@@ -83,7 +86,7 @@ export default function MainHome() {
                 </div>
 
             </div>
-            }
+            
         </section>
     )
 }

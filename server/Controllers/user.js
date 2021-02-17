@@ -124,7 +124,7 @@ exports.uploadImageProfile = async (req, res) => {
         }
     })
 }
-
+//! Avoir car répétition avec les 2 fonctions
 // Update image banner
 exports.uploadImageBanner = async (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
