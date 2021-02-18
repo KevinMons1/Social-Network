@@ -8,9 +8,7 @@ import Connected from "../Connected/Connected"
 export default function Index() {
     return (
         <div className="gaming">
-            <Header />
             <MainGaming />
-            <Connected />
         </div>
     )
 }

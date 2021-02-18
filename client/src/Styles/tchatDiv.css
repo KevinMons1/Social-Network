@@ -1,12 +1,12 @@
 .mainTchat {
-    width: 60%;
+    width: 100%;
     height: 100vh;
     border-left: 1px solid #c2c2c2;
-    background-color: #f9f9f9;
+    background-color: #F0F2F5;
 }
 
 .mainTchat-dark {
-    width: 60%;
+    width: 100%;
     height: 100vh;
     border-left: 1px solid #000;
     background-color: #252525;

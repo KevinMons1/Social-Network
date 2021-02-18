@@ -13,9 +13,7 @@ export default function Index() {
 
     return (
         <div className={themeReducer ? "home-dark" : "home"}>
-            <Header />
             <MainHome />
-            <Connected choiceCss={true} />
         </div>
     )
 }

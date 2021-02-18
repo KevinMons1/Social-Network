@@ -2,12 +2,14 @@
     width: 20%;
     height: 100vh;
     background-color: #F0F2F5;
+    z-index: 2;
 }
 
 .header-dark {
     width: 20%;
     height: 100vh;
     background-color: #252525;
+    z-index: 2;
 }
 
 /*
@@ -46,10 +48,12 @@ Top
     align-items: center;
     width: 80%;
     height: 15%;
+    margin: 5px;
     background-color: #333333;
     border: 1px solid #707070;
     border-radius: 10px;
     color: #fff;
+    z-index: 2;
 }
 .search {
     width: 80%;
@@ -71,7 +75,7 @@ Top
 }
 
 .header-banner-box > img {
-    height: 100%;
+    width: 100%;
 }
 
 .img-profile-box {

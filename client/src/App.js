@@ -3,12 +3,15 @@
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import {Route, Switch, useLocation} from 'react-router-dom'
 import Cookie from "js-cookie"
 import axios from "axios"
 import {useDispatch} from "react-redux"
+import {useTransition, animated, config} from "react-spring"
 
 // Components
+import Header from "./Components/Header/Header"
+import Connected from "./Components/Connected/Connected"
 import Home from "./Components/Home/Index"
 import Tchat from "./Components/Tchat/Index"
 import Account from "./Components/Account/Index"
@@ -26,6 +29,17 @@ function App() {
   const [authorization, setAuthorization] = useState(false)
   const [load, setLoad] = useState(false)
   const dispatch = useDispatch()
+  const location = useLocation()
+  const transitions = useTransition(location, location => location.pathname, {
+    from: {opacity: 0, transform: 'translate3d(100%, 0, 0)'},
+    enter: {opacity: 1, transform: 'translate3d(0%, 0, 0)'},
+    leave: {opacity: 0, transform: 'translate3d(50%, 0, 0)'},
+    config: config.stiff
+    // from: {transform: 'scale(0)'},
+    // enter: {transform: 'scale(1)'},
+    // leave: {transform: 'scale(0)'},
+    //config: config.stiff
+  })
 
   useEffect(() => {
     axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
@@ -43,34 +57,39 @@ function App() {
 
   return (
     load 
-    ? authorization 
-      ? <Router>
-          <div className="App">
-            <Switch>
-              <Route exact path="/" component={Home} /> 
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/password-forget" component={PasswordForget} />
-              <Route exact path="/tchat" component={Tchat} />
-              <Route exact path="/account/:slug" component={Account} />
-              <Route exact path="/gaming" component={Gaming} />
-              <Route excat path="/gaming/live/:slug" component={Live} />
-              <Route component={Error} />
-            </Switch>
-          </div>
-        </Router>
-    
-        : <Router>
-            <div className="App">
-              <Switch>
-                <Route exact path={["/login", "/"]} component={Login} />
+      ? authorization 
+        ? 
+      <div className="App">
+      <Header />
+      <div className="container">
+        {transitions.map(({item: location, props, key}) => {
+          return (
+            <animated.div key={key} style={props} className="container-anim">
+              <Switch location={location}>
+                <Route exact path="/" component={Home} /> 
+                {/* <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/password-forget" component={PasswordForget} />
+                <Route exact path="/password-forget" component={PasswordForget} /> */}
+                <Route exact path="/tchat" component={Tchat} />
+                <Route exact path="/account/:slug" component={Account} />
+                <Route exact path="/gaming" component={Gaming} />
+                <Route excat path="/gaming/live/:slug" component={Live} />
                 <Route component={Error} />
               </Switch>
-            </div>
-          </Router> 
-    : <Loader />
+            </animated.div>
+          )
+        })}
+      </div>
+      <Connected choiceCss={true} />
+    </div>
+      
+          : <Switch>
+            <Route exact path={["/login", "/"]} component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/password-forget" component={PasswordForget} />
+            <Route component={Error} />
+          </Switch>
+      : <Loader />
   );
 
 }

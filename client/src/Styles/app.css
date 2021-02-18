@@ -5,8 +5,22 @@
     font-family: "Poppins";
 }
 
+body {
+    overflow: hidden;
+}
+
 .App {
-    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    background-color: #F0F2F5;
+}
+
+.container {
+    width: 60%;
+}
+
+.container-anim {
+    width: 100%;
 }
 
 a {

@@ -17,7 +17,6 @@ export default function Live() {
 
     return (
         <section className="gaming">
-            <Header />
             <div className={themeReducer? "mainLive-dark" : "mainLive"}>
                 <div className="live-stream">
                     <ReactTwitchEmbedVideo 
@@ -33,7 +32,6 @@ export default function Live() {
                     </Link>
                 </div>                
             </div>
-            <Connected />
         </section>
     )
 }

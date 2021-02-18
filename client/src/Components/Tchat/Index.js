@@ -9,8 +9,6 @@ import MainTchat from "./MainTchat"
 export default function Index() {
     return (
         <div className="tchat">
-            <Header />
-            <Connected choiceCss={false} />
             <MainTchat />
         </div>
     )

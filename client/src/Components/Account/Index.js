@@ -9,9 +9,7 @@ import Connected from "../Connected/Connected"
 export default function Index() {
     return (
         <div className="account">
-            <Header />
             <MainAccount />
-            <Connected choiceCss={true} />
         </div>
     )
 }

@@ -16,7 +16,7 @@
     margin: 15px 0 15px 0;
     border-radius: 10px;
     border: 1px solid #333333;
-    background-color: #333333;
+    background-color: #252525;
     -webkit-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
     -moz-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
     box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
@@ -44,7 +44,7 @@
 }
 
 .publi-delete-btn-dark {
-    background-color: #333333;
+    background-color: #272727;
     color: #fff;
     opacity: 0.5;
     border: none;
@@ -300,6 +300,7 @@ NewPubliBox
 }
 
 .new-publi-box-dark {
+    display: flex;
     min-height: 200px;
     padding: 5px;
     border: 1px solid #fff;
@@ -485,9 +486,9 @@ NewPubliBox
     text-transform: uppercase;
     border: none;
     border-radius: 5px;
-    background-color: #f1f1f1;
+    background-color: #272727;
     border: 1px solid #fff;
-    color: #000;
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
     outline: none;
@@ -495,8 +496,8 @@ NewPubliBox
 
 .new-publi-btn-dark:hover {
     transition: 0.3s;
-    background-color: rgb(43, 43, 43);
-    color: #fff;
+    background-color: #f1f1f1;
+    color: #000;
 }
 
 .new-publi-btn:hover {
@@ -510,14 +511,13 @@ Publication Open
 //////////////////////// 
 */
 
-
 .publi-open {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100%;
-    width: 60%;
+    width: 100%;
     padding: 15px;
     background-color: #F0F2F5;
     border-left: 1px solid #c2c2c2;
@@ -531,9 +531,9 @@ Publication Open
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100%;
-    width: 60%;
+    width: 100%;
     padding: 15px;
-    background-color: #2e2e2e;
+    background-color: #252525;
     border-left: 1px solid #c2c2c2;
     overflow-y: scroll;
     z-index: 1001;
@@ -599,6 +599,14 @@ Publication Open
     width: 90%;
     margin: 0 20px 0 20px;
     font-size: 13px;
+}
+
+.publi-open-bottom-dark {
+    display: flex;
+    padding: 5px;
+    border-radius: 9px;
+    margin: 20px;
+    background-color: rgb(53, 53, 53);
 }
 
 .publi-open-bottom {
@@ -698,4 +706,33 @@ Delete publication
 
 .delBtn2 {
     background-color: #72ff72;
+}
+
+/*
+//////////////////////// 
+Loader
+//////////////////////// 
+*/
+
+.left-publi-img-box-loader {
+    display: flex;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #cfcfcf;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.hashtag-loader {
+    width: 50px;
+    height: 10px;
+    background-color: #cfcfcf;
+}
+
+.bg-publi-loader {
+    width: 100%;
+    height: 30vh;
+    background-color: #cfcfcf;
 }

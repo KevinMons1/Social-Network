@@ -6,6 +6,7 @@ import {Provider} from 'react-redux'
 import {createStore, combineReducers} from 'redux'
 import Theme from "./Reducer/themeReducer"
 import UserData from "./Reducer/userDataReducer"
+import {BrowserRouter as Router} from "react-router-dom"
 
 const rootReducer = combineReducers({
   Theme,
@@ -18,7 +19,9 @@ const store = createStore(rootReducer,
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 );

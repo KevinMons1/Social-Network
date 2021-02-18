@@ -7,7 +7,7 @@
 }
 
 .mainGaming {
-    width: 60%;
+    width: 100%;
     padding: 2%;
     display: flex;
     flex-direction: column;
@@ -18,7 +18,7 @@
 }
 
 .mainGaming-dark {
-    width: 60%;
+    width: 100%;
     padding: 2%;
     display: flex;
     flex-direction: column;
@@ -169,13 +169,13 @@ Live
 */
 
 .mainLive {
-    width: 60%;
+    width: 100%;
     background-color: #F0F2F5;
     border-left: 1px solid #c2c2c2;
 }
 
 .mainLive-dark {
-    width: 60%;
+    width: 100%;
     background-color: #000;
     border-left: 1px solid #000;
 }

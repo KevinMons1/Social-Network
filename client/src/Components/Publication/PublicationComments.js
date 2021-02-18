@@ -65,7 +65,7 @@ export default function PublicationComments({close, data}) {
                     {load 
                     ? dataComments.map((item, index) => {
                         return (
-                            <div className="publi-open-bottom" key={index}>
+                            <div className={themeReducer ? "publi-open-bottom-dark" : "publi-open-bottom"} key={index}>
                                 <div className="publi-open-info-img-box">
                                     <div className="publi-open-img">
                                         <img src={item.profile_image_url} alt="Frame profile"/>
@@ -77,7 +77,6 @@ export default function PublicationComments({close, data}) {
                                         <small className={themeReducer ? 'txt-dark' : null}>{moment(item.date).fromNow()}</small>
                                     </div>
                                     <div className="publi-open-info">
-                                        
                                         <p className={themeReducer ? "publi-open-txt txt-dark" : "publi-open-txt"}>{item.text}</p>
                                     </div>
                                 </div>
