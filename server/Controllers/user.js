@@ -7,7 +7,7 @@ const publications = require("./publications")
 
 // Publication when your modify a statu as profile image
 const publicationsDefault = async (id, type, imageUrl, txt) => {
-    let hashtag, publi_id;
+    let hashtag, publiId;
 
     if (type === "profile") {
         hashtag = "newProfileImage"
@@ -15,18 +15,18 @@ const publicationsDefault = async (id, type, imageUrl, txt) => {
         hashtag = "newBannerImage"
     } 
 
-    await db.query("INSERT INTO publications (user_id, text, hashtag) VALUES (?, ?, ?)",
+    await db.query("INSERT INTO publications (userId, text, hashtag) VALUES (?, ?, ?)",
     [id, txt, hashtag], async (err, result) => {
         if (err) {
             throw err
         } else {
-            publi_id = result.insertId
-            await db.query("INSERT INTO publication_images (publication_id, publication_image_url) VALUES (?, ?)",
-            [publi_id, imageUrl], async (err2, result2) => {
+            publiId = result.insertId
+            await db.query("INSERT INTO publicationImages (publicationId, publicationImageUrl) VALUES (?, ?)",
+            [publiId, imageUrl], async (err2, result2) => {
                 if (err2) {
                     throw err2
                 } else {
-                    await db.query("UPDATE users SET publications_total = publications_total + 1 WHERE user_id = ?",
+                    await db.query("UPDATE users SET publicationsTotal = publicationsTotal + 1 WHERE userId = ?",
                     [id], (err3, result3) => {
                         if (err3) {
                             throw err3
@@ -44,15 +44,15 @@ exports.getAccountInformations = async (req, res) => {
     let regex = /^[0-9]*$/
 
     if (id != null && id.match(regex) != null) {
-        const queryUser = "u.last_name, u.first_name, u.bio, u.likes_total, u.publications_total, u.friends_total"
-        const queryImgProfile = "ip.profile_image_url"
-        const queryImgBanner = "ib.banner_image_url"
+        const queryUser = "u.lastName, u.firstName, u.bio, u.likesTotal, u.publicationsTotal, u.friendsTotal"
+        const queryImgProfile = "ip.profileImageUrl"
+        const queryImgBanner = "ib.bannerImageUrl"
 
         await db.query(`SELECT ${queryUser}, ${queryImgProfile}, ${queryImgBanner}
                         FROM users u
-                        LEFT JOIN profile_images ip ON ip.user_id = ?
-                        LEFT JOIN banner_images ib ON ib.user_id = ?
-                        WHERE u.user_id = ?`, [id, id, id], (err, result) => {
+                        LEFT JOIN profileImages ip ON ip.userId = ?
+                        LEFT JOIN bannerImages ib ON ib.userId = ?
+                        WHERE u.userId = ?`, [id, id, id], (err, result) => {
             if (err) {
                 throw err
             } else {
@@ -60,14 +60,14 @@ exports.getAccountInformations = async (req, res) => {
                     res.send({
                         alert: false,
                         userData: {
-                            last_name: result[0].last_name,
-                            first_name: result[0].first_name,
+                            lastName: result[0].lastName,
+                            firstName: result[0].firstName,
                             bio: result[0].bio,
-                            likes_total: result[0].likes_total,
-                            publications_total: result[0].publications_total,
-                            friends_total: result[0].friends_total,
-                            profile_image_url: result[0].profile_image_url,
-                            banner_image_url: result[0].banner_image_url
+                            likesTotal: result[0].likesTotal,
+                            publicationsTotal: result[0].publicationsTotal,
+                            friendsTotal: result[0].friendsTotal,
+                            profileImageUrl: result[0].profileImageUrl,
+                            bannerImageUrl: result[0].bannerImageUrl
                         }
                     })
                 } else {
@@ -82,14 +82,14 @@ exports.getAccountInformations = async (req, res) => {
 
 // Update informations
 exports.updateAccountInformations = async (req, res) => {
-    const { last_name, first_name, bio } = req.body
+    const { lastName, firstName, bio } = req.body
     const id = req.params.id
     const regex = /^[^@&":()!_$*€<>£`'µ§%+=\/;?#]+$/
 
-    if (last_name != null && first_name != null) {
-        if (last_name.match(regex) && first_name.match(regex)) {
-            await db.query("UPDATE users SET last_name = ?, first_name = ?, bio = ? WHERE user_id = ?",
-            [last_name, first_name, bio, id], (err, result) => {
+    if (lastName != null && firstName != null) {
+        if (lastName.match(regex) && firstName.match(regex)) {
+            await db.query("UPDATE users SET lastName = ?, firstName = ?, bio = ? WHERE userId = ?",
+            [lastName, firstName, bio, id], (err, result) => {
                 if (err) {
                     res.send({message: "An error has occurred !", alert: true})
                     throw err
@@ -113,7 +113,7 @@ exports.uploadImageProfile = async (req, res) => {
     const txt = req.body.txt
 
     
-    db.query("UPDATE profile_images SET profile_image_url = ? WHERE user_id = ?",
+    db.query("UPDATE profileImages SET profileImageUrl = ? WHERE userId = ?",
     [imageUrl, id], async (err, result) => {
         if (err) {
             res.send({message: "An error has occurred !", alert: true})
@@ -131,7 +131,7 @@ exports.uploadImageBanner = async (req, res) => {
     const id = req.params.id 
     const txt = req.body.txt
     
-    db.query("UPDATE banner_images SET banner_image_url = ? WHERE user_id = ?",
+    db.query("UPDATE bannerImages SET bannerImageUrl = ? WHERE userId = ?",
     [imageUrl, id], async (err, result) => {
         if (err) {
             res.send({message: "An error has occurred !", alert: true})

@@ -11,16 +11,16 @@ export default function Signup() {
     const [alertCss, setAletCss] = useState(true)
     const [passwordVerify, setPasswordVerify] = useState("")
     const [data, setData] = useState({
-        last_name: "",
-        first_name: "",
+        lastName: "",
+        firstName: "",
         email: "",
         password: ""
     })
 
     const verifyInformations = () => {
         let regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
-        let name = data.last_name
-        let surname = data.first_name
+        let name = data.lastName
+        let surname = data.firstName
 
         if (surname.length > 2 && name.length > 2) {
             if (surname.match(regex) && name.match(regex)) {
@@ -91,12 +91,12 @@ export default function Signup() {
                     </div>
                     <div className="connexion-info connexion-name">
                         <div>
-                            <label htmlFor="last_name" className="connexion-label">Last Name</label>
-                            <input required type="text" name="last_name" className="connexion-input" onChange={e => handleChange(e)}/>
+                            <label htmlFor="lastName" className="connexion-label">Last Name</label>
+                            <input required type="text" name="lastName" className="connexion-input" onChange={e => handleChange(e)}/>
                         </div>
                         <div>
-                            <label htmlFor="first_name" className="connexion-label">First Name</label>
-                            <input required type="text" name="first_name" className="connexion-input" onChange={e => handleChange(e)}/>
+                            <label htmlFor="firstName" className="connexion-label">First Name</label>
+                            <input required type="text" name="firstName" className="connexion-input" onChange={e => handleChange(e)}/>
                         </div>
                     </div>
                     <div className="connexion-info">

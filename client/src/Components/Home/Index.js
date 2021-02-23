@@ -3,9 +3,7 @@ import {useSelector} from "react-redux"
 import "../../Styles/home.css"
 
 //Components
-import Header from "../Header/Header"
 import MainHome from "./MainHome"
-import Connected from "../Connected/Connected"
 
 export default function Index() {
 

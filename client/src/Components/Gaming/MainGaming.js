@@ -3,7 +3,7 @@ import "../../Styles/gaming.css"
 import {useSelector} from "react-redux"
 import {apiTwitch} from "../../Api"
 import StreamCard from "./StreamCard"
-import Loader from "../Services/Loader"
+import PublicationCardLoader from "../Publication/PublicationCardLoader"
 
 export default function MainGaming() {
 
@@ -126,7 +126,7 @@ export default function MainGaming() {
                         />
                     )
                 })  
-            : <div><Loader /></div>
+            : <PublicationCardLoader />
             }
 
         </section>

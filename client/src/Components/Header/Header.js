@@ -32,15 +32,15 @@ export default function Header() {
         <header className={themeReducer ? "header-dark" : "header"}>
             <div className="header-top">
                 <div className="header-banner-box">
-                    <img src={userDataReducer.banner_image_url} alt="Your banner frame"/>
+                    <img src={userDataReducer.bannerImageUrl} alt="Your banner frame"/>
                 </div>
                 <div className={themeReducer ? "search-top-dark" : "search-top"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
                     <input className={themeReducer ? "search txt-dark" : "search"} type="search" placeholder="Search..."/>
                 </div>
                 <div className="img-profile-box">
-                    <Link to={{pathname: `/account/${userDataReducer.user_id}`}}>
-                        <img className="img-profile" src={userDataReducer.profile_image_url} alt="Your profile frame"/>
+                    <Link to={{pathname: `/account/${userDataReducer.userId}`}}>
+                        <img className="img-profile" src={userDataReducer.profileImageUrl} alt="Your profile frame"/>
                     </Link>
                 </div>
             </div>
@@ -56,7 +56,7 @@ export default function Header() {
                     <li className="header-middle-li">
                         <FontAwesomeIcon className={themeReducer ? "header-account-icon header-middle-icon-dark" : "header-account-icon header-middle-icon"} icon="user-circle" />
                         <div className="header-middle-text">
-                            <Link to={{pathname: `/account/${userDataReducer.user_id}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
+                            <Link to={{pathname: `/account/${userDataReducer.userId}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">

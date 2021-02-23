@@ -26,8 +26,8 @@ export default function PublicationCard({open, data}) {
     }, [])
 
     const handleDelete = () => {
-        if (data.user_id === userDataReducer.user_id) {
-            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.user_id + "-" + data.publication_id}`)
+        if (data.userId === userDataReducer.userId) {
+            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.userId + "-" + data.publicationId}`)
                 .then(res => {
                     if (res.data.alert) {
                         // setDeleteMsg(true)
@@ -55,7 +55,7 @@ export default function PublicationCard({open, data}) {
               </div>
             : null
             }
-            {data.user_id === userDataReducer.user_id
+            {data.userId === userDataReducer.userId
             ? <div className="publi-delete-box"> 
                 <button className={themeReducer ? "publi-delete-btn-dark" : "publi-delete-btn"} onClick={() => setDeleteAlert(true)}>Delete</button>
               </div>
@@ -64,12 +64,12 @@ export default function PublicationCard({open, data}) {
                 <div className="info-publi">
                     <div className="left-publi">
                         <div className="left-publi-img-box">
-                            <Link to={`/account/${data.user_id}`}>
-                                <img className="left-publi-img" src={data.profile_image_url} alt="Profile frame"/>
+                            <Link to={`/account/${data.userId}`}>
+                                <img className="left-publi-img" src={data.profileImageUrl} alt="Profile frame"/>
                             </Link>
                         </div>
                         <div className="left-publi-info">
-                            <Link to={`/account/${data.user_id}`} className={themeReducer ? 'txt-dark' : "left-publi-info-link"}>{data.first_name} {data.last_name}</Link>
+                            <Link to={`/account/${data.userId}`} className={themeReducer ? 'txt-dark' : "left-publi-info-link"}>{data.firstName} {data.lastName}</Link>
                             <small className={themeReducer ? 'txt-dark' : null}>{moment(data.date).fromNow()}</small>
                         </div>
                     </div>
@@ -83,20 +83,20 @@ export default function PublicationCard({open, data}) {
                 </div>
             </div>
              
-                {data.publication_image_url != null 
+                {data.publicationImageUrl != null 
                 ? <div className="bg-publi">
-                    <img className="bg-publi-img" src={data.publication_image_url} onClick={() => open(data)} alt="Publication frame"/>
+                    <img className="bg-publi-img" src={data.publicationImageUrl} onClick={() => open(data)} alt="Publication frame"/>
                   </div>
                 : null}
 
                 <div className="social-publi">
                     <div className="icon-publi">
                         <FontAwesomeIcon className="heart-publi" icon="heart" />
-                        <p className={themeReducer ? 'txt-dark' : null}>{data.likes_total}</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>{data.likesTotal}</p>
                     </div>
                     <div className="icon-publi">
                         <FontAwesomeIcon className="comment-publi" icon="comment" />
-                        <p className={themeReducer ? 'txt-dark' : null}>{data.comments_total}</p>
+                        <p className={themeReducer ? 'txt-dark' : null}>{data.commentsTotal}</p>
                     </div>
                 </div>
               

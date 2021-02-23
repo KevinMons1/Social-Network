@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import {Gifs} from "../../Api"
 import axios from "axios"
+import {useTransition, animated, config} from "react-spring"
 
 export default function NewPubliBox({ setPubli }) {
 
@@ -18,6 +19,19 @@ export default function NewPubliBox({ setPubli }) {
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
     const [newHashtag, setNewHashtag] = useState("")
+    const [isAnimated, setIsAnimated] = useState(true)
+    const transitionContent = useTransition(isAnimated, null, {
+        from: {opacity: 0, transform: "scale(0)"},
+        enter: {opacity: 1, transform: "scale(1)"},
+        leave: {opacity: 0, transform: "scale(0)"},
+        config: config.stiff
+    })
+    const transitionContentOpacity = useTransition(isAnimated, null, {
+        from: {opacity: 0},
+        enter: {opacity: 0.5},
+        leave: {opacity: 0},
+        config: config.stiff
+    })
     const [data, setData] = useState({
         text: "",
         hashtag: []
@@ -51,16 +65,16 @@ export default function NewPubliBox({ setPubli }) {
         e.preventDefault()
         // Publication text
         if (verifyInformations()) {
-            axios.post(`http://localhost:3001/api/publications/add/${userDataReducer.user_id}`, data)
+            axios.post(`http://localhost:3001/api/publications/add/${userDataReducer.userId}`, data)
                 .then(res => {
                     if (res.data.alert) {
                         // Publication image
                         if (dataFile != null) {
                             let formData = new FormData()
                             formData.append('file', dataFile)
-                            formData.append('id', res.data.publication_id)
+                            formData.append('id', res.data.publicationId)
                             
-                            axios.post(`http://localhost:3001/api/publications/add/image/${userDataReducer.user_id}`, formData)
+                            axios.post(`http://localhost:3001/api/publications/add/image/${userDataReducer.userId}`, formData)
                                 .then(res => {
                                     setAletCss(false)
                                     setAlertMsg(res.data.message)
@@ -77,7 +91,10 @@ export default function NewPubliBox({ setPubli }) {
     }
 
     const handleClosePublication = () => {
-        setPubli(false)
+        setIsAnimated(!isAnimated)
+        setTimeout(() => {
+            setPubli(false)
+        }, 200);
     }
     
     const handleChange = e => {
@@ -112,8 +129,11 @@ export default function NewPubliBox({ setPubli }) {
 
     return (
         <div className="new-publi-container">
-            <div className="new-publi-opacity"></div>
-            <div className={themeReducer ? "new-publi-content-dark" : "new-publi-content"}>
+            {transitionContentOpacity.map(({item, key, props}) => item && (
+                <animated.div key={key} style={props} className="new-publi-opacity"></animated.div>
+            ))}
+            {transitionContent.map(({item, key, props}) => item && (
+                <animated.div key={key} style={props} className={themeReducer ? "new-publi-content-dark" : "new-publi-content"}>
                 <button className={themeReducer ? "new-publi-icon-btn-dark" : "new-publi-icon-btn"} onClick={handleClosePublication}>
                     <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon"/>
                 </button>
@@ -130,7 +150,7 @@ export default function NewPubliBox({ setPubli }) {
                                 <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon-img"/>
                             </button>
                             <img src={imgVisible} alt="Your publication frame" className="new-publi-img"/>
-                          </div>
+                        </div>
                         : null} 
                     <div className={themeReducer ? "new-publi-box-dark" : "new-publi-box"}>
                         <FontAwesomeIcon className={themeReducer ? "icon-new-publi-dark" : "icon-new-publi"} icon="comments" />
@@ -154,7 +174,8 @@ export default function NewPubliBox({ setPubli }) {
                     </div>
                     <button className={themeReducer ? "new-publi-btn-dark" : "new-publi-btn"}>PUBLISH</button>
                 </form>
-            </div>
+            </animated.div>
+            ))}   
         </div>
     )
 }

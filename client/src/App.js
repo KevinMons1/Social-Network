@@ -6,7 +6,7 @@ import "./Styles/app.css"
 import {Route, Switch, useLocation} from 'react-router-dom'
 import Cookie from "js-cookie"
 import axios from "axios"
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
 
 // Components
@@ -26,19 +26,16 @@ import Loader from "./Components/Services/Loader"
 function App() {
 
   const authCookie = Cookie.get("user")
+  const themeReduceur = useSelector(state => state.Theme)
   const [authorization, setAuthorization] = useState(false)
   const [load, setLoad] = useState(false)
   const dispatch = useDispatch()
   const location = useLocation()
   const transitions = useTransition(location, location => location.pathname, {
-    from: {opacity: 0, transform: 'translate3d(100%, 0, 0)'},
+    from: {opacity: 0, transform: 'translate3d(-50%, 0, 0)', position: 'absolute'},
     enter: {opacity: 1, transform: 'translate3d(0%, 0, 0)'},
     leave: {opacity: 0, transform: 'translate3d(50%, 0, 0)'},
     config: config.stiff
-    // from: {transform: 'scale(0)'},
-    // enter: {transform: 'scale(1)'},
-    // leave: {transform: 'scale(0)'},
-    //config: config.stiff
   })
 
   useEffect(() => {
@@ -59,7 +56,7 @@ function App() {
     load 
       ? authorization 
         ? 
-      <div className="App">
+      <div className={themeReduceur ? "App-dark" : "App"}>
       <Header />
       <div className="container">
         {transitions.map(({item: location, props, key}) => {

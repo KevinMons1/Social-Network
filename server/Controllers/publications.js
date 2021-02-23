@@ -10,12 +10,12 @@ exports.addNewPublication = (req, res) => {
     const id = req.params.id
     let hashtagTxt = hashtag.join(";")
 
-    db.query("INSERT INTO publications (user_id, text, hashtag) VALUES (?, ?, ?)",
+    db.query("INSERT INTO publications (userId, text, hashtag) VALUES (?, ?, ?)",
     [id, text, hashtagTxt], (err, result) => {
         if (err) {
             throw err
         } else {
-            db.query("UPDATE users SET publications_total = publications_total + 1 WHERE user_id = ?",
+            db.query("UPDATE users SET publicationsTotal = publicationsTotal + 1 WHERE userId = ?",
             [id], (_err, _result) => {
                 if (_err) {
                     throw _err
@@ -32,7 +32,7 @@ exports.addPublicationImage = (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
     const id = req.body.id 
     
-    db.query("INSERT INTO publication_images (publication_image_url, publication_id) VALUES (?, ?)",
+    db.query("INSERT INTO publicationImages (publicationImageUrl, publicationId) VALUES (?, ?)",
     [imageUrl, id], (err, result) => {
         if (err) {
             res.send({message: "An error has occurred !", alert: true})
@@ -45,16 +45,16 @@ exports.addPublicationImage = (req, res) => {
 
 // Add new comments in publication
 exports.addNewComments = (req, res) => {
-    const {user_id, text} = req.body
-    const publication_id = req.params.id
+    const {userId, text} = req.body
+    const publicationId = req.params.id
 
-    db.query("INSERT INTO publication_comments (publication_id, user_id, text) VALUES (?, ?, ?)",
-    [publication_id, user_id, text], (err, result) => {
+    db.query("INSERT INTO publicationComments (publicationId, userId, text) VALUES (?, ?, ?)",
+    [publicationId, userId, text], (err, result) => {
         if (err) {
             throw err
         } else {
-            db.query("UPDATE publications SET comments_total = comments_total + 1 WHERE publication_id = ?",
-            [publication_id], (err2, result2) => {
+            db.query("UPDATE publications SET commentsTotal = commentsTotal + 1 WHERE publicationId = ?",
+            [publicationId], (err2, result2) => {
                 if (err2) {
                     throw err2
                 } else {
@@ -67,16 +67,16 @@ exports.addNewComments = (req, res) => {
 
 // get all publication by all users
 exports.getAllPublications = (req, res) => {
-    const queryPublications = "p.publication_id, p.user_id, p.text, p.hashtag, p.likes_total, p.comments_total, p.date"
-    const queryUsers = "u.last_name, u.first_name"
-    const queryImg = "pi.publication_image_url, pri.profile_image_url"
+    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.likesTotal, p.commentsTotal, p.date"
+    const queryUsers = "u.lastName, u.firstName"
+    const queryImg = "pi.publicationImageUrl, pri.profileImageUrl"
 
     //Order by id DESC to sort from new to oldest
     db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
-                    LEFT JOIN users u ON u.user_id = p.user_id 
-                    LEFT JOIN profile_images pri ON pri.user_id = u.user_id
-                    LEFT JOIN publication_images pi ON pi.publication_id = p.publication_id
-                    ORDER BY p.publication_id DESC`,
+                    LEFT JOIN users u ON u.userId = p.userId 
+                    LEFT JOIN profileImages pri ON pri.userId = u.userId
+                    LEFT JOIN publicationImages pi ON pi.publicationId = p.publicationId
+                    ORDER BY p.publicationId DESC`,
     (err, result) => {
         if (err) {
             throw err
@@ -89,14 +89,14 @@ exports.getAllPublications = (req, res) => {
 // Get all comments in this publication
 exports.getComments = (req, res) => {
     const publication_id = req.params.id
-    const queryComments = "c.comments_id, c.publication_id, c.user_id, c.text, c.date"
-    const queryUsers = "u.last_name, u.first_name"
-    const queryImg = "pi.profile_image_url"
+    const queryComments = "c.commentsId, c.publicationId, c.userId, c.text, c.date"
+    const queryUsers = "u.lastName, u.firstName"
+    const queryImg = "pi.profileImageUrl"
 
-    db.query(`SELECT ${queryComments}, ${queryUsers}, ${queryImg} FROM publication_comments c
-                LEFT JOIN users u ON u.user_id = c.user_id
-                LEFT JOIN profile_images pi ON pi.user_id = c.user_id
-                WHERE publication_id = ?`, 
+    db.query(`SELECT ${queryComments}, ${queryUsers}, ${queryImg} FROM publicationComments c
+                LEFT JOIN users u ON u.userId = c.userId
+                LEFT JOIN profileImages pi ON pi.userId = c.userId
+                WHERE publicationId = ?`, 
     [publication_id], (err, result) => {
         if (err) {
             throw err
@@ -110,17 +110,17 @@ exports.getComments = (req, res) => {
 exports.getAccountPublications = (req, res) => {
     const id = req.params.id
 
-    const queryPublications = "p.publication_id, p.user_id, p.text, p.hashtag, p.likes_total, p.comments_total, p.date"
-    const queryUsers = "u.last_name, u.first_name"
-    const queryImg = "pi.publication_image_url, pri.profile_image_url"
+    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.likesTotal, p.commentsTotal, p.date"
+    const queryUsers = "u.lastName, u.firstName"
+    const queryImg = "pi.publicationImageUrl, pri.profileImageUrl"
 
     //Order by id DESC to sort from new to oldest
     db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
-                    LEFT JOIN users u ON u.user_id = p.user_id 
-                    LEFT JOIN profile_images pri ON pri.user_id = u.user_id
-                    LEFT JOIN publication_images pi ON pi.publication_id = p.publication_id
-                    WHERE p.user_id = ? 
-                    ORDER BY p.publication_id DESC`,
+                    LEFT JOIN users u ON u.userId = p.userId 
+                    LEFT JOIN profileImages pri ON pri.userId = u.userId
+                    LEFT JOIN publicationImages pi ON pi.publicationId = p.publicationId
+                    WHERE p.userId = ? 
+                    ORDER BY p.publicationId DESC`,
     [id], (err, result) => {
         if (err) {
             throw err
@@ -133,20 +133,20 @@ exports.getAccountPublications = (req, res) => {
 // Delete publications
 exports.deletePublication = (req, res) => {
     const id = req.params.id.split("-")
-    const user_id = id[0]
-    const publication_id = id[1]
+    const userId = id[0]
+    const publicationId = id[1]
 
     // this is not working, to be repaired later
     // db.query(`DELETE FROM publications p
-    //             LEFT JOIN publication_images pi ON pi.publication_id = ?
-    //             LEFT JOIN publication_comments pc ON pc.publication_id = ?
-    //             WHERE p.publication_id = ?`,
-    //             [publication_id, publication_id, publication_id] ,(err, result) => {
+    //             LEFT JOIN publicationImages pi ON pi.publicationId = ?
+    //             LEFT JOIN publicationComments pc ON pc.publicationId = ?
+    //             WHERE p.publicationId = ?`,
+    //             [publicationId, publicationId, publicationId] ,(err, result) => {
     //                 if (err) {
     //                     throw err
     //                 } else {
-    //                     db.query("UPDATE users SET publications_total = publications_total - 1 WHERE user_id = ?",
-    //                     [user_id], (err3, result3) => {
+    //                     db.query("UPDATE users SET publicationsTotal = publicationsTotal - 1 WHERE userId = ?",
+    //                     [userId], (err3, result3) => {
     //                         if (err3) {
     //                             throw err3
     //                         } else {
@@ -156,19 +156,19 @@ exports.deletePublication = (req, res) => {
     //                 }
     //             })
     
-    db.query("DELETE FROM publications WHERE publication_id = ?", [publication_id], (err, result) => {
+    db.query("DELETE FROM publications WHERE publicationId = ?", [publicationId], (err, result) => {
         if (err) {
             throw err
         } else {
-            db.query("DELETE FROM publication_images WHERE publication_id = ?", [publication_id], (err2, result2) => {
+            db.query("DELETE FROM publicationImages WHERE publicationId = ?", [publicationId], (err2, result2) => {
                 if (err2) {
                     throw err2
                 } else {
-                    db.query("DELETE FROM publication_comments WHERE publication_id = ?", [publication_id], (err3, result3) => {
+                    db.query("DELETE FROM publicationComments WHERE publicationId = ?", [publicationId], (err3, result3) => {
                         if (err3) {
                             throw err3
                         } else {
-                            db.query("UPDATE users SET publications_total = publications_total - 1 WHERE user_id = ?",
+                            db.query("UPDATE users SET publicationsTotal = publicationsTotal - 1 WHERE userId = ?",
                             [user_id], (err4, result4) => {
                                 if (err4) {
                                     throw err4

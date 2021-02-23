@@ -1,11 +1,8 @@
 import React from 'react'
-import {useSelector} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 
 export default function PublicationCardLoader() {
-
-    const themeReducer = useSelector(state => state.Theme)
 
     return (
         <div className="publi">

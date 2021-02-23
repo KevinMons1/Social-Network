@@ -17,13 +17,13 @@ export default function PublicationComments({close, data}) {
     const userDataReducer = useSelector(state => state.UserData)
     const [dataComments, setDataComments] = useState([])
     const [dataNewPubli, setDataNewPubli] = useState({
-        user_id: userDataReducer.user_id,
+        userId: userDataReducer.userId,
         text: ""
     })
 
     useEffect(() => {
         setLoad(false)
-        axios.get(`http://localhost:3001/api/publications/comments/${data.publication_id}`)
+        axios.get(`http://localhost:3001/api/publications/comments/${data.publicationId}`)
             .then(res => {
                 setDataComments(res.data)
                 setLoad(true)
@@ -35,7 +35,7 @@ export default function PublicationComments({close, data}) {
         e.preventDefault()
 
         if (dataNewPubli.text.length > 2) {
-            axios.post(`http://localhost:3001/api/publications/comments/add/${data.publication_id}`, dataNewPubli)
+            axios.post(`http://localhost:3001/api/publications/comments/add/${data.publicationId}`, dataNewPubli)
                 .then(res => {
                     setAletCss(false)
                     setAlertMsg("Comment published !")
@@ -68,12 +68,12 @@ export default function PublicationComments({close, data}) {
                             <div className={themeReducer ? "publi-open-bottom-dark" : "publi-open-bottom"} key={index}>
                                 <div className="publi-open-info-img-box">
                                     <div className="publi-open-img">
-                                        <img src={item.profile_image_url} alt="Frame profile"/>
+                                        <img src={item.profileImageUrl} alt="Frame profile"/>
                                     </div>
                                 </div>
                                 <div className="publi-open-info-txt-box">
                                     <div className="publi-open-name">
-                                        <p className={themeReducer ? 'txt-dark' : null}>{item.first_name} {item.last_name}</p>
+                                        <p className={themeReducer ? 'txt-dark' : null}>{item.firstName} {item.lastName}</p>
                                         <small className={themeReducer ? 'txt-dark' : null}>{moment(item.date).fromNow()}</small>
                                     </div>
                                     <div className="publi-open-info">
