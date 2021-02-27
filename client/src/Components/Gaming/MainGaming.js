@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import "../../Styles/gaming.css"
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import {apiTwitch} from "../../Api"
 import StreamCard from "./StreamCard"
 import PublicationCardLoader from "../Publication/PublicationCardLoader"
 
 export default function MainGaming() {
 
+    const dispatch = useDispatch()
     const [streams, setStreams] = useState([])
     const [getApi, setGetApi] = useState([])
     const [load, setLoad] = useState(false)
@@ -14,6 +15,12 @@ export default function MainGaming() {
 
     // Take all informations for modify each url with good params
     useEffect(() => {
+
+        dispatch({
+            type: "CHANGE_ZINDEX",
+            payload: false
+          })
+
         const fetchData = async () => {
             const res = await apiTwitch.get('https://api.twitch.tv/helix/streams?first=100')
             let dataArray = res.data.data
@@ -100,7 +107,7 @@ export default function MainGaming() {
     }
     
     return (
-        <section className={themeReducer ? "mainGaming-dark" : "mainGaming"}>
+        <div className={themeReducer ? "mainGaming-dark" : "mainGaming"}>
 
             <div className="gaming-lang">
                 <div className={themeReducer ? "gaming-lang-box-dark" : "gaming-lang-box"} onClick={() => handleLanguage("all")}>
@@ -112,23 +119,27 @@ export default function MainGaming() {
                     <p>FR</p>
                 </div>
             </div>
-            {load ?                        
-                streams.map((stream, index) => {
-                    return (
-                        <StreamCard 
-                            login={stream.login}
-                            name={stream.user_name}
-                            channelImg={stream.channelImg} 
-                            streamImg={stream.streamImg}
-                            viewerCount={stream.viewer_count}
-                            gamePlay={stream.gameName} 
-                            key={index} 
-                        />
-                    )
-                })  
-            : <PublicationCardLoader />
+            {load 
+            ? streams.map((stream, index) => {
+                return (
+                    <StreamCard 
+                        login={stream.login}
+                        name={stream.user_name}
+                        channelImg={stream.channelImg} 
+                        streamImg={stream.streamImg}
+                        viewerCount={stream.viewer_count}
+                        gamePlay={stream.gameName} 
+                        key={index} 
+                    />
+                )
+            })  
+            : <div className="streamCardLoader">
+                <PublicationCardLoader />
+                <PublicationCardLoader />
+                <PublicationCardLoader />
+                </div>
             }
 
-        </section>
+        </div>
     )
 }

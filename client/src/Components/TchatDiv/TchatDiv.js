@@ -1,28 +1,36 @@
-import React from 'react'
-import {useSelector} from "react-redux"
-import "../../Styles/tchatDiv.css"
+import React, {useEffect} from 'react'
+import {useSelector, useDispatch} from "react-redux"
+import "../../Styles/tchat.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import UserCard from '../Connected/UserCard'
 
-export default function TchatDiv(props) {
+export default function TchatDiv({choiceCss, closeTchat}) {
 
     const themeReducer = useSelector(state => state.Theme)
+    const dispatch = useDispatch()
 
-    const choiceContainer = props.choiceCss ? "tchatDiv-container-mini" : "tchatDiv-container"
-    const choiceInfo = props.choiceCss ? "tchatDiv-info-mini" : "tchatDiv-info"
+    useEffect(() => {
+        dispatch({
+            type: "CHANGE_ZINDEX",
+            payload: true
+          })
+    }, [])
+
+    const choiceContainer = choiceCss ? "tchatDiv-container-mini" : "tchatDiv-container"
+    const choiceInfo = choiceCss ? "tchatDiv-info-mini" : "tchatDiv-info"
 
     return (
         <div className={themeReducer ? `${choiceContainer} tchatDiv-dark` : choiceContainer}>
             <div className="tchatDiv-top">
                 <div className="tchatDiv-icon">
-                    {props.choiceCss ? <FontAwesomeIcon icon="times-circle" className="close-icon" onClick={props.closeTchat} /> : null}
+                    {choiceCss ? <FontAwesomeIcon icon="times-circle" className="close-icon" onClick={closeTchat} /> : null}
                 </div>
                 <div className={themeReducer ? `${choiceInfo} tchatDiv-info-dark` : choiceInfo}>
                     <UserCard />
                 </div>
             </div>            
-            <div className={props.choiceCss ? "tchatDiv-mini" : "tchatDiv"}>
+            <div className={choiceCss ? "tchatDiv-mini" : "tchatDiv"}>
                 <div className="msg-container">
                     <div className="msg-box">
                         <div className="msg">

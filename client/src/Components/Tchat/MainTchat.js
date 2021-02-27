@@ -7,8 +7,8 @@ export default function MainTchat() {
     const themeReducer = useSelector(state => state.Theme)
 
     return (
-        <section className={themeReducer ? "mainTchat-dark" : "mainTchat"}>
+        <div className={themeReducer ? "mainTchat-dark" : "mainTchat"}>
             <TchatDiv choiceCss={false} />
-        </section>
+        </div>
     )
 }

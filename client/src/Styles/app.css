@@ -25,6 +25,10 @@ body {
     width: 60%;
 }
 
+.container-index {
+    z-index: 3;
+}
+
 .container-anim {
     width: 100%;
 }

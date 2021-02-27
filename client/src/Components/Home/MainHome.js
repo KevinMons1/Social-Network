@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import "../../Styles/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -12,20 +12,19 @@ import Loader from "../Services/Loader"
 
 export default function MainHome() {
 
+    const themeReducer = useSelector(state => state.Theme)
+    const dispatch = useDispatch()
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
-    const [open, setOpen] = useState(false)
+    const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [data, setData] = useState(null)
-    // const [hide, setHide] = useState(false)
     const [dataPubliClick, setDataPubliClick] = useState(null)
-    const themeReducer = useSelector(state => state.Theme)
-
-    const handleOpenCommentsPubli = (dataPubli) => {
-        setDataPubliClick(dataPubli)
-        setOpen(true)
-    }
 
     useEffect(() => {
+        dispatch({
+            type: "CHANGE_ZINDEX",
+            payload: false
+          })
         // Get all publications
         async function fetchData() {
             await axios.get("http://localhost:3001/api/publications/all")
@@ -38,16 +37,19 @@ export default function MainHome() {
         fetchData()
     }, [])
 
+    const handleOpenCommentsPubli = (dataPubli) => {
+        setDataPubliClick(dataPubli)
+        setOpenCommentsPubli(true)
+    }
+
     const handleCloseCommentsPubli = () => {
-        setOpen(false)
+        setOpenCommentsPubli(false)
     }
 
     return (
-        <section className={themeReducer ? "mainHome-dark" : "mainHome"}>
-            
-            {open 
-            ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> 
-            : null } 
+        <div className={themeReducer ? "mainHome-dark" : "mainHome"}>
+        
+            {openCommentsPubli ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> : null } 
 
             <div>
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
@@ -84,9 +86,7 @@ export default function MainHome() {
                     : <Loader />
                     }
                 </div>
-
             </div>
-            
-        </section>
+        </div>
     )
 }

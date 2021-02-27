@@ -10,8 +10,8 @@ export default function Index() {
     const themeReducer = useSelector(state => state.Theme)
 
     return (
-        <div className={themeReducer ? "home-dark" : "home"}>
+        <section className={themeReducer ? "home-dark" : "home"}>
             <MainHome />
-        </div>
+        </section>
     )
 }

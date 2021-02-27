@@ -1,19 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import "../../Styles/gaming.css"
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 import {Link, useParams} from "react-router-dom"
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
-
-// Components
-import Header from "../Header/Header"
-import Connected from "../Connected/Connected"
 
 export default function Live() {
 
     let {slug} = useParams()
+    const dispatch = useDispatch()
     const themeReducer = useSelector(state => state.Theme)
+
+    useEffect(() => {
+        dispatch({
+            type: "CHANGE_ZINDEX",
+            payload: false
+          })
+    }, [])
 
     return (
         <section className="gaming">

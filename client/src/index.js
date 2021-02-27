@@ -6,11 +6,13 @@ import {Provider} from 'react-redux'
 import {createStore, combineReducers} from 'redux'
 import Theme from "./Reducer/themeReducer"
 import UserData from "./Reducer/userDataReducer"
+import ZIndexReduceur from "./Reducer/zIndexReducer"
 import {BrowserRouter as Router} from "react-router-dom"
 
 const rootReducer = combineReducers({
   Theme,
-  UserData
+  UserData,
+  ZIndexReduceur
 })
 
 const store = createStore(rootReducer,

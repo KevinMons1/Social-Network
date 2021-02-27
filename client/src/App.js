@@ -27,6 +27,7 @@ function App() {
 
   const authCookie = Cookie.get("user")
   const themeReduceur = useSelector(state => state.Theme)
+  const zIndexReduceur = useSelector(state => state.ZIndexReduceur)
   const [authorization, setAuthorization] = useState(false)
   const [load, setLoad] = useState(false)
   const dispatch = useDispatch()
@@ -39,17 +40,19 @@ function App() {
   })
 
   useEffect(() => {
-    axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
-      .then(res => {
-        setAuthorization(res.data.authorization)
-        dispatch({
-          type: "ADD_DATA",
-          payload: res.data.informations
+    const fecthData = async () => {
+      await axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
+        .then(res => {
+          setAuthorization(res.data.authorization)
+          dispatch({
+            type: "ADD_DATA",
+            payload: res.data.informations
+          })
         })
-      })
-      .catch(err => console.log(err))
-      
-      setLoad(true)
+        .catch(err => console.log(err))
+        setLoad(true)
+    }
+    fecthData()
   }, [])
 
   return (
@@ -61,7 +64,7 @@ function App() {
       <div className="container">
         {transitions.map(({item: location, props, key}) => {
           return (
-            <animated.div key={key} style={props} className="container-anim">
+            <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
               <Switch location={location}>
                 <Route exact path="/" component={Home} /> 
                 {/* <Route exact path="/login" component={Login} />

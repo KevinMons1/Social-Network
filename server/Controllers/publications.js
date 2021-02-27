@@ -65,9 +65,46 @@ exports.addNewComments = (req, res) => {
     })
 }
 
-// get all publication by all users
+// Add like
+exports.addLike = (req, res) => {
+    const { userId } = req.body
+    const publicationId = req.params.id
+
+    db.query('INSERT INTO likes (userId, publicationId) VALUES (?, ?)', 
+    [userId, publicationId], (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            res.send(result)
+        }
+    })
+}
+
+// Get like 
+exports.getLikes = (req, res) => {
+    const { userId } = req.body
+    const publicationId = req.params.id
+
+    db.query(`SELECT COUNT(*) likesTotal FROM likes WHERE publicationId = ?`,
+        [publicationId], (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            db.query(`SELECT userId FROM likes WHERE userId = ? AND publicationId = ?`,
+            [userId, publicationId], (err2, result2) => {
+                if (err2) {
+                    throw err2
+                } else {
+                    res.send({like: result[0],isLike: result2})
+                }
+            })
+        }
+    })
+}
+
+// Get all publication by all users
 exports.getAllPublications = (req, res) => {
-    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.likesTotal, p.commentsTotal, p.date"
+    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
     const queryImg = "pi.publicationImageUrl, pri.profileImageUrl"
 
@@ -110,7 +147,7 @@ exports.getComments = (req, res) => {
 exports.getAccountPublications = (req, res) => {
     const id = req.params.id
 
-    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.likesTotal, p.commentsTotal, p.date"
+    const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
     const queryImg = "pi.publicationImageUrl, pri.profileImageUrl"
 
@@ -133,28 +170,7 @@ exports.getAccountPublications = (req, res) => {
 // Delete publications
 exports.deletePublication = (req, res) => {
     const id = req.params.id.split("-")
-    const userId = id[0]
     const publicationId = id[1]
-
-    // this is not working, to be repaired later
-    // db.query(`DELETE FROM publications p
-    //             LEFT JOIN publicationImages pi ON pi.publicationId = ?
-    //             LEFT JOIN publicationComments pc ON pc.publicationId = ?
-    //             WHERE p.publicationId = ?`,
-    //             [publicationId, publicationId, publicationId] ,(err, result) => {
-    //                 if (err) {
-    //                     throw err
-    //                 } else {
-    //                     db.query("UPDATE users SET publicationsTotal = publicationsTotal - 1 WHERE userId = ?",
-    //                     [userId], (err3, result3) => {
-    //                         if (err3) {
-    //                             throw err3
-    //                         } else {
-    //                             res.send({message: "Publications deleted !", alert: true})
-    //                         }
-    //                     })
-    //                 }
-    //             })
     
     db.query("DELETE FROM publications WHERE publicationId = ?", [publicationId], (err, result) => {
         if (err) {
@@ -168,19 +184,26 @@ exports.deletePublication = (req, res) => {
                         if (err3) {
                             throw err3
                         } else {
-                            db.query("UPDATE users SET publicationsTotal = publicationsTotal - 1 WHERE userId = ?",
-                            [user_id], (err4, result4) => {
-                                if (err4) {
-                                    throw err4
-                                } else {
-                                    res.send({message: "Publications deleted !", alert: true})
-                                }
-                            })
+                            res.send({message: "Publications deleted !", alert: true})
                         }
-                    })
-                    
+                    })  
                 }
             })
+        }
+    })
+}
+
+// Delete like
+exports.deleteLike = (req, res) => {
+    const { userId } = req.body
+    const publicationId = req.params.id
+
+    db.query('DELETE FROM likes WHERE userId = ? AND publicationId = ?', 
+    [userId, publicationId], (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            res.send(result)
         }
     })
 }
