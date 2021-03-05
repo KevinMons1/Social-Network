@@ -1,20 +1,20 @@
 const express = require("express")
 const app = express()
+const http = require('http').Server(app)
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const db = require("./db")
 const path = require("path")
+const io = require('socket.io')(http, {
+    cors: {
+      origin: '*',
+    }
+  })
 
 // Routes
 const authRoutes = require("./Routers/auth")
 const userRoutes = require("./Routers/user")
 const publicationsRoutes = require("./Routers/publications")
-
-// app.use((req, res) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-// });
+const chatRouter = require("./Routers/chat")
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,9 +25,34 @@ app.use('/Images', express.static(path.join(__dirname, 'Images'))) // Send folde
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes) 
 app.use('/api/publications', publicationsRoutes)
+app.use('/api/chat', chatRouter)
+
+let usersInRoom = []
+io.on('connection', (socket) => {            
+    // get user connect
+    socket.on('userConnected', (userId) => {
+        usersInRoom[userId] = socket.id
+        io.emit('userConnected', userId)
+    })
+
+    // receive message and send message
+    socket.on('sendMessage', data => {
+        let { receiver } = data
+        let socketId = usersInRoom[receiver]
+
+        io.to(socketId).emit("newMessage", data)
+
+    })
+
+    socket.on('disconnect', () => {
+        // console.log('user disconnected')
+    })
+})
 
 // Start server
-app.listen("3001", () => {
+http.listen("3001", () => {
     console.log("Server started on port 3001")
 })
+
+exports.io = io
 

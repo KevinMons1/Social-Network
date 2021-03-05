@@ -34,7 +34,7 @@ const verifyPassword = async (password, email) => {
                 bcrypt.compare(password, result[0].password)
                     .then(valide => {
                         if (valide) {
-                            resolve({auth: true, id: result[0].user_id})
+                            resolve({auth: true, id: result[0].userId})
                         } else {
                             resolve({auth: false})
                         }
@@ -97,20 +97,20 @@ exports.signup = async (req, res) => {
                 if (err) {
                     throw err
                 } else {
-                    // GET user_id
+                    // GET userId
                     await db.query("SELECT userId FROM users WHERE email = ?",
                     [email], async (err2, result2) => {
                         if (err2) {
                             throw err2
                         } else {
-                            id = await result2[0].user_id
-                            // Create line on profile_images with user_id
+                            id = await result2[0].userId
+                            // Create line on profile_images with userId
                             await db.query("INSERT INTO profileImages (userId, profileImageUrl) VALUES (?, ?)",
                             [id, imageProfileUrl], async (err3, result3) => {
                                 if (err3) {
                                     throw err3
                                 } else {
-                                    // Create line on images_banner with user_id
+                                    // Create line on images_banner with userId
                                     await db.query("INSERT INTO bannerImages (userId, bannerImageUrl) VALUES (?, ?)",
                                     [id, imageBannerUrl], async (err4, result4) => {
                                         if (err4) {
@@ -144,7 +144,8 @@ exports.login = async (req, res) => {
             const awaitVerifyPassword = await verifyPassword(password, email)
     
             if (awaitVerifyPassword.auth) {
-                res.send({alert: false, token: jwtUtils.generateToekForUser(awaitVerifyPassword.id)})
+                const token = jwtUtils.generateToekForUser(awaitVerifyPassword.id)
+                res.send({alert: false, token: token})
             } else {
                 res.send({message: "Your mail adress or your password is not match !", alert: true})
             }

@@ -10,7 +10,7 @@ import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationComments from '../Publication/PublicationComments'
 import Loader from "../Services/Loader"
 
-export default function MainHome() {
+export default function MainHome({openFullImg}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const dispatch = useDispatch()
@@ -45,6 +45,7 @@ export default function MainHome() {
     const handleCloseCommentsPubli = () => {
         setOpenCommentsPubli(false)
     }
+
 
     return (
         <div className={themeReducer ? "mainHome-dark" : "mainHome"}>

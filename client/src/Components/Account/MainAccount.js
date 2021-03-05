@@ -68,7 +68,6 @@ export default function MainAccount() {
                     setIsFriend(res.data)
                 })
                 .catch(err => console.log(err))
-
             setLoad(true)
         }
         fetchDataAccount()

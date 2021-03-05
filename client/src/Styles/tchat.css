@@ -20,6 +20,31 @@
     border-left: 1px solid #000000;
 }
 
+.tchatEmpty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100vh;
+    background-color: #F0F2F5;
+    border-left: 1px solid #c2c2c2;
+    z-index: 5;
+}
+
+.tchatEmpty-dark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100vh;
+    background-color: #252525;
+    border-left: 1px solid #000000;
+}
+
+.tchatEmpty-dark > p {
+    color: #f1f1f1;
+}
+
 /*
 //////////////////////// 
 TchatDiv
@@ -28,62 +53,64 @@ TchatDiv
 
 .tchatDiv-container {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
 }
 
-.tchatDiv-container-mini {
-    height: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.tchatDiv-icon {
-    padding: 5px 5px 0 0;
-    text-align: end;
-}
-
-.close-icon {
+.tchatDiv-close-icon {
+    margin: 3px;
+    font-size: 15px;
     color: #FF7272;
     cursor: pointer;
 }
 
-.close-icon:hover {
+.tchatDiv-close-icon:hover {
     transition: 0.3s;
     color: #ff4747;
 }
 
-.tchatDiv-info-mini {
-    padding: 0 2px 0 2px;
-    margin-top: -10px;
-    border-bottom: 1px solid #c2c2c2;
+.tchatDiv-container-mini {
+    overflow: hidden;
+    height: 56%;
 }
 
-.tchatDiv-info {
-    padding: 10px 2px 10px 2px;
-    border-bottom: 1px solid #c2c2c2;
-}
-
-.tchatDiv-info-dark {
-    border-bottom: 1px solid #000;
-}
-
-.tchatDiv {
-    height: 80%;
-}
-
-.tchatDiv-mini {
-    height: 70%;
-}
-
-.msg-container {
+.tchatDiv-top {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 5px;
-    overflow: scroll;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px solid #c2c2c2;
+}
+
+.tchatDiv-top-mini {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #c2c2c2;
+}
+
+.tchatDiv-tchat {
+    width: 100%;
+    height: 82%;
+    border-bottom: 1px solid #c2c2c2;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.tchatDiv-tchat-mini {
+    height: 78%;
+    border-bottom: 1px solid #c2c2c2;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.tchatDiv-tchat-mini-dark {
+    height: 82%;
+    overflow-y: scroll;
+}
+
+.tchatDiv-border-dark {
+    border-bottom: 1px solid #000;
 }
 
 .msg-box {
@@ -94,8 +121,10 @@ TchatDiv
 .msg {
     padding: 5px;
     max-width: 75%;
+    height: auto;
     background-color: rgb(219, 219, 219);
     border-radius: 10px;
+    word-break: break-all;
 }
 
 .msg-right-box {
@@ -111,18 +140,41 @@ TchatDiv
     font-size: 12px;
 }
 
+.tchatDiv-write {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 8%;
+}
+
+.tchatDiv-write-dark {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 10.5%;
+}
+
 .new-msg-box {
     display: flex;
     align-items: center;
+    width: 100%;
+    height: 50%;
     margin: 5px;
     background-color: #fff;
     border: 1px solid #707070;
     border-radius: 10px;
 }
 
+.new-msg-box > button {
+    outline: none;
+    border: none;
+    background: none;
+}
+
 .new-msg-textarea {
-    height: 15px;
+    height: 100%;
     width: 100%;
+    border-radius: 10px;
     resize: none;
     border: none;
     outline: none;

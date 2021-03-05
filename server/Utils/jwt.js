@@ -17,7 +17,6 @@ module.exports = {
     // Verify token
     getUserId: (token) => {
         let userId = -1 // Default value (id -1 do not exist so we can see if it is not exist)
-
         if (token != null) {
             try {
                 let jwtToken = jwt.verify(token, JWT_SIGN_SECRET)

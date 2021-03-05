@@ -15,14 +15,7 @@ exports.addNewPublication = (req, res) => {
         if (err) {
             throw err
         } else {
-            db.query("UPDATE users SET publicationsTotal = publicationsTotal + 1 WHERE userId = ?",
-            [id], (_err, _result) => {
-                if (_err) {
-                    throw _err
-                } else {
-                    res.send({alert: true, publication_id: result.insertId})
-                }
-            })
+            res.send({alert: true, publicationId: result.insertId})
         }
     })
 }

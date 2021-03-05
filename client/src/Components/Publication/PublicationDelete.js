@@ -35,7 +35,7 @@ export default function PublicationDelete( {deletePubli, setDeleteAlert} ) {
                 <animated.div key={key} style={props} className={themeReducer ? "deleteMsg-box-dark" : "deleteMsg-box"}>
                     <p className={themeReducer ? "txt-dark" : null}>You are sure to delete this publication ?</p>
                     <div>
-                        <button className="deleteMsg-btn delBtn1" onClick={() => deletePubli}>DELETE</button>
+                        <button className="deleteMsg-btn delBtn1" onClick={() => deletePubli()}>DELETE</button>
                         <button className="deleteMsg-btn delBtn2" onClick={() => handleCloseDelete()}>CANCEL</button>
                     </div>
                 </animated.div>

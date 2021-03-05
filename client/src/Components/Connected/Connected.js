@@ -7,7 +7,7 @@ import axios from "axios"
 import UserCard from './UserCard'
 import TchatDiv from '../TchatDiv/TchatDiv'
 
-export default function Connected({choiceCss}) {
+export default function Connected({choiceCss, friendClick}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
@@ -15,32 +15,35 @@ export default function Connected({choiceCss}) {
     const [usersCardTchat, setUsersCardTchat] = useState([])
     const [load, setLoad] = useState(false)
     const [tchat, setTchat] = useState(false)
+    const [userCardClick, setUserCardClick] = useState(null)
+
 
     useEffect(() => {
         const fetchData = async () => {
             await axios.get(`http://localhost:3001/api/user/connected/friends/${userDataReducer.userId}`)
                 .then(res => {
-                    console.log(res)
+                    res.data.forEach(friend => {
+                        setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenTchat(friend)} />])
+                        setUsersCardTchat(usersCardTchat => [...usersCardTchat, <UserCard data={friend} text={true} open={() => handleOpenTchat(friend)} />])
+                    });
                 })
                 .catch(err => console.log(err))
-
             setLoad(true)
         }
-
         fetchData()
-
-        for (let i = 0; i < 10; i++) {
-            setUsersCard(usersCard => [...usersCard, <UserCard text={false} open={choiceCss ? handleOpenTchat : null} />])
-            setUsersCardTchat(usersCardTchat => [...usersCardTchat, <UserCard text={true} open={choiceCss ? handleOpenTchat : null} />])
-        }
     }, [])
 
     const handleCloseTchat = () => {
         setTchat(false)
     }
 
-    const handleOpenTchat = () => {
-        setTchat(true)
+    const handleOpenTchat = (friendData) => {
+        if (choiceCss) {
+            setUserCardClick(<TchatDiv index={false} closeTchat={handleCloseTchat} choiceCss={true} data={friendData} />)
+            setTchat(true)
+        } else {
+            friendClick(friendData)
+        }
     }
 
     const usersHtml = (
@@ -63,7 +66,7 @@ export default function Connected({choiceCss}) {
 
             <div className="connected-top">
                 <div className="friends-boxs">                     
-                    {load ? usersHtml : <p>...</p>}
+                    {load ? usersHtml : null}
                 </div>
                 <div className={themeReducer.Theme ? "search-top-dark connected-search" : "search-top connected-search"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
@@ -71,10 +74,10 @@ export default function Connected({choiceCss}) {
                 </div>
             </div>
 
-            {tchat ? <TchatDiv closeTchat={handleCloseTchat} choiceCss={true} /> :
+            {tchat ? userCardClick :
                 <div className="connected-bottom">
                     <div className="friends-boxs">             
-                        {load ? usersTchatHtml : <p>...</p>}  
+                        {load ? usersTchatHtml : null}  
                     </div>  
                 </div>  
             }

@@ -31,12 +31,15 @@ export default function PublicationComments({close, data}) {
 
     useEffect(() => {
         setLoad(false)
-        axios.get(`http://localhost:3001/api/publications/comments/${data.publicationId}`)
-            .then(res => {
-                setDataComments(res.data)
-                setLoad(true)
-            })
-            .catch(err => console.log(err))
+        const fetchData = async () => {
+            await axios.get(`http://localhost:3001/api/publications/comments/${data.publicationId}`)
+                .then(res => {
+                    setDataComments(res.data)
+                })
+                .catch(err => console.log(err))
+            setLoad(true)
+        }
+        fetchData()
     }, [])
 
     const handleSubmit = e => {
@@ -75,7 +78,7 @@ export default function PublicationComments({close, data}) {
                     </div>
                     <div className="publi-open-bottom-container">
                         <div className="publi-open-top">
-                            <PublicationCard data={data} />
+                            <PublicationCard data={data} noClick={true} />
                         </div>
 
                         <div style={{position: "relative"}}>

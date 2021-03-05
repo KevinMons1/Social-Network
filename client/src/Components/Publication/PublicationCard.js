@@ -10,7 +10,7 @@ import {useTransition, useSpring, animated} from "react-spring"
 import PublicationCardLoader from "./PublicationCardLoader"
 import PublicationDelete from "./PublicationDelete"
 
-export default function PublicationCard({open, data}) { 
+export default function PublicationCard({open, data, noClick}) { 
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
@@ -85,7 +85,7 @@ export default function PublicationCard({open, data}) {
 
     return load ?
         <div className={cssDelete}>
-
+            
             {deleteAlert ? <PublicationDelete setDeleteAlert={setDeleteAlert} deletePubli={() => handleDelete()} /> : null}
 
             {data.userId === userDataReducer.userId
@@ -113,13 +113,13 @@ export default function PublicationCard({open, data}) {
                 </div>
 
                 <div className="text-publi">
-                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => open(data)}>{data.text}</p>
+                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => noClick ? null : open(data)}>{data.text}</p>
                 </div>
             </div>
              
                 {data.publicationImageUrl != null 
                 ? <div className="bg-publi">
-                    <img className="bg-publi-img" src={data.publicationImageUrl} onClick={() => open(data)} alt="Publication frame"/>
+                    <img className="bg-publi-img" src={data.publicationImageUrl} onClick={() => noClick ? null : open(data)} alt="Publication frame"/>
                   </div>
                 : null}
 

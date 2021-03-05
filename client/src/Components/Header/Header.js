@@ -68,7 +68,7 @@ export default function Header() {
                     <li className="header-middle-li">
                         <FontAwesomeIcon className={themeReducer ? "friends-icon header-middle-icon-dark" : "friends-icon header-middle-icon"} icon="comments" />
                         <div className="header-middle-text">
-                            <Link to="/tchat" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Friends</Link>
+                            <Link to="/friends/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Friends</Link>
                         </div>
                     </li>
                 </ul>

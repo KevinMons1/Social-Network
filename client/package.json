@@ -24,6 +24,7 @@
     "react-spring": "^8.0.27",
     "react-twitch-embed-video": "^2.0.4",
     "redux": "^4.0.5",
+    "socket.io-client": "^3.1.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

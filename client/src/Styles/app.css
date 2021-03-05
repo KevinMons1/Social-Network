@@ -30,6 +30,7 @@ body {
 }
 
 .container-anim {
+    position: absolute;
     width: 100%;
 }
 

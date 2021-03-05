@@ -4,6 +4,7 @@
     border-left: 1px solid #c2c2c2;
     background-color: #F0F2F5;
     z-index: 2;
+    overflow: hidden;
 }
 
 .connected-dark {
@@ -12,16 +13,17 @@
     border-left: 1px solid #000000;
     background-color: #252525;
     z-index: 2;
+    overflow: hidden;
 }
 
 .connected-title {
-    padding-left: 15px;
+    padding: 15px;
     color: #707070;
     font-size: 25px;
 }
 
 .connected-title-dark {
-    padding-left: 15px;
+    padding: 15px;
     color: #f1f1f1;
     font-size: 25px;
 }
@@ -37,7 +39,7 @@ Top || Input search style is in header.css
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 0 0 15px;
+    padding: 0 15px;
 }
 
 .connected-search {
@@ -61,7 +63,7 @@ Bottom
 
 .connected-bottom {
     height: 60%;
-    padding-left: 15px;
+    padding: 0 15px;
 }
 
 .friend-lastMsg-txt {
@@ -78,8 +80,6 @@ UserCard
 //////////////////////// 
 */
 
-/* !!! ICI LE friends-boxs dépasse de sa box en x à changer quand on change la taille en width !!!! */
-
 .friends-boxs {
     height: 100%;
     width: 100%;
@@ -87,11 +87,16 @@ UserCard
     overflow-y: scroll;
 }
 
+.friend-box {
+    width: 100%;
+}
+
 .friend-connected {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
+    padding: 5px 5px;
 }
 
 .friend-info {
@@ -101,14 +106,19 @@ UserCard
 }
 
 .connected-img-friend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 40px;
     height: 40px;
-    border-radius: 100%;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
     overflow: hidden;
+    z-index: 2;
 }
 
 .connected-img-friend img{
-    width: 40px;
+    height: 100%;
 }
 
 .connected-name-friend {
