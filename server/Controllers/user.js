@@ -58,6 +58,7 @@ exports.getAccountInformations = (req, res) => {
         const queryPublication = "COUNT(publicationId)"
         const queryFriend = "COUNT(friendId)"
 
+        // Search main informations
         //! Problème ici avec les COUNT ! et le count like doit être modifier car la on compte le nombre qu'il a liker lui et pas ce qu'il à reçu
         db.query(`SELECT ${queryUser}, ${queryImgProfile}, ${queryImgBanner} FROM users u
                     LEFT JOIN profileImages ip ON ip.userId = ?
@@ -67,31 +68,42 @@ exports.getAccountInformations = (req, res) => {
             if (err) {
                 throw err
             } else {
+                // If result.lenght > 0 but this user not exist !
                 if (result.length > 0) {
+                    // Search if he have publications
                     db.query(`SELECT publicationId FROM publications WHERE userId = ?`,
                         [id], (err2, result2) => {
                             if (err2) {
                                 throw err2
                             } else {
-                                // To destroy the objects in the received array
+                                // If user haven't publication so he havn't publicationTotal and likeTotal but he can have friends !
                                 if (result2.length === 0) {
-                                    const noResult = {
-                                        likesTotal: 0,
-                                        friendsTotal: 0,
-                                        publicationsTotal: 0
-                                    }
-                                    res.send({alert: true, userData: [result[0], noResult]})
+                                    db.query(`SELECT ${queryFriend} as friendsTotal FROM friends WHERE (user1Id = ?) OR (user2Id = ?)`,
+                                    [id, id], (err3, result3) => {
+                                        if (err3) {
+                                            throw err3
+                                        } else {
+                                            const defaultResult = {
+                                                likesTotal: 0,
+                                                friendsTotal: result3[0].friendsTotal,
+                                                publicationsTotal: 0
+                                            }
+                                            res.send({alert: false, userData: [result[0], defaultResult]})
+                                        }
+                                    })
                                 } else {
+                                    // To destroy the objects in the received array
                                     const publicationId = result2.map(item => item.publicationId)
+                                    // Search likesTotal, publicationsTotal and friendsTotal for complet account
                                     db.query(`SELECT likesTotal, publicationsTotal, friendsTotal FROM
                                                 (SELECT ${queryPublication} as publicationsTotal FROM publications WHERE userId = ?) publicationsTotal
                                                 CROSS JOIN (SELECT ${queryFriend} as friendsTotal FROM friends WHERE (user1Id = ?) OR (user2Id = ?)) friendsTotal
                                                 CROSS JOIN (SELECT ${queryLike} as likesTotal FROM likes WHERE publicationId IN (${publicationId})) likesTotal`,
-                                        [id, id, id, id], (err3, result3) => {
-                                            if (err3) {
-                                                throw err3
+                                        [id, id, id, id], (err4, result4) => {
+                                            if (err4) {
+                                                throw err4
                                             } else {
-                                                res.send({alert: false, userData: [result[0], result3[0]]})
+                                                res.send({alert: false, userData: [result[0], result4[0]]})
                                             }
                                         })
                                 }
@@ -134,31 +146,34 @@ exports.getFriendsConnected = (req, res) => {
     let friendsId;
     let friends = []
     let count = 0
-
     db.query(`SELECT user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?`,
     [id, id], (err, result) => {
         if (err) {
             throw err
         } else {
-            // To destroy the objects in the received array and seek userId
-            friendsId = result.map(item => item.user1Id != id ? item.user1Id : item.user2Id)
-            friendsId.forEach(userId => {
-                db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
-                            LEFT JOIN profileImages pi ON pi.userId = ?
-                            WHERE u.userId = ?`,
-                [userId, userId], (err2, result2) => {
-                    if (err2) {
-                        throw err2
-                    } else {
-                        count++
-                        friends = [...friends, result2[0]]
-                        
-                        if (count === friendsId.length) {
-                            res.send(friends)
+            if (result.lenght === 0) {
+                res.send(false)
+            } else {
+                // To destroy the objects in the received array and seek userId
+                friendsId = result.map(item => item.user1Id != id ? item.user1Id : item.user2Id)
+                friendsId.forEach(userId => {
+                    db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
+                                LEFT JOIN profileImages pi ON pi.userId = ?
+                                WHERE u.userId = ?`,
+                    [userId, userId], (err2, result2) => {
+                        if (err2) {
+                            throw err2
+                        } else {
+                            count++
+                            friends = [...friends, result2[0]]
+                            
+                            if (count === friendsId.length) {
+                                res.send(friends)
+                            }
                         }
-                    }
-                })   
-            })
+                    })   
+                })
+            }
         }
     })
 }
@@ -177,7 +192,7 @@ exports.updateAccountInformations = (req, res) => {
                     res.send({message: "An error has occurred !", alert: true})
                     throw err
                 } else {
-                    res.send({message: "Modified information !", alert: false})
+                    res.send({message: "Informations modified !", alert: false})
                 }
             })
         } else {
@@ -195,7 +210,7 @@ exports.uploadImageProfile = async (req, res) => {
     const id = req.params.id 
     const txt = req.body.txt
 
-    
+    console.log(imageUrl)
     db.query("UPDATE profileImages SET profileImageUrl = ? WHERE userId = ?",
     [imageUrl, id], async (err, result) => {
         if (err) {
@@ -207,7 +222,7 @@ exports.uploadImageProfile = async (req, res) => {
         }
     })
 }
-//! Avoir car répétition avec les 2 fonctions
+//! A voir car répétition avec les 2 fonctions
 // Update image banner
 exports.uploadImageBanner = async (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`

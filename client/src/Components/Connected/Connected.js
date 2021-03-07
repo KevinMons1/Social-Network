@@ -15,6 +15,7 @@ export default function Connected({choiceCss, friendClick}) {
     const [usersCardTchat, setUsersCardTchat] = useState([])
     const [load, setLoad] = useState(false)
     const [tchat, setTchat] = useState(false)
+    const [friendEmpty, setFriendEmpty] = useState(false)
     const [userCardClick, setUserCardClick] = useState(null)
 
 
@@ -22,10 +23,15 @@ export default function Connected({choiceCss, friendClick}) {
         const fetchData = async () => {
             await axios.get(`http://localhost:3001/api/user/connected/friends/${userDataReducer.userId}`)
                 .then(res => {
-                    res.data.forEach(friend => {
-                        setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenTchat(friend)} />])
-                        setUsersCardTchat(usersCardTchat => [...usersCardTchat, <UserCard data={friend} text={true} open={() => handleOpenTchat(friend)} />])
-                    });
+                    // if res.data === true but this user haven't friends
+                    if (res.data) {
+                        res.data.forEach(friend => {
+                            setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenTchat(friend)} />])
+                            setUsersCardTchat(usersCardTchat => [...usersCardTchat, <UserCard data={friend} text={true} open={() => handleOpenTchat(friend)} />])
+                        });
+                    } else {
+                        setFriendEmpty(true)
+                    }
                 })
                 .catch(err => console.log(err))
             setLoad(true)
@@ -66,7 +72,11 @@ export default function Connected({choiceCss, friendClick}) {
 
             <div className="connected-top">
                 <div className="friends-boxs">                     
-                    {load ? usersHtml : null}
+                    {load 
+                    ? friendEmpty 
+                        ? <small>You are not friends !</small>
+                        : usersHtml
+                    : null}  
                 </div>
                 <div className={themeReducer.Theme ? "search-top-dark connected-search" : "search-top connected-search"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
@@ -74,10 +84,15 @@ export default function Connected({choiceCss, friendClick}) {
                 </div>
             </div>
 
-            {tchat ? userCardClick :
-                <div className="connected-bottom">
+            {tchat 
+            ? userCardClick 
+            :   <div className="connected-bottom">
                     <div className="friends-boxs">             
-                        {load ? usersTchatHtml : null}  
+                        {load 
+                        ? friendEmpty 
+                            ? <small>You are not friends !</small>
+                            : usersTchatHtml
+                        : null}  
                     </div>  
                 </div>  
             }

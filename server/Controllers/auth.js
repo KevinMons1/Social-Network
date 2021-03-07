@@ -74,9 +74,9 @@ const getInfomations = async (id) => {
 
 // Signup
 exports.signup = async (req, res) => {
-    const {last_name, first_name, email, password} = req.body
+    const {lastName, firstName, email, password} = req.body
 
-    if (last_name != null && first_name != null && email != null && password != null) {
+    if (lastName != null && firstName != null && email != null && password != null) {
         const awaitVerify = await verifyEmail(email, false)
 
         if (awaitVerify) {
@@ -93,7 +93,7 @@ exports.signup = async (req, res) => {
             // Create account
             // Create user
             await db.query("INSERT INTO users (lastName, firstName, email, password) VALUES (?, ?, ?, ?)",
-            [last_name, first_name, email, hash], async (err, result) => {
+            [lastName, firstName, email, hash], async (err, result) => {
                 if (err) {
                     throw err
                 } else {
@@ -104,13 +104,13 @@ exports.signup = async (req, res) => {
                             throw err2
                         } else {
                             id = await result2[0].userId
-                            // Create line on profile_images with userId
+                            // Create line on profileImages with userId
                             await db.query("INSERT INTO profileImages (userId, profileImageUrl) VALUES (?, ?)",
                             [id, imageProfileUrl], async (err3, result3) => {
                                 if (err3) {
                                     throw err3
                                 } else {
-                                    // Create line on images_banner with userId
+                                    // Create line on bannerImages with userId
                                     await db.query("INSERT INTO bannerImages (userId, bannerImageUrl) VALUES (?, ?)",
                                     [id, imageBannerUrl], async (err4, result4) => {
                                         if (err4) {

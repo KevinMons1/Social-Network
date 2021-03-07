@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import {Gifs} from "../../Api"
 import axios from "axios"
+import imageCompression from "browser-image-compression"
 import {useTransition, animated, config} from "react-spring"
 
 export default function NewPubliBox({ setPubli }) {
@@ -70,16 +71,7 @@ export default function NewPubliBox({ setPubli }) {
                     if (res.data.alert) {
                         // Publication image
                         if (dataFile != null) {
-                            let formData = new FormData()
-                            formData.append('file', dataFile)
-                            formData.append('id', res.data.publicationId)
-                            
-                            axios.post(`http://localhost:3001/api/publications/add/image/${userDataReducer.userId}`, formData)
-                                .then(res => {
-                                    setAletCss(false)
-                                    setAlertMsg(res.data.message)
-                                })
-                                .catch(err => console.log(err))
+                            handleCompressionImage(res.data.publicationId)
                         } else {
                             setAletCss(false)
                             setAlertMsg("Publications published !")
@@ -115,6 +107,33 @@ export default function NewPubliBox({ setPubli }) {
     const handleClickFile = () => {
         openFile.current.click()
     }
+
+    // Image compression
+    const handleCompressionImage = (publicationId) => {
+        let imageFile = dataFile;     
+        let options = {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        }
+
+        imageCompression(imageFile, options)
+          .then(compressedFile => {
+                let formData = new FormData()
+                formData.append('file', compressedFile)
+                formData.append('id', publicationId)
+                axios.post(`http://localhost:3001/api/publications/add/image/${userDataReducer.userId}`, formData)
+                    .then(res => {
+                        setAletCss(false)
+                        setAlertMsg(res.data.message)
+                    })
+                    .catch(err => console.log(err))
+          })
+          .catch(error => {
+            console.log(error.message);
+          });
+      }
+      
 
     const handleChangeFile = e => {
         setImgVisible(URL.createObjectURL(e.target.files[0]))

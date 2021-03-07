@@ -51,19 +51,19 @@ export default function MainAccount() {
                     }
                 })
                 .catch(err => console.log(err))
-
-            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+                
+                await axios.get(`http://localhost:3001/api/publications/account/${id}`)
                 .then(res => {
                     if (res.data.length === 0) {
                         setIsEmpty(true)
                     } else {
                         setDataPublications(res.data)
                         setIsEmpty(false)
-                        }
-                    })
+                    }
+                })
                 .catch(err => console.log(err))
-
-            await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
+                
+                await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
                 .then(res => {
                     setIsFriend(res.data)
                 })

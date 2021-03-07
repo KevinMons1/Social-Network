@@ -86,8 +86,7 @@ Top
 }
 
 .img-profile-box {
-    display: flex;
-    align-items: center;
+    position: relative;
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -98,7 +97,10 @@ Top
 }
 
 .img-profile {
+    position: absolute;
     width: 150%;
+    top: -25%;
+    left: -25%;
 }
 
 /*

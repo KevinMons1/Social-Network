@@ -47,7 +47,8 @@ exports.getRoom = (req, res) => {
 // Get all messages in the room
 exports.getMessages = (req, res) => {
     const roomId = req.params.id
-    db.query('SELECT * FROM roomMessages WHERE roomId = ? ORDER BY date DESC',
+    
+    db.query('SELECT * FROM roomMessages WHERE roomId = ? ORDER BY date ASC',
     [roomId], (err, result) => {
         if (err) {
             throw err
@@ -61,14 +62,12 @@ exports.getMessages = (req, res) => {
 exports.addMessage = (req, res) => {
     const roomId = req.params.id
     const userId = req.body.sender
-    const txt = req.body.txt
+    const text = req.body.text
 
-    db.query("INSERT INTO roomMessages (roomId, userId, txt) VALUES(?, ?, ?)",
-    [roomId, userId, txt], (err, result) => {
+    db.query("INSERT INTO roomMessages (roomId, userId, text) VALUES(?, ?, ?)",
+    [roomId, userId, text], (err, result) => {
         if (err) {
             throw err
-        } else {
-            console.log(result)
         }
     })
 }

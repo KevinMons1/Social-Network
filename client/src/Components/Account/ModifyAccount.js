@@ -4,6 +4,7 @@ import {useSelector} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
+import imageCompression from "browser-image-compression"
 import {useTransition, animated, config} from "react-spring"
 
 export default function ModifyAccount({ setClose, slug }) {
@@ -69,30 +70,12 @@ export default function ModifyAccount({ setClose, slug }) {
 
         // Modify image profile
         if (profileImage !== null) {
-            let formData = new FormData()
-            formData.append('file', profileImage)
-            formData.append('txt', dataProfileImgTxt)
-            
-            await axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
-                .then(res => {
-                    setAletCss(res.data.alert)
-                    setAlertMsg(res.data.message)
-                })
-                .catch(err => console.log(err))
+            await handleCompressionImage(profileImage, dataProfileImgTxt, true)           
         }
 
         // Modify image banner
         if (bannerImage != null) {
-            let formData = new FormData()
-            formData.append('file', bannerImage)
-            formData.append('txt', dataBannerImgTxt)
-            
-            await axios.put(`http://localhost:3001/api/user/account/image/banner/${slug}`, formData)
-                .then(res => {
-                    setAletCss(res.data.alert)
-                    setAlertMsg(res.data.message)
-                })
-                .catch(err => console.log(err))
+            await handleCompressionImage(bannerImage, dataBannerImgTxt, false)           
         }
         
         // Modify informations
@@ -107,6 +90,42 @@ export default function ModifyAccount({ setClose, slug }) {
 
         window.location.reload()
     } 
+
+     // Image compression
+     const handleCompressionImage = (image ,txt, choiceImage) => {
+        let imageFile = image;     
+        let options = {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        }
+
+        imageCompression(imageFile, options)
+          .then(compressedFile => {
+                let formData = new FormData()
+                formData.append('file', compressedFile)
+                formData.append('txt', txt)
+
+                if (choiceImage) {
+                    axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
+                    .then(res => {
+                        setAletCss(res.data.alert)
+                        setAlertMsg(res.data.message)
+                    })
+                    .catch(err => console.log(err))
+                } else {
+                    axios.put(`http://localhost:3001/api/user/account/image/banner/${slug}`, formData)
+                    .then(res => {
+                        setAletCss(res.data.alert)
+                        setAlertMsg(res.data.message)
+                    })
+                    .catch(err => console.log(err))
+                }
+          })
+          .catch(error => {
+            console.log(error.message);
+          });
+      }
     
     const handleCloseModifyAccount = () => {
         setIsAnimated(!isAnimated)

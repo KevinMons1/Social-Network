@@ -5,7 +5,7 @@ const chat = require("../Controllers/chat")
 // Routes
 
 router.post('/getRoom/:id', chat.getRoom)
-router.post('/addMessage', chat.addMessage)
+router.post('/addMessage/:id', chat.addMessage)
 
 router.get('/getMessages/:id', chat.getMessages)
 

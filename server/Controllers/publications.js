@@ -1,9 +1,5 @@
 const db = require("../db")
 
-//
-// Functions exports 
-//
-
 // Add a new publication
 exports.addNewPublication = (req, res) => {
     const {text, hashtag} = req.body
@@ -23,7 +19,7 @@ exports.addNewPublication = (req, res) => {
 // Add image of new publication
 exports.addPublicationImage = (req, res) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
-    const id = req.body.id 
+    const id = req.body.id
     
     db.query("INSERT INTO publicationImages (publicationImageUrl, publicationId) VALUES (?, ?)",
     [imageUrl, id], (err, result) => {
@@ -51,9 +47,9 @@ exports.addNewComments = (req, res) => {
                 if (err2) {
                     throw err2
                 } else {
-                    res.send({message: "Comments published !"})
                 }
             })
+            res.send({message: "Comments published !"})
         }
     })
 }
@@ -119,7 +115,7 @@ exports.getAllPublications = (req, res) => {
 // Get all comments in this publication
 exports.getComments = (req, res) => {
     const publication_id = req.params.id
-    const queryComments = "c.commentsId, c.publicationId, c.userId, c.text, c.date"
+    const queryComments = "c.commentId, c.publicationId, c.userId, c.text, c.date"
     const queryUsers = "u.lastName, u.firstName"
     const queryImg = "pi.profileImageUrl"
 

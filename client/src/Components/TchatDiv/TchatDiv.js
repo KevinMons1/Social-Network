@@ -19,6 +19,7 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
     const [allMessages, setAllMessages] = useState([])
     const [roomId, setRoomId] = useState(null)
     const messageRef = useRef()
+    const tchatRef = useRef()
     const dispatch = useDispatch()
     const { slug } = useParams()
     const [message, setMessage] = useState({
@@ -38,14 +39,11 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
 
     // Send message
     socket.on('newMessage', dataMessage => {
-        if (dataMessage.sender.toString() === slug.toString()) {
-            setAllMessages([...allMessages, <Message data={dataMessage} isMe={false} />])
+        const id = slug === undefined ? data.userId : slug
+        if (dataMessage.sender.toString() === id.toString()) {
+            setAllMessages([...allMessages, dataMessage])
         }
     })
-
-    useEffect(() => {
-        
-    }, [slug])
     
     useEffect(() => {
         const fetch = async () => {
@@ -53,38 +51,48 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
                 type: "CHANGE_ZINDEX",
                 payload: index
             })
-
             // get roomId
-            await axios.post(`http://localhost:3001/api/chat/getRoom/${slug}`, {userId: userDataReducer.userId})
-                .then(res => {
-                    setRoomId(res.data.roomId)
-                })
-                .catch(err => console.log(err))
+            const dataFetchRoomId = await fetchRoomId()
+            const dataRoomId = dataFetchRoomId.data.roomId
             // get message in room with roomId
-            // await axios.get(`http://localhost:3001/api/chat/getMessages/${roomId}`)
-            //     .then(res => { 
-            //         console.log(res.data)
-            //     })
-            //     .catch(err => console.log(err))
-    
+            const dataFetchMessages = await fetchMessages(dataRoomId)
+            const dataMessages = dataFetchMessages.data
+            // not continue if haven't messages
+            if (dataMessages.length > 0) {
+                setAllMessages(dataMessages)
+            }
+            setRoomId(dataRoomId)
             // send my connection
             await socket.emit('userConnected', userDataReducer.userId)
 
+            // Scrollbar appears at the bottom by default
+            tchatRef.current.scrollTop = tchatRef.current.scrollHeight
             setLoad(true)
         }
         fetch()
-    }, [slug])
+    }, [roomId])
+
+    const fetchRoomId = async () => {
+        return await new Promise(resolve => {
+            const id = slug === undefined ? data.userId : slug
+            const dataFetch = axios.post(`http://localhost:3001/api/chat/getRoom/${id}`, {userId: userDataReducer.userId})
+            resolve(dataFetch)
+        })
+    }
+
+    const fetchMessages = async (id) => {
+        return await new Promise(resolve => {
+            const dataFetch = axios.get(`http://localhost:3001/api/chat/getMessages/${id}`)
+            resolve(dataFetch)
+        })
+    }
 
     const handleSubmit = e => {
         e.preventDefault()
-        setAllMessages([...allMessages, <Message data={message} isMe={true} />])
+        setAllMessages([...allMessages, message])
 
         socket.emit('sendMessage', message)
-
         axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
-
         setMessage({...message, text: ""})
         messageRef.current.value = ""
     }
@@ -99,9 +107,10 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
                 <UserCard data={data} />
             {choiceCss ? <FontAwesomeIcon icon="times-circle" className="tchatDiv-close-icon" onClick={() => closeTchat()} /> : null}
             </div>
-            <div className={themeReducer ? `${choiceTchat} tchatDiv-border-dark` : choiceTchat}>
+            <div className={themeReducer ? `${choiceTchat} tchatDiv-border-dark` : choiceTchat} ref={tchatRef}>
                {load ? allMessages.map((item, key) => {
-                   return <div key={key}>{item}</div>
+                   let isMe = item.userId === userDataReducer.userId || item.sender === userDataReducer.userId
+                   return <Message key={key} data={item} isMe={isMe} />
                }) : null}
             </div>
             <div className={choiceCss ? "tchatDiv-write-dark" : "tchatDiv-write"}>
