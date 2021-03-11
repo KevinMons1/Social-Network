@@ -88,7 +88,7 @@ export default function PublicationComments({close, data}) {
                                     <div className={themeReducer ? "publi-open-bottom-dark" : "publi-open-bottom"} key={index}>
                                         <div className="publi-open-info-img-box">
                                             <div className="publi-open-img">
-                                                <img src={item.profileImageUrl} alt="Frame profile"/>
+                                                <img src={item.profileImage} alt="Frame profile"/>
                                             </div>
                                         </div>
                                         <div className="publi-open-info-txt-box">

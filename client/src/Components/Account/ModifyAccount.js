@@ -86,9 +86,10 @@ export default function ModifyAccount({ setClose, slug }) {
                     setAlertMsg(res.data.message)  
                 })
                 .catch(err => console.log(err))
-        }   
-
-        window.location.reload()
+                setTimeout(() => {
+                    window.location.reload()
+                }, 500);
+            }   
     } 
 
      // Image compression
@@ -105,7 +106,8 @@ export default function ModifyAccount({ setClose, slug }) {
                 let formData = new FormData()
                 formData.append('file', compressedFile)
                 formData.append('txt', txt)
-
+                
+                console.log(choiceImage)
                 if (choiceImage) {
                     axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
                     .then(res => {

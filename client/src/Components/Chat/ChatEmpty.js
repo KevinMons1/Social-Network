@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 
-export default function TchatEmpty() {
+export default function ChatEmpty() {
 
     const dispatch = useDispatch();
     const themeReducer = useSelector(state => state.Theme)
@@ -14,7 +14,7 @@ export default function TchatEmpty() {
     }, [])
 
     return (
-        <div className={themeReducer ? "tchatEmpty-dark" : "tchatEmpty"}>
+        <div className={themeReducer ? "chatEmpty-dark" : "chatEmpty"}>
             <p>Click on a friend</p>
         </div>
     )

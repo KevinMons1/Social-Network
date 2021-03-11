@@ -110,7 +110,7 @@ export default function NewPubliBox({ setPubli }) {
 
     // Image compression
     const handleCompressionImage = (publicationId) => {
-        let imageFile = dataFile;     
+        let imageFile = dataFile;    
         let options = {
           maxSizeMB: 0.5,
           maxWidthOrHeight: 1920,
@@ -130,8 +130,8 @@ export default function NewPubliBox({ setPubli }) {
                     .catch(err => console.log(err))
           })
           .catch(error => {
-            console.log(error.message);
-          });
+            console.log(error.message)
+          })
       }
       
 

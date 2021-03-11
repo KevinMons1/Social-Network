@@ -13,7 +13,7 @@ import {useTransition, animated, config} from "react-spring"
 import Header from "./Components/Header/Header"
 import Connected from "./Components/Connected/Connected"
 import Home from "./Components/Home/Index"
-import Tchat from "./Components/Tchat/Index"
+import Chat from "./Components/Chat/Index"
 import Account from "./Components/Account/Index"
 import Gaming from "./Components/Gaming/Index"
 import Live from "./Components/Gaming/Live"
@@ -33,9 +33,9 @@ function App() {
   const dispatch = useDispatch()
   const location = useLocation()
   const verifyPathname = () => {
-    // Avoid listen pathname /:slug on root friend for not repeat animation and refresh page each change path
-    if (location.pathname.includes("/friends/")) {
-      if (location.pathname.includes("/friends/empty")) {
+    // Avoid listen pathname /:slug on root chat for not repeat animation and refresh page each change path
+    if (location.pathname.includes("/chat/")) {
+      if (location.pathname.includes("/chat/empty")) {
         return true
       }
       return false
@@ -83,7 +83,7 @@ function App() {
                       <Route exact path="/account/:slug" component={Account} />
                       <Route exact path="/gaming" component={Gaming} />
                       <Route excat path="/gaming/live/:slug" component={Live} />
-                      <Route exact path="/friends/:slug" component={Tchat} />
+                      <Route exact path="/chat/:slug" component={Chat} />
                       <Route component={Error} />
                     </Switch>
                   </animated.div>

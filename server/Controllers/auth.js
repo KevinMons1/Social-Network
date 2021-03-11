@@ -51,13 +51,12 @@ const verifyPassword = async (password, email) => {
 const getInfomations = async (id) => {
     return new Promise((resolve) => {
         const queryUser = "u.userId, u.email, u.lastName, u.firstName, u.bio"
-        const queryImgProfile = "ip.profileImageUrl"
-        const queryImgBanner = "ib.bannerImageUrl"
+        const queryImg = "ib.url as bannerImage, ip.url as profileImage"
 
-        db.query(`SELECT ${queryUser}, ${queryImgProfile}, ${queryImgBanner}
+        db.query(`SELECT ${queryUser}, ${queryImg}
                   FROM users u
-                  LEFT JOIN profileImages ip ON ip.userId = ?
-                  LEFT JOIN bannerImages ib ON ib.userId = ?
+                  LEFT JOIN userImages ib ON ib.userId = ? AND ib.type = "banner"
+                  LEFT JOIN userImages ip ON ip.userId = ? AND ip.type = "profile"
                   WHERE u.userId = ?`, [id, id, id], (err, result) => {
             if (err) {
                 throw err
@@ -105,13 +104,13 @@ exports.signup = async (req, res) => {
                         } else {
                             id = await result2[0].userId
                             // Create line on profileImages with userId
-                            await db.query("INSERT INTO profileImages (userId, profileImageUrl) VALUES (?, ?)",
+                            await db.query(`INSERT INTO userImages (userId, url, type) VALUES (?, ?, "profile")`,
                             [id, imageProfileUrl], async (err3, result3) => {
                                 if (err3) {
                                     throw err3
                                 } else {
                                     // Create line on bannerImages with userId
-                                    await db.query("INSERT INTO bannerImages (userId, bannerImageUrl) VALUES (?, ?)",
+                                    await db.query(`INSERT INTO userImages (userId, url, type) VALUES (?, ?, "profile")`,
                                     [id, imageBannerUrl], async (err4, result4) => {
                                         if (err4) {
                                             throw err4

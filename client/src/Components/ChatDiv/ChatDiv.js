@@ -1,31 +1,34 @@
 import React, {useEffect, useState, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
-import "../../Styles/tchat.css"
+import "../../Styles/chat.css"
 import {useParams} from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
 import io from 'socket.io-client'
+import imageCompression from "browser-image-compression"
 import UserCard from '../Connected/UserCard'
 import Message from "./Message"
 
 const socket = io("localhost:3001")
 
-export default function TchatDiv({choiceCss, closeTchat, data, index}) {
-    
+export default function ChatDiv({choiceCss, closeChat, data, index}) {
+
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const [load, setLoad] = useState(false)
     const [allMessages, setAllMessages] = useState([])
     const [roomId, setRoomId] = useState(null)
     const messageRef = useRef()
-    const tchatRef = useRef()
+    const chatRef = useRef()
+    const openFile = useRef()
     const dispatch = useDispatch()
     const { slug } = useParams()
     const [message, setMessage] = useState({
         text: "",
         sender: userDataReducer.userId,
-        receiver: data.userId
+        receiver: data.userId,
+        type: "text"
     })
 
     /*
@@ -60,17 +63,18 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
             // not continue if haven't messages
             if (dataMessages.length > 0) {
                 setAllMessages(dataMessages)
+            } else {
+                setAllMessages([])
             }
             setRoomId(dataRoomId)
             // send my connection
             await socket.emit('userConnected', userDataReducer.userId)
-
             // Scrollbar appears at the bottom by default
-            tchatRef.current.scrollTop = tchatRef.current.scrollHeight
             setLoad(true)
+            chatRef.current.scrollTop = chatRef.current.scrollHeight
         }
         fetch()
-    }, [roomId])
+    }, [data])
 
     const fetchRoomId = async () => {
         return await new Promise(resolve => {
@@ -82,7 +86,7 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
 
     const fetchMessages = async (id) => {
         return await new Promise(resolve => {
-            const dataFetch = axios.get(`http://localhost:3001/api/chat/getMessages/${id}`)
+            const dataFetch = axios.get(`http://localhost:3001/api/chat/getContent/${id}`)
             resolve(dataFetch)
         })
     }
@@ -95,27 +99,65 @@ export default function TchatDiv({choiceCss, closeTchat, data, index}) {
         axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
         setMessage({...message, text: ""})
         messageRef.current.value = ""
+    } 
+
+    const handleClickFile = () => {
+        openFile.current.click()
     }
 
-    const choiceContainer = choiceCss ? "tchatDiv-container-mini" : "tchatDiv-container"
-    const choiceTop = choiceCss ? "tchatDiv-top-mini" : "tchatDiv-top"
-    const choiceTchat = choiceCss ? "tchatDiv-tchat-mini" : "tchatDiv-tchat"
+    const handleSubmitImage = e => {
+        let imageFile = e.target.files[0]
+        let options = {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        }
+
+        imageCompression(imageFile, options)
+          .then(compressedFile => {
+                let formData = new FormData()
+                formData.append('file', compressedFile)
+                formData.append('id', userDataReducer.userId)
+                axios.post(`http://localhost:3001/api/chat/addImage/${roomId}`, formData)
+                    .then(res => {
+                        const newImage = {
+                            sender: message.sender,
+                            receiver: message.receiver,
+                            text: res.data,
+                            type: "image"
+                        }
+                        socket.emit('sendMessage', newImage)
+                        setAllMessages([...allMessages, newImage])
+                    })
+                    .catch(err => console.log(err))
+          })
+          .catch(error => {
+            console.log(error.message)
+          })
+      }
+
+    const choiceContainer = choiceCss ? "chatDiv-container-mini" : "chatDiv-container"
+    const choiceTop = choiceCss ? "chatDiv-top-mini" : "chatDiv-top"
+    const choicechat = choiceCss ? "chatDiv-chat-mini" : "chatDiv-chat"
 
     return (
         <div className={themeReducer ? choiceContainer : choiceContainer}>
-            <div className={themeReducer ? `${choiceTop} tchatDiv-border-dark` : choiceTop}>
+            <div className={themeReducer ? `${choiceTop} chatDiv-border-dark` : choiceTop}>
                 <UserCard data={data} />
-            {choiceCss ? <FontAwesomeIcon icon="times-circle" className="tchatDiv-close-icon" onClick={() => closeTchat()} /> : null}
+            {choiceCss ? <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon" onClick={() => closeChat()} /> : null}
             </div>
-            <div className={themeReducer ? `${choiceTchat} tchatDiv-border-dark` : choiceTchat} ref={tchatRef}>
-               {load ? allMessages.map((item, key) => {
+            <div className={themeReducer ? `${choicechat} chatDiv-border-dark` : choicechat} ref={chatRef}>
+               {load 
+               ? allMessages.map((item, key) => {
                    let isMe = item.userId === userDataReducer.userId || item.sender === userDataReducer.userId
                    return <Message key={key} data={item} isMe={isMe} />
-               }) : null}
+               }) 
+               : null}
             </div>
-            <div className={choiceCss ? "tchatDiv-write-dark" : "tchatDiv-write"}>
+            <div className={choiceCss ? "chatDiv-write-dark" : "chatDiv-write"}>
                 <div className="icon-new-msg">
-                    <FontAwesomeIcon icon="image" className="icon-write-new-msg"/>
+                    <input type="file" name="chatImage" id="chatImage" style={{display: "none"}} ref={openFile} onChange={e => handleSubmitImage(e)} />
+                    <FontAwesomeIcon icon="image" className="icon-write-new-msg" onClick={() => handleClickFile()} />
                     <p className="icon-write-new-msg">GIF</p>
                 </div>
                 <form className="new-msg-box">

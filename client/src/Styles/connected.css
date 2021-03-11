@@ -74,6 +74,18 @@ Bottom
     color: #f1f1f1;
 }
 
+.connected-chat {
+    height: 56%;
+    background-color: #F0F2F5;
+    z-index: 5;
+}
+
+.connected-chat-dark {
+    height: 56%;
+    background-color: rgb(37, 37, 37);
+    z-index: 5;
+}
+
 /*
 //////////////////////// 
 UserCard
@@ -106,10 +118,12 @@ UserCard
 }
 
 .connected-img-friend {
-    position: relative;
     display: flex;
+    align-items: center;
     min-width: 40px;
     min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     border-radius: 50%;
     background-color: rgb(0, 0, 0);
     overflow: hidden;
@@ -117,10 +131,7 @@ UserCard
 }
 
 .connected-img-friend img{
-    position: absolute;
-    width: 150%;
-    top: -25%;
-    left: -25%;
+    width: 100%;
 }
 
 .connected-name-friend {

@@ -52,7 +52,7 @@ export default function MainAccount() {
                 })
                 .catch(err => console.log(err))
                 
-                await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
                 .then(res => {
                     if (res.data.length === 0) {
                         setIsEmpty(true)
@@ -62,8 +62,8 @@ export default function MainAccount() {
                     }
                 })
                 .catch(err => console.log(err))
-                
-                await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
+            
+            await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
                 .then(res => {
                     setIsFriend(res.data)
                 })
@@ -110,12 +110,12 @@ export default function MainAccount() {
 
                     <div className={themeReducer ? "account-top-dark" : "account-top"}>
                         <div className="account-bg">
-                            <img className="account-bg-img" src={dataUser[0].bannerImageUrl} alt="Your banner frame"/>
+                            <img className="account-bg-img" src={dataUser[0].bannerImage} alt="Your banner frame"/>
                         </div>
                         <div className="account-info">
                             <div className="account-info-top">
                                 <div className={themeReducer ? "account-info-img-dark" : "account-info-img"}>
-                                    <img className="img-profile" src={dataUser[0].profileImageUrl} alt="Your profile frame"/>
+                                    <img className="img-profile" src={dataUser[0].profileImage} alt="Your profile frame"/>
                                 </div>
                                 <div>
                                     <p className={themeReducer ? "txt-dark" : null}>{dataUser[0].firstName} {dataUser[0].lastName}</p>

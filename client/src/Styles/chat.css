@@ -1,4 +1,4 @@
-.tchat {
+.chat {
     width: 80%;
     height: 100vh;
     display: flex;
@@ -6,21 +6,21 @@
     overflow: hidden;
 }
 
-.mainTchat {
+.mainChat {
     width: 80%;
     height: 100vh;
     background-color: #F0F2F5;
     border-left: 1px solid #c2c2c2;
 }
 
-.mainTchat-dark {
+.mainChat-dark {
     width: 80%;
     height: 100vh;
     background-color: #252525;
     border-left: 1px solid #000000;
 }
 
-.tchatEmpty {
+.chatEmpty {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +31,7 @@
     z-index: 5;
 }
 
-.tchatEmpty-dark {
+.chatEmpty-dark {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,39 +41,39 @@
     border-left: 1px solid #000000;
 }
 
-.tchatEmpty-dark > p {
+.chatEmpty-dark > p {
     color: #f1f1f1;
 }
 
 /*
 //////////////////////// 
-TchatDiv
+ChatDiv
 //////////////////////// 
 */
 
-.tchatDiv-container {
+.chatDiv-container {
     height: 100vh;
     overflow: hidden;
 }
 
-.tchatDiv-close-icon {
+.chatDiv-close-icon {
     margin: 3px;
     font-size: 15px;
     color: #FF7272;
     cursor: pointer;
 }
 
-.tchatDiv-close-icon:hover {
+.chatDiv-close-icon:hover {
     transition: 0.3s;
     color: #ff4747;
 }
 
-.tchatDiv-container-mini {
+.chatDiv-container-mini {
     overflow: hidden;
-    height: 56%;
+    height: 100%;
 }
 
-.tchatDiv-top {
+.chatDiv-top {
     display: flex;
     align-items: center;
     width: 100%;
@@ -81,7 +81,7 @@ TchatDiv
     border-bottom: 1px solid #c2c2c2;
 }
 
-.tchatDiv-top-mini {
+.chatDiv-top-mini {
     display: flex;
     align-items: center;
     width: 100%;
@@ -89,7 +89,7 @@ TchatDiv
     border-bottom: 1px solid #c2c2c2;
 }
 
-.tchatDiv-tchat {
+.chatDiv-chat {
     width: 100%;
     height: 82%;
     border-bottom: 1px solid #c2c2c2;
@@ -97,19 +97,19 @@ TchatDiv
     overflow-y: scroll;
 }
 
-.tchatDiv-tchat-mini {
+.chatDiv-chat-mini {
     height: 78%;
     border-bottom: 1px solid #c2c2c2;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
-.tchatDiv-tchat-mini-dark {
+.chatDiv-chat-mini-dark {
     height: 82%;
     overflow-y: scroll;
 }
 
-.tchatDiv-border-dark {
+.chatDiv-border-dark {
     border-bottom: 1px solid #000;
 }
 
@@ -128,13 +128,36 @@ TchatDiv
     word-break: break-all;
 }
 
-.msg > small {
+.msg-box-img {
+    max-width: 75%;
+    max-height: 250px;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.msg-box-img-right {
+    max-width: 75%;
+    max-height: 250px;
+    border: 1px solid #1f76f8;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.msg-hour {
     position: absolute;
     top: -20px;
     color: #000;
-    width: 120px;
     font-size: 10px;
     opacity: 0.6;
+}
+
+.msg-hour-right { 
+    right: 0;
+}
+
+.msg-hour-left {
+    left: 0;
 }
 
 .msg-right-box {
@@ -150,14 +173,20 @@ TchatDiv
     font-size: 12px;
 }
 
-.tchatDiv-write {
+.msg-img {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.chatDiv-write {
     display: flex;
     align-items: center;
     width: 100%;
     height: 8%;
 }
 
-.tchatDiv-write-dark {
+.chatDiv-write-dark {
     display: flex;
     align-items: center;
     width: 100%;

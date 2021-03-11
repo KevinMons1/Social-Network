@@ -10,7 +10,8 @@ router.post('/account/friend/delete/:id', user.deleteFriend)
 router.post('/account/isFriend/:id', user.getIsFriend)
 
 router.get('/account/informations/:id', user.getAccountInformations)
-router.get('/connected/friends/:id', user.getFriendsConnected)
+router.get('/connected/friends/:id', user.getFriends)
+router.get('/connected/friends/chat/:id', user.getFriendsChat)
 
 router.put('/account/informations/update/:id', user.updateAccountInformations)
 router.put('/account/image/profile/:id', multer.single("file"), user.uploadImageProfile)

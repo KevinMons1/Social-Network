@@ -1,4 +1,4 @@
-const db = require("../db")
+const db = require("../db");
 
 // Create and/or search roomId
 exports.getRoom = (req, res) => {
@@ -45,7 +45,7 @@ exports.getRoom = (req, res) => {
 }
 
 // Get all messages in the room
-exports.getMessages = (req, res) => {
+exports.getContent = (req, res) => {
     const roomId = req.params.id
     
     db.query('SELECT * FROM roomMessages WHERE roomId = ? ORDER BY date ASC',
@@ -53,7 +53,7 @@ exports.getMessages = (req, res) => {
         if (err) {
             throw err
         } else {
-            res.send(result)
+           res.send(result)
         }
     })
 }
@@ -64,10 +64,27 @@ exports.addMessage = (req, res) => {
     const userId = req.body.sender
     const text = req.body.text
 
-    db.query("INSERT INTO roomMessages (roomId, userId, text) VALUES(?, ?, ?)",
+    db.query(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, "text")`,
     [roomId, userId, text], (err, result) => {
         if (err) {
             throw err
         }
     })
+}
+
+// Add image
+exports.addImage = (req, res) => {
+    const roomId = req.params.id
+    const userId = req.body.id
+    const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
+
+    db.query(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, "image")`,
+    [roomId, userId, imageUrl], (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            res.send(imageUrl)
+        }
+    })
+    
 }
