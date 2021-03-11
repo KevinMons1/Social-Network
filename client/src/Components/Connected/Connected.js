@@ -4,20 +4,27 @@ import "../../Styles/connected.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
+import {useTransition, config, animated} from "react-spring"
 import UserCard from './UserCard'
-import TchatDiv from '../TchatDiv/TchatDiv'
+import ChatDiv from '../ChatDiv/ChatDiv'
 
 export default function Connected({choiceCss, friendClick}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const [usersCard, setUsersCard] = useState([])
-    const [usersCardTchat, setUsersCardTchat] = useState([])
+    const [usersCardChat, setUsersCardChat] = useState([])
     const [load, setLoad] = useState(false)
-    const [tchat, setTchat] = useState(false)
+    const [chat, setChat] = useState(false)
+    const [isAnimated, setIsAnimated] = useState(false)
     const [friendEmpty, setFriendEmpty] = useState(false)
     const [userCardClick, setUserCardClick] = useState(null)
-
+    const transitionContent = useTransition(isAnimated, null, {
+        from: {opacity: 0, transform: "translateY(500px)", position: 'absolute'},
+        enter: {opacity: 1, transform: "translateY(0)", position: "absolute"},
+        leave: {opacity: 0, transform: "translateY(500px)", position: 'absolute'},
+        config: config.stiff
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,11 +33,19 @@ export default function Connected({choiceCss, friendClick}) {
                     // if res.data === true but this user haven't friends
                     if (res.data) {
                         res.data.forEach(friend => {
-                            setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenTchat(friend)} />])
-                            setUsersCardTchat(usersCardTchat => [...usersCardTchat, <UserCard data={friend} text={true} open={() => handleOpenTchat(friend)} />])
-                        });
+                            setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenChat(friend)} />])
+                        })                 
                     } else {
                         setFriendEmpty(true)
+                    }
+                })
+                .catch(err => console.log(err))
+                await axios.get(`http://localhost:3001/api/user/connected/friends/chat/${userDataReducer.userId}`)
+                .then(res => {
+                    if (res.data) {
+                        res.data.forEach(friendData => {
+                            setUsersCardChat(usersCardChat => [...usersCardChat, <UserCard data={friendData} text={true} open={() => handleOpenChat(friendData)} />])
+                        })
                     }
                 })
                 .catch(err => console.log(err))
@@ -39,14 +54,18 @@ export default function Connected({choiceCss, friendClick}) {
         fetchData()
     }, [])
 
-    const handleCloseTchat = () => {
-        setTchat(false)
+    const handleCloseChat = () => {
+        setIsAnimated(false)
+        setTimeout(() => {
+            setChat(false)
+        }, 200);
     }
 
-    const handleOpenTchat = (friendData) => {
+    const handleOpenChat = (friendData) => {
         if (choiceCss) {
-            setUserCardClick(<TchatDiv index={false} closeTchat={handleCloseTchat} choiceCss={true} data={friendData} />)
-            setTchat(true)
+            setUserCardClick(<ChatDiv index={false} closeChat={handleCloseChat} choiceCss={true} data={friendData} />)
+            setIsAnimated(true)
+            setChat(true)
         } else {
             friendClick(friendData)
         }
@@ -58,8 +77,8 @@ export default function Connected({choiceCss, friendClick}) {
         })                 
     )
 
-    const usersTchatHtml = (
-        usersCardTchat.map((item, index) => {
+    const usersChatHtml = (
+        usersCardChat.map((item, index) => {
             return <div key={index}>{item}</div>
         })                 
     )
@@ -83,19 +102,21 @@ export default function Connected({choiceCss, friendClick}) {
                     <input className={themeReducer.Theme ? "search txt-dark" : "search"} type="text" placeholder="Search..."/>
                 </div>
             </div>
-
-            {tchat 
-            ? userCardClick 
-            :   <div className="connected-bottom">
-                    <div className="friends-boxs">             
-                        {load 
-                        ? friendEmpty 
-                            ? <small>You are not friends !</small>
-                            : usersTchatHtml
-                        : null}  
-                    </div>  
+             
+             <div>
+                {transitionContent.map(({item, key, props}) => item &&(
+                    <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
+                ))}
+                <div className="connected-bottom">
+                        <div className="friends-boxs">             
+                            {load 
+                            ? friendEmpty 
+                                ? <small>You are not friends !</small>
+                                : usersChatHtml
+                            : null}  
+                        </div>  
                 </div>  
-            }
+             </div>
         </section>
     )
 }

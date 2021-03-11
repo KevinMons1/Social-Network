@@ -99,7 +99,7 @@ export default function PublicationCard({open, data, noClick}) {
                     <div className="left-publi">
                         <div className="left-publi-img-box">
                             <Link to={`/account/${data.userId}`}>
-                                <img className="left-publi-img" src={data.profileImageUrl} alt="Profile frame"/>
+                                <img className="left-publi-img" src={data.userImageUrl} alt="Profile frame"/>
                             </Link>
                         </div>
                         <div className="left-publi-info">

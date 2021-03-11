@@ -32,7 +32,7 @@ export default function Header() {
         <header className={themeReducer ? "header-dark" : "header"}>
             <div className="header-top">
                 <div className="header-banner-box">
-                    <img src={userDataReducer.bannerImageUrl} alt="Your banner frame"/>
+                    <img src={userDataReducer.bannerImage} alt="Your banner frame"/>
                 </div>
                 <div className={themeReducer ? "search-top-dark" : "search-top"}>
                     <FontAwesomeIcon className="search-icon" icon="search" />
@@ -40,7 +40,7 @@ export default function Header() {
                 </div>
                 <div className="img-profile-box">
                     <Link to={{pathname: `/account/${userDataReducer.userId}`}}>
-                        <img className="img-profile" src={userDataReducer.profileImageUrl} alt="Your profile frame"/>
+                        <img className="img-profile" src={userDataReducer.profileImage} alt="Your profile frame"/>
                     </Link>
                 </div>
             </div>
@@ -66,9 +66,9 @@ export default function Header() {
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer ? "friends-icon header-middle-icon-dark" : "friends-icon header-middle-icon"} icon="comments" />
+                        <FontAwesomeIcon className={themeReducer ? "chat-icon header-middle-icon-dark" : "chat-icon header-middle-icon"} icon="comments" />
                         <div className="header-middle-text">
-                            <Link to="/friends/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Friends</Link>
+                            <Link to="/chat/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Chat</Link>
                         </div>
                     </li>
                 </ul>

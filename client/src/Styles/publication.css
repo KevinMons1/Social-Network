@@ -100,7 +100,8 @@ info-publi
 }
 
 .left-publi-img-box {
-    position: relative;
+    display: flex;
+    align-items: center;
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -110,10 +111,7 @@ info-publi
 }
 
 .left-publi-img {
-    position: absolute;
-    width: 150%;
-    top: -25%;
-    left: -25%;
+    width: 100%;   
 }
 
 .left-publi-info {
@@ -155,13 +153,6 @@ info-publi
 
 .text-publi > p {
     cursor: pointer;
-}
-
-.publi-full-img {
-    position: absolute;
-    width: 100vh;
-    height: auto;
-    z-index: 1000;
 }
 
 /*

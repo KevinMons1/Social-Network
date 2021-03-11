@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import {useHistory, useParams} from "react-router-dom"
-import "../../Styles/tchat.css"
+import "../../Styles/chat.css"
 
 //Components
-import MainTchat from "./MainTchat"
+import MainChat from "./MainChat"
 import Connected from "../Connected/Connected"
-import TchatEmpty from "./TchatEmpty"
+import ChatEmpty from "./ChatEmpty"
 
 export default function Index() {
 
@@ -22,13 +22,13 @@ export default function Index() {
     }, [])
 
     const handleFriendClick = (data) => {
-        history.push({pathname: `/friends/${data.userId}`, state: data})
+        history.push({pathname: `/chat/${data.userId}`, state: data})
     }
 
     return (
-        <section className="tchat">
+        <section className="chat">
             <Connected choiceCss={false} friendClick={(data) => handleFriendClick(data)} />
-            {friendClick ? <MainTchat data={data} /> : <TchatEmpty />}
+            {friendClick ? <MainChat data={data} /> : <ChatEmpty />}
         </section>
     )
 }

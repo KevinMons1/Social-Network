@@ -4,8 +4,8 @@ const INITIAL_STATE = {
     lastName: "",
     firstName: "",
     bio: "",
-    imageProfileUrl: "",
-    imageBannerUrl: ""
+    banneImage: "",
+    profileImage: ""
 }
 
 const userDataReducer = (state = INITIAL_STATE, action) => {

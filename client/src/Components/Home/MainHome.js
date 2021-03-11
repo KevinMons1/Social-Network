@@ -10,7 +10,7 @@ import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationComments from '../Publication/PublicationComments'
 import Loader from "../Services/Loader"
 
-export default function MainHome({openFullImg}) {
+export default function MainHome() {
 
     const themeReducer = useSelector(state => state.Theme)
     const dispatch = useDispatch()
