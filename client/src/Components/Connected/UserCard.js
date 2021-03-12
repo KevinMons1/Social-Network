@@ -8,10 +8,11 @@ export default function UserCard({ open, text, data}) {
 
     const handleCutText = () => {
         let newText = data.text
+
         if (data.type === "image") {
-            return `Send an image !`
-        } else {
-            return newText.substr(0, 15) + " ..."
+            return `Last message: Send an image !`      
+        } else {           
+            return `Last message: ${newText.substr(0, 15)} ...`          
         }
     }
 

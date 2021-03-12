@@ -119,11 +119,10 @@ UserCard
 
 .connected-img-friend {
     display: flex;
+    justify-content: center;
     align-items: center;
-    min-width: 40px;
-    min-height: 40px;
-    max-width: 40px;
-    max-height: 40px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: rgb(0, 0, 0);
     overflow: hidden;
@@ -131,7 +130,7 @@ UserCard
 }
 
 .connected-img-friend img{
-    width: 100%;
+    width: 40px;
 }
 
 .connected-name-friend {
@@ -148,7 +147,7 @@ UserCard
 
 .friend-text {
     width: 100%;
-    margin-left: 62px;
+    margin-left: 15px;
     font-size: 12px;
     opacity: 0.5;
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import "../../Styles/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,28 +14,40 @@ export default function MainHome() {
 
     const themeReducer = useSelector(state => state.Theme)
     const dispatch = useDispatch()
+    const scrollRef = useRef()
+    const [countPublication, setCountPublication] = useState(3)
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
     const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
-    const [data, setData] = useState(null)
+    const [data, setData] = useState([])
+    const [alertMsg, setAlertMsg] = useState(false)
     const [dataPubliClick, setDataPubliClick] = useState(null)
 
     useEffect(() => {
-        dispatch({
-            type: "CHANGE_ZINDEX",
-            payload: false
-          })
-        // Get all publications
+        // Get publications
         async function fetchData() {
-            await axios.get("http://localhost:3001/api/publications/all")
-                .then(res => {
-                        setData(res.data)
-                    })
-                .catch(err => console.log(err))
-                setLoad(true)
+            await dispatch({
+                type: "CHANGE_ZINDEX",
+                payload: false
+              })
+            await getPublications()
         }
         fetchData()
     }, [])
+    
+    const getPublications = () => {
+        axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
+        .then(res => {
+            if (res.data === false) {
+                setAlertMsg(true)
+            } else {
+                setData([...data, res.data[0], res.data[1], res.data[2]])
+                setLoad(true)
+            }
+            setCountPublication(countPublication + 3)
+        })
+        .catch(err => console.log(err))
+    }
 
     const handleOpenCommentsPubli = (dataPubli) => {
         setDataPubliClick(dataPubli)
@@ -46,9 +58,17 @@ export default function MainHome() {
         setOpenCommentsPubli(false)
     }
 
+    // Scroll infini -> get publications with scroll
+    const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
+        
+        if (clientHeight + scrollTop >= scrollHeight - 20) {
+            getPublications()
+        }
+    }
 
     return (
-        <div className={themeReducer ? "mainHome-dark" : "mainHome"}>
+        <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
         
             {openCommentsPubli ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> : null } 
 
@@ -86,6 +106,7 @@ export default function MainHome() {
                     })
                     : <Loader />
                     }
+                    {alertMsg ? <p className="home-alertMsg">There is no more publication! Come back later :)</p> : null}
                 </div>
             </div>
         </div>

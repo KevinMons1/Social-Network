@@ -101,6 +101,7 @@ info-publi
 
 .left-publi-img-box {
     display: flex;
+    justify-content: center;
     align-items: center;
     width: 70px;
     height: 70px;
@@ -111,7 +112,7 @@ info-publi
 }
 
 .left-publi-img {
-    width: 100%;   
+    width: 70px;   
 }
 
 .left-publi-info {
@@ -589,6 +590,7 @@ Publication Open
 
 .publi-open-img {
     display: flex;
+    justify-content: center;
     align-items: center;
     width: 40px;
     height: 40px;
@@ -599,7 +601,7 @@ Publication Open
 }
 
 .publi-open-img img{
-    width: 100%;
+    width: 40px;
 }
 
 .publi-open-info {

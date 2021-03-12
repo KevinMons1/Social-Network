@@ -1,5 +1,4 @@
 const db = require("../db");
-const { all } = require("../Routers/auth");
 
 //
 // Functions exports 
@@ -282,7 +281,6 @@ exports.uploadImageProfile = async (req, res) => {
     const id = req.params.id 
     const txt = req.body.txt
 
-    console.log(imageUrl)
     db.query(`UPDATE userImages SET url = ? WHERE userId = ? AND type = "profile"`,
     [imageUrl, id], async (err, result) => {
         if (err) {

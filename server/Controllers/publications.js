@@ -92,22 +92,37 @@ exports.getLikes = (req, res) => {
 }
 
 // Get all publication by all users
-exports.getAllPublications = (req, res) => {
+exports.getPublicationsHome = (req, res) => {
     const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
     const queryImg = "pc.text as publicationImageUrl, ui.url as userImageUrl"
+    const maxCount = req.params.id
+    let minCount = maxCount - 3
+    let countPublication
 
-    //Order by id DESC to sort from new to oldest
-    db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
-                    LEFT JOIN users u ON u.userId = p.userId 
-                    LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
-                    LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND pc.type = "image"
-                    ORDER BY p.publicationId DESC`,
-    (err, result) => {
+    // Verify if there is no more publication
+    db.query(`SELECT COUNT(publicationId) as countPublication FROM publications`, (err, result) => {
         if (err) {
             throw err
         } else {
-            res.send(result)
+            countPublication = result[0].countPublication
+            if (parseInt(maxCount) <= countPublication - 3) {
+                //Order by id DESC to sort from new to oldest
+                db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
+                                LEFT JOIN users u ON u.userId = p.userId 
+                                LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+                                LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND pc.type = "image"
+                                ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`,
+                (err2, result2) => {
+                    if (err2) {
+                        throw err2
+                    } else {
+                        res.send(result2)
+                    }
+                })
+            } else {
+                res.send(false)
+            }
         }
     })
 }

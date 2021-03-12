@@ -40,7 +40,7 @@ export default function PublicationCard({open, data, noClick}) {
             _hashtag = _hashtag.replace(";", " #")
             _hashtag = "#" + _hashtag
             setHashtag(_hashtag)
-        }
+        }        
 
         axios.post(`http://localhost:3001/api/publications/likes/get/${data.publicationId}`, {userId: userDataReducer.userId})
             .then(res => {

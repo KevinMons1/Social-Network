@@ -33,6 +33,11 @@
     overflow-y: scroll;
 }
 
+.home-alertMsg {
+    margin: 50px;
+    text-align: center;
+}
+
 /*
 //////////////////////// 
 Story

@@ -14,7 +14,7 @@ router.post('/likes/get/:id', publications.getLikes)
 
 router.get('/account/:id', publications.getAccountPublications)
 router.get('/comments/:id', publications.getComments)
-router.get('/all', publications.getAllPublications)
+router.get('/home/:id', publications.getPublicationsHome)
 
 router.delete('/account/delete/:id', publications.deletePublication)
 

@@ -70,13 +70,13 @@ Top
 }
 
 .header-banner-box {
-    background: #000;
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
+    background: #000;
     overflow: hidden;
 }
 
@@ -87,6 +87,7 @@ Top
 
 .img-profile-box {
     display: flex;
+    justify-content: center;
     align-items: center;
     width: 70px;
     height: 70px;
@@ -98,7 +99,8 @@ Top
 }
 
 .img-profile {
-    width: 100%;
+    /* la balise a à un décalge ! a regler */
+    width: 70px;
 }
 
 /*
