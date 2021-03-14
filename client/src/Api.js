@@ -1,6 +1,4 @@
 import axios from "axios"
-import { GiphyFetch } from '@giphy/js-fetch-api'
-import { Grid } from "@giphy/react-components";
 
 // Twitch API
 export const apiTwitch = axios.create({
@@ -14,11 +12,5 @@ export const apiTwitch = axios.create({
 
 // Giphy API
 
-const keyGiphy = new GiphyFetch("p6c0Ct0mrOiMKSHtVavlcR3On6hNhFQ7")
+export const keyGiphy = "p6c0Ct0mrOiMKSHtVavlcR3On6hNhFQ7"
 
-export const Gifs = () => {
-    const fetch = offset => {
-        keyGiphy.trending({ offset, limit: 10 })
-    }
-    return <Grid width={200} columns={4} gutter={6} fetchGifs={fetch}/>
-}

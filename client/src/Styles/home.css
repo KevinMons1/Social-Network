@@ -38,6 +38,22 @@
     text-align: center;
 }
 
+.suggest-friend {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+    width: 100%;
+}
+
+.suggest-friend-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /*
 //////////////////////// 
 Story
@@ -76,7 +92,7 @@ Story
     width: 60px;
     height: 60px;
     margin: 5px;
-    border: 2px solid #000000;
+    border: 2px solid #000;
     border-radius: 9px;
     opacity: 0.25;
     cursor: pointer;

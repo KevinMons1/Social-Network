@@ -170,11 +170,6 @@ export default function MainAccount() {
                                         <p className={themeReducer ? "write-publi-placeholder txt-dark" : "write-publi-placeholder"}>What do you mean ?</p>
                                     </div>
                                 </div>
-
-                                <div className="bottom-new-publi">
-                                    <FontAwesomeIcon icon="image" className={themeReducer ? "icon-bottom-new-publi txt-dark" : "icon-bottom-new-publi"}  onClick={() => setOpenNewPubli(true)}/>
-                                    <p className={themeReducer ? "icon-bottom-new-publi txt-dark" : "icon-bottom-new-publi"}  onClick={() => setOpenNewPubli(true)}>GIF</p>
-                                </div>
                             </div>
                         }
                     </div>

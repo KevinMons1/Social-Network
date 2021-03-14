@@ -63,9 +63,10 @@ exports.addMessage = (req, res) => {
     const roomId = req.params.id
     const userId = req.body.sender
     const text = req.body.text
+    const type = req.body.type
 
-    db.query(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, "text")`,
-    [roomId, userId, text], (err, result) => {
+    db.query(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, ?)`,
+    [roomId, userId, text, type], (err, result) => {
         if (err) {
             throw err
         }

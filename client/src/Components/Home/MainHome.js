@@ -9,10 +9,12 @@ import PublicationCard from '../Publication/PublicationCard'
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationComments from '../Publication/PublicationComments'
 import Loader from "../Services/Loader"
+import SuggestFriendCard from '../Services/SuggestFriendCard'
 
 export default function MainHome() {
 
     const themeReducer = useSelector(state => state.Theme)
+    const userDataReducer = useSelector(state => state.UserData)
     const dispatch = useDispatch()
     const scrollRef = useRef()
     const [countPublication, setCountPublication] = useState(3)
@@ -67,6 +69,45 @@ export default function MainHome() {
         }
     }
 
+    const getSuggestFriend = () => {
+        axios.get(`http://localhost:3001/api/user/suggest/friend/${userDataReducer.userId}`)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => console.log(err))
+    }
+
+    const homeContent = (item, index) => {
+        // if ((index % 5) === 0) { //!! A changer car 5 c'est trop peu (mettre 20 mais il faut plus de publication)
+        //     return (
+        //         <div key={index}>
+        //             <div className="suggest-friend">
+        //                 <p className={themeReducer ? "txt-dark" : null}>You know this persons ?</p>
+        //                 <div className="suggest-friend-content">
+        //                     <SuggestFriendCard />
+        //                     {getSuggestFriend()}
+        //                 </div>
+        //             </div>
+        //             <div key={index} className="box-publi">
+        //                 <PublicationCard open={handleOpenCommentsPubli} data={item} />
+        //             </div>
+        //         </div>
+        //     )
+        // } else {
+        //     return (
+        //         <div key={index} className="box-publi">
+        //             <PublicationCard open={handleOpenCommentsPubli} data={item} />
+        //         </div>
+        //     )
+        // }
+
+        return (
+            <div key={index} className="box-publi">
+                <PublicationCard open={handleOpenCommentsPubli} data={item} />
+            </div>
+        )
+    }
+
     return (
         <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
         
@@ -79,7 +120,7 @@ export default function MainHome() {
                     <div className={themeReducer ? "story-add border-dark" : "story-add"}>
                         <FontAwesomeIcon icon="plus" className={themeReducer ? "story-icon txt-dark" : "story-icon"}/>
                     </div>
-                <StoryCard />
+                    <StoryCard />
                 </div>
 
                 <div className="new-publi">
@@ -89,22 +130,13 @@ export default function MainHome() {
                             <p className={themeReducer ? "write-publi-placeholder txt-dark" : "write-publi-placeholder"}>What do you mean ?</p>
                         </div>
                     </div>
-                    <div className="bottom-new-publi">
-                        <FontAwesomeIcon icon="image" className={themeReducer ? "icon-bottom-new-publi txt-dark" : "icon-bottom-new-publi"}  onClick={() => setNewPubli(true)}/>
-                        <p className={themeReducer ? "icon-bottom-new-publi txt-dark" : "icon-bottom-new-publi"}  onClick={() => setNewPubli(true)}>GIF</p>
-                    </div>
                 </div>
-
                 <div>
                     {load 
-                    ? data.map((item, index) => {
-                        return (
-                            <div key={index} className="box-publi">
-                                <PublicationCard open={handleOpenCommentsPubli} data={item} />
-                            </div>
-                        )
-                    })
-                    : <Loader />
+                    ?   data.map((item, index) => {
+                            return homeContent(item, index)
+                        })
+                    :   <Loader />
                     }
                     {alertMsg ? <p className="home-alertMsg">There is no more publication! Come back later :)</p> : null}
                 </div>

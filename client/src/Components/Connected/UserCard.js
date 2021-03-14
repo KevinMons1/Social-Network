@@ -10,7 +10,9 @@ export default function UserCard({ open, text, data}) {
         let newText = data.text
 
         if (data.type === "image") {
-            return `Last message: Send an image !`      
+            return `Last message: Sended an image !`      
+        } else if (data.type === "gif") {
+            return `Last message: Sended a gif !`      
         } else {           
             return `Last message: ${newText.substr(0, 15)} ...`          
         }

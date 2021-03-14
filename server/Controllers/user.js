@@ -30,6 +30,37 @@ const publicationsDefault = (id, type, imageUrl, txt) => {
     })
 }
 
+const getFriendId = async (id) => {
+    return await new Promise(resolve => {
+        db.query(`SELECT friendId, user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?`,
+        [id, id], (err, result) => {
+            if (err) {
+                throw err
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+
+const getInformationsFriend = async (id) => {
+    return await new Promise(resolve => {
+        const queryUser = "u.userId, u.lastName, u.firstName"
+        const queryImg = "ui.url as profileImage"
+
+        db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
+        LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
+        WHERE u.userId = ?`,
+        [id, id], (err2, result2) => {
+            if (err2) {
+                throw err2
+            } else {
+               resolve(result2)
+            }
+        })   
+    })
+}
+
 // Get all information for display each user who speaking white the user
 const getFriendsChatPromisse = async (element, id) => {
     return await new Promise(resolve => {
@@ -184,69 +215,88 @@ exports.getIsFriend = (req, res) => {
 }
 
 // Get friends for components Connected
-exports.getFriends = (req, res) => {
+exports.getFriends = async (req, res) => {
     const id = req.params.id
-    const queryUser = "u.userId, u.lastName, u.firstName"
-    const queryImg = "ui.url as profileImage"
+    const result = await getFriendId(id) 
     let friendsId;
     let friends = []
     let count = 0
+    let result2;
 
-    db.query(`SELECT user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?`,
-    [id, id], (err, result) => {
-        if (err) {
-            throw err
-        } else {
-            if (result.lenght === 0) {
-                res.send(false)
-            } else {
-                // To destroy the objects in the received array and seek userId
-                friendsId = result.map(item => item.user1Id != id ? item.user1Id : item.user2Id)
-                friendsId.forEach(userId => {
-                    db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
-                                LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
-                                WHERE u.userId = ?`,
-                    [userId, userId], (err2, result2) => {
-                        if (err2) {
-                            throw err2
-                        } else {
-                            count++
-                            friends = [...friends, result2[0]]
-                            if (count === friendsId.length) {
-                                res.send(friends)
-                            }
-                        }
-                    })   
-                })
+    if (result.lenght === 0) {
+        res.send(false)
+    } else {
+        // To destroy the objects in the received array and seek userId
+        friendsId = result.map(item => item.user1Id != id ? item.user1Id : item.user2Id)
+        friendsId.forEach(async userId => {
+            result2 = await getInformationsFriend(userId)
+            count++
+            friends = [...friends, result2[0]]
+            if (count === friendsId.length) {
+                res.send(friends)
             }
-        }
-    })
+        })
+    }
 }
 
 // Get friends with whom there is a private Room and take last message for notification
-exports.getFriendsChat = (req, res) => {
+exports.getFriendsChat = async (req, res) => {
     const id = req.params.id
+    const result = await getFriendId(id) 
     let allResult = []
-    let _result
+    let result2
     let count
     let i = 0
 
-    db.query("SELECT friendId, user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?",
-        [id, id], (err, result) => {
-            if (err) {
-                throw err
-            } else {
-                count = result.length
-                result.forEach(async element => {
-                    _result = await getFriendsChatPromisse(element, id)
-                    if (_result != false) {
-                        allResult.push(await getFriendsChatPromisse(element, id))   
-                    }
-                    i++
-                    if (count == i) res.send(allResult)
-                })
+    count = result.length
+    result.forEach(async element => {
+        result2 = await getFriendsChatPromisse(element, id)
+        if (result2 != false) {
+            allResult.push(await getFriendsChatPromisse(element, id))   
+        }
+        i++
+        if (count == i) res.send(allResult)
+    })
+}
+
+// Get suggest friend
+exports.getSuggestFriend = async (req, res) => {
+    const id = req.params.id
+    const queryUser = "u.userId, u.lastName, u.firstName"
+    const queryImg = "ui.url as profileImage"
+    const result = await getFriendId(id)
+    let rnd
+    let rnds = []
+    let _result = []
+
+    db.query("SELECT COUNT(userId) as userIdTotal FROM users", (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            for (let i = 0; i < 10; i++) {
+                rnd = Math.floor(Math.random() * Math.floor(result[0].userIdTotal + 5))  //! enlever l'addition
+                // rnds.indexOf(rnd) >= 0 ? i-- : rnds = [...rnds, rnd]
+                if (rnds.lenght == 0 || rnds.indexOf(rnd) == -1) {
+                    rnds.push(rnd)
+                } else {
+                    i--
+                }
             }
-        })
+            rnds.forEach(userId => {
+                db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
+                        LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+                        WHERE u.userId = ?`, [userId], (err2, result2) => {
+                    if (err2) {
+                        throw err2
+                    } else {
+                        _result.push(result2[0])
+                        // faire un count pour savoir quand on a fini et on peu faire le .send dans un if
+                    }
+                })
+            })
+            res.send(_result)
+        }
+    })
 }
 
 // Update informations

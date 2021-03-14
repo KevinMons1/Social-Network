@@ -123,6 +123,11 @@ UserCard
     align-items: center;
     width: 40px;
     height: 40px;
+    align-items: center;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     border-radius: 50%;
     background-color: rgb(0, 0, 0);
     overflow: hidden;
@@ -131,6 +136,7 @@ UserCard
 
 .connected-img-friend img{
     width: 40px;
+    width: 100%;
 }
 
 .connected-name-friend {

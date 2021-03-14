@@ -178,7 +178,6 @@ export default function NewPubliBox({ setPubli }) {
                     <div className="bottom-new-publi">
                         <button className="new-publi-btn-noVisible" type="button"><FontAwesomeIcon icon="image" className="icon-write-new-publi" onClick={handleClickFile}/></button>
                         <input type="file" name="newPubliFile" id="newPubliFile" style={{display: "none"}} ref={openFile} onChange={e => handleChangeFile(e)} />
-                        <button className="new-publi-btn-noVisible icon-write-new-publi-gif" type="button">GIF</button>
                     </div>
                     <div className={themeReducer ? "new-publi-hashtag-box-dark" : "new-publi-hashtag-box"}>
                         <div className="new-publi-hashtag-txt-box">

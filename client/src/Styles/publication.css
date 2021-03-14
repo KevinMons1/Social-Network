@@ -365,6 +365,10 @@ NewPubliBox
     outline: none;
 }
 
+.bottom-new-publi {
+    margin: 3px;
+}
+
 .icon-write-new-publi {
     margin-right: 10px;
     font-size: 20px;
@@ -372,15 +376,7 @@ NewPubliBox
     cursor: pointer;
 }
 
-.icon-write-new-publi-gif {
-    margin-right: 10px;
-    font-size: 15px;
-    color: #707070;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.icon-write-new-publi:hover, .icon-write-new-publi-gif:hover {
+.icon-write-new-publi:hover {
     transition: 0.3s;
     color: #000;
 }

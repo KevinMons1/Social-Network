@@ -149,3 +149,103 @@ Error
     background-color: #f0f2f5;
 
 }
+
+/*
+//////////////////////// 
+Gif
+//////////////////////// 
+*/
+
+.gif-carousel {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.gif-carousel > img {
+    margin: 5px;
+}
+
+/*
+//////////////////////// 
+Suggest friend card
+//////////////////////// 
+*/
+
+.suggestFriendCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 125px;
+    height: 175px;
+    margin: 10px;
+    border: 1px solid #c2c2c2;
+    border-radius: 5px;
+    -webkit-box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+    -moz-box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+    box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
+    overflow: hidden;
+}
+
+.suggestFriendCard-dark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 125px;
+    height: 175px;
+    margin: 10px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    -webkit-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+    -moz-box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+    box-shadow: 6px 6px 14px -6px rgb(0, 0, 0);
+    overflow: hidden;
+}
+
+.suggestFriendCard-top {
+    height: 60%;
+    overflow: hidden;
+}
+
+.suggestFriendCard-top > img {
+    width: 150%;
+}
+
+.suggestFriendCard-bottom  {
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestFriendCard-btn {
+    padding: 3px;
+    color: #333;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+}
+
+.suggestFriendCard-btn-dark {
+    padding: 3px;
+    color: #a7a7a7;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+}
+
+.suggestFriendCard-btn:hover {
+    color: #00;
+}
+
+.suggestFriendCard-btn-dark:hover {
+    color: #f3f3f3;
+}
