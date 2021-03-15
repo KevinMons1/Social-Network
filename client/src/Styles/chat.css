@@ -138,10 +138,14 @@ ChatDiv
     overflow: hidden;
 }
 
+.msg-right {
+    background-color: #1f76f8;
+    color: #f1f1f1;
+}
+
 .msg-box-img-right {
     max-width: 75%;
     max-height: 250px;
-    border: 1px solid #1f76f8;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -164,11 +168,6 @@ ChatDiv
 
 .msg-right-box {
     justify-content: flex-end;
-}
-
-.msg-right {
-    background-color: #1f76f8;
-    color: #f1f1f1;
 }
 
 .msg-txt {

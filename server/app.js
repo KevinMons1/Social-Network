@@ -20,6 +20,7 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use('/Images', express.static(path.join(__dirname, 'Images'))) // Send folder Images on server
+app.use('/Videos', express.static(path.join(__dirname, 'Videos'))) // Send folder Videos on server
 
 // Path
 app.use('/api/auth', authRoutes)

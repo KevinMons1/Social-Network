@@ -41,12 +41,14 @@ export default function Connected({choiceCss, friendClick}) {
                 })
                 .catch(err => console.log(err))
                 await axios.get(`http://localhost:3001/api/user/connected/friends/chat/${userDataReducer.userId}`)
-                .then(res => {
-                    if (res.data) {
-                        res.data.forEach(friendData => {
-                            setUsersCardChat(usersCardChat => [...usersCardChat, <UserCard data={friendData} text={true} open={() => handleOpenChat(friendData)} />])
-                        })
-                    }
+                .then(res => { 
+                    setFriendEmpty(true)       
+                    res.data.forEach(friendData => {
+                        if (friendData != null) {
+                            setUsersCardChat(usersCardChat => [...usersCardChat, <UserCard data={friendData} text={true} open={() => handleOpenChat(friendData)} />])      
+                            setFriendEmpty(false)      
+                        }
+                    })
                 })
                 .catch(err => console.log(err))
             setLoad(true)
@@ -71,18 +73,6 @@ export default function Connected({choiceCss, friendClick}) {
         }
     }
 
-    const usersHtml = (
-        usersCard.map((item, index) => {
-            return <div key={index}>{item}</div>
-        })                 
-    )
-
-    const usersChatHtml = (
-        usersCardChat.map((item, index) => {
-            return <div key={index}>{item}</div>
-        })                 
-    )
-    
     return (
         <section className={themeReducer ? "connected-dark" : "connected"}>
             <div className={themeReducer ? "connected-title-dark" : "connected-title"}>
@@ -92,9 +82,9 @@ export default function Connected({choiceCss, friendClick}) {
             <div className="connected-top">
                 <div className="friends-boxs">                     
                     {load 
-                    ? friendEmpty 
-                        ? <small>You are not friends !</small>
-                        : usersHtml
+                    ? usersCard.map((item, index) => {
+                        return <div key={index}>{item}</div>
+                        })   
                     : null}  
                 </div>
                 <div className={themeReducer.Theme ? "search-top-dark connected-search" : "search-top connected-search"}>
@@ -112,7 +102,9 @@ export default function Connected({choiceCss, friendClick}) {
                             {load 
                             ? friendEmpty 
                                 ? <small>You are not friends !</small>
-                                : usersChatHtml
+                                :  usersCardChat.map((item, index) => {
+                                    return <div key={index}>{item}</div>
+                                    }) 
                             : null}  
                         </div>  
                 </div>  

@@ -70,37 +70,40 @@ const getFriendsChatPromisse = async (element, id) => {
         let allResult
 
         // Take roomId
-        db.query(`SELECT roomId FROM privateRooms WHERE friendId = ?`,
+        db.query(`SELECT roomId FROM privaterooms WHERE friendId = ?`,
         [element.friendId], (err, result) => {
-        if (err) {
-            throw err
-        } else {
-            // Take last message
-            db.query(`SELECT text, type FROM roomMessages WHERE roomId = ? ORDER BY Date DESC LIMIT 0,1`,
-                [result[0].roomId], (err2, result2) => {
-                    if (err2) {
-                        throw err2
-                    } else {
-                        if (result2.length == 0) {
-                            resolve(false)
+            if (err) {
+                throw err
+            } else {
+                if (result[0] === undefined) {
+                    resolve(allResult)
+                } else {
+                    // Take last message
+                    db.query(`SELECT text, type FROM roomMessages WHERE roomId = ? ORDER BY Date DESC LIMIT 0,1`,
+                    [result[0].roomId], (err2, result2) => {
+                        if (err2) {
+                            throw err2
                         } else {
-                            // Take id of friend
-                            friendId = element.user1Id == id ? element.user2Id : element.user1Id
-    
-                            // Get informations of friend
-                            db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
-                                        LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
-                                        WHERE u.userId = ?`, [friendId, friendId], (err3, result3) => {
-                                if (err3) {
-                                    throw err3
-                                } else {
-                                    allResult = {...result3[0], text: result2[0].text, type: result2[0].type}
-                                    resolve(allResult)
-                                }
-                            })
+                            if (result2.length == 0) {
+                                resolve(false)
+                            } else {
+                                // Take id of friend
+                                friendId = element.user1Id == id ? element.user2Id : element.user1Id
+                                // Get informations of friend
+                                db.query(`SELECT ${queryUser}, ${queryImg} FROM users u
+                                            LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
+                                            WHERE u.userId = ?`, [friendId, friendId], (err3, result3) => {
+                                    if (err3) {
+                                        throw err3
+                                    } else {
+                                        allResult = {...result3[0], text: result2[0].text, type: result2[0].type}
+                                        resolve(allResult)
+                                    }
+                                })
+                            }
                         }
-                    }
-                })
+                    })
+                }
             }
         })   
     })
@@ -247,12 +250,12 @@ exports.getFriendsChat = async (req, res) => {
     let result2
     let count
     let i = 0
-
+    
     count = result.length
     result.forEach(async element => {
         result2 = await getFriendsChatPromisse(element, id)
         if (result2 != false) {
-            allResult.push(await getFriendsChatPromisse(element, id))   
+            allResult.push(await getFriendsChatPromisse(element, id))  
         }
         i++
         if (count == i) res.send(allResult)

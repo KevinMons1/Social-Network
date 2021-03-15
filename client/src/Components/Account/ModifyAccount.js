@@ -107,7 +107,6 @@ export default function ModifyAccount({ setClose, slug }) {
                 formData.append('file', compressedFile)
                 formData.append('txt', txt)
                 
-                console.log(choiceImage)
                 if (choiceImage) {
                     axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
                     .then(res => {

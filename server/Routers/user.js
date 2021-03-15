@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const user = require("../Controllers/user")
-const multer = require("../Middleware/multer.config")
+const multer = require("../Middleware/multerImage")
 
 // Routes
 
@@ -15,7 +15,7 @@ router.get('/connected/friends/chat/:id', user.getFriendsChat)
 router.get('/suggest/friend/:id', user.getSuggestFriend)
 
 router.put('/account/informations/update/:id', user.updateAccountInformations)
-router.put('/account/image/profile/:id', multer.single("file"), user.uploadImageProfile)
-router.put('/account/image/banner/:id', multer.single("file"), user.uploadImageBanner)
+router.put('/account/image/profile/:id', multer.single('file'), user.uploadImageProfile)
+router.put('/account/image/banner/:id', multer.single('file'), user.uploadImageBanner)
 
 module.exports = router

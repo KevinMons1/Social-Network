@@ -4,7 +4,7 @@ const db = require("../db")
 exports.addNewPublication = (req, res) => {
     const {text, hashtag} = req.body
     const id = req.params.id
-    let hashtagTxt = hashtag.join(";")
+    let hashtagTxt = hashtag === undefined ? null : hashtag.join(";")
 
     db.query("INSERT INTO publications (userId, text, hashtag) VALUES (?, ?, ?)",
     [id, text, hashtagTxt], (err, result) => {
@@ -23,6 +23,22 @@ exports.addPublicationImage = (req, res) => {
     
     db.query(`INSERT INTO publicationContent (publicationId, text, type) VALUES (?, ?, "image")`,
     [id, imageUrl], (err, result) => {
+        if (err) {
+            res.send({message: "An error has occurred !", alert: true})
+            throw err
+        } else {
+            res.send({message: "Publications published !", alert: false})
+        }
+    })
+}
+
+// Add video of new publication
+exports.addPublicationVideo = (req, res) => {
+    const videoUrl = `${req.protocol}://${req.get('host')}/Videos/${req.file.filename}`
+    const id = req.body.id
+    
+    db.query(`INSERT INTO publicationContent (publicationId, text, type) VALUES (?, ?, "video")`,
+    [id, videoUrl], (err, result) => {
         if (err) {
             res.send({message: "An error has occurred !", alert: true})
             throw err
@@ -95,7 +111,7 @@ exports.getLikes = (req, res) => {
 exports.getPublicationsHome = (req, res) => {
     const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
-    const queryImg = "pc.text as publicationImageUrl, ui.url as userImageUrl"
+    const queryImg = "pc.text as publicationFileUrl, ui.url as userImageUrl, pc.type"
     const maxCount = req.params.id
     let minCount = maxCount - 3
     let countPublication
@@ -111,7 +127,7 @@ exports.getPublicationsHome = (req, res) => {
                 db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
                                 LEFT JOIN users u ON u.userId = p.userId 
                                 LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
-                                LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND pc.type = "image"
+                                LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
                                 ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`,
                 (err2, result2) => {
                     if (err2) {
@@ -152,13 +168,13 @@ exports.getAccountPublications = (req, res) => {
     const id = req.params.id
     const queryPublications = "p.publicationId, p.userId, p.text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
-    const queryImg = "pc.text as publicationImageUrl, ui.url as userImageUrl"
+    const queryImg = "pc.text as publicationFileUrl, ui.url as userImageUrl, pc.type"
 
     //Order by id DESC to sort from new to oldest
     db.query(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
                     LEFT JOIN users u ON u.userId = p.userId 
                     LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
-                    LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND pc.type = "image"
+                    LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
                     WHERE p.userId = ? 
                     ORDER BY p.publicationId DESC`,
     [id], (err, result) => {

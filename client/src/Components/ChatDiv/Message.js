@@ -33,11 +33,7 @@ export default function Message({data, isMe}) {
         <div className={isMe ? "msg-box msg-right-box" : "msg-box"}>
                 <div className={divClass}>
                     <small className={smallClass}>{moment(data.date).fromNow()}</small>
-                    {/* {isImage
-                    ?   <img className="msg-img" src={data.text} alt="frame message"/>
-                    :   <p className="msg-txt">{data.text}</p>
-                    } */} 
-                    {handleType()}
+                    { handleType() }
                 </div>
         </div>
     )

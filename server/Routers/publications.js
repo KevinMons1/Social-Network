@@ -1,13 +1,15 @@
 const express = require("express")
 const router = express.Router()
 const publications = require("../Controllers/publications")
-const multer = require("../Middleware/multer.config")
+const multerImage = require("../Middleware/multerImage")
+const multerVideo = require("../Middleware/multerVideo")
 
 // Routes
 
-router.post('/add/:id', publications.addNewPublication)
+router.post('/add/publication/:id', publications.addNewPublication)
 router.post('/comments/add/:id', publications.addNewComments)
-router.post('/add/image/:id', multer.single("file"), publications.addPublicationImage)
+router.post('/add/image', multerImage.single('file'), publications.addPublicationImage)
+router.post('/add/video', multerVideo.single('video'), publications.addPublicationVideo)
 router.post('/like/add/:id', publications.addLike)
 router.post('/like/delete/:id', publications.deleteLike)
 router.post('/likes/get/:id', publications.getLikes)

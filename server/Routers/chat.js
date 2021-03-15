@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const chat = require("../Controllers/chat")
-const multer = require("../Middleware/multer.config")
+const multer = require("../Middleware/multerImage")
 
 // Routes
 

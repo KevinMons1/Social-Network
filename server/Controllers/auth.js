@@ -110,7 +110,7 @@ exports.signup = async (req, res) => {
                                     throw err3
                                 } else {
                                     // Create line on bannerImages with userId
-                                    await db.query(`INSERT INTO userImages (userId, url, type) VALUES (?, ?, "profile")`,
+                                    await db.query(`INSERT INTO userImages (userId, url, type) VALUES (?, ?, "banner")`,
                                     [id, imageBannerUrl], async (err4, result4) => {
                                         if (err4) {
                                             throw err4
