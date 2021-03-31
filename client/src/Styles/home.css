@@ -39,11 +39,24 @@
 }
 
 .suggest-friend {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    margin: 20px 5px;
+}
+
+.suggest-friend > p {
+    font-size: 18px;
+}
+
+.suggest-friend-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     overflow: scroll;
     width: 100%;
 }

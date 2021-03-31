@@ -10,7 +10,7 @@ router.post('/account/friend/delete/:id', user.deleteFriend)
 router.post('/account/isFriend/:id', user.getIsFriend)
 
 router.get('/account/informations/:id', user.getAccountInformations)
-router.get('/connected/friends/:id', user.getFriends)
+router.get('/userFriends/:id', user.getFriends)
 router.get('/connected/friends/chat/:id', user.getFriendsChat)
 router.get('/suggest/friend/:id', user.getSuggestFriend)
 

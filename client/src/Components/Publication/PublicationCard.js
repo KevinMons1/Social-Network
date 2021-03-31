@@ -9,17 +9,12 @@ import axios from 'axios'
 import {useTransition, useSpring, animated} from "react-spring"
 import PublicationCardLoader from "./PublicationCardLoader"
 import PublicationDelete from "./PublicationDelete"
+import Video from "./Video"
 
 export default function PublicationCard({open, data, noClick}) { 
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
-    const videoRef = useRef()
-    const videoVolumeRef = useRef()
-    const videoBarRef = useRef()
-    const btnPlayRef = useRef()
-    const barreRef = useRef()
-    const [mute, setMute] = useState("Mute")
     const [hashtag, setHashtag] = useState("")
     const [deleteAlert, setDeleteAlert] = useState(false)
     const [deleteMsg, setDeleteMsg] = useState(true)
@@ -87,49 +82,6 @@ export default function PublicationCard({open, data, noClick}) {
         setSpam(spam + 1)
     }
 
-    const handleVideo = () => {
-        if (videoRef.current.paused) {
-            btnPlayRef.current.className = "video-btn video-btn-play video-pause"
-            videoRef.current.play()
-        } else {
-            btnPlayRef.current.className = "video-btn video-btn-play video-play"
-            videoRef.current.pause()
-        }
-    }
-
-    const handleVideoRun = e => {
-        let juicePos = videoRef.current.currentTime / videoRef.current.duration
-        barreRef.current.style.width = juicePos * 100 + "%"
-
-        if (videoRef.current.ended) {
-            btnPlayRef.current.className = "video-btn video-btn-play video-play"
-        }
-    }
-
-    const handleMute = () => {
-        if (videoRef.current.muted) {
-            videoRef.current.muted = false
-            setMute("Mute")
-        } else {
-            videoRef.current.muted = true
-            setMute("Unmute")
-        }
-    }
-
-    const handleChangeVolume = () => {
-        videoRef.current.volume = videoVolumeRef.current.value / 100
-    }
-
-    const handleClickVideo = e => {
-        let rect = videoBarRef.current.getBoundingClientRect()
-        let width = rect.width
-        let x = e.clientX - rect.left // Get where you clicked
-        let widthPercent = (x * 100) / width
-        let currentTimeTrue = (widthPercent * 60) / 100
-        videoRef.current.currentTime = currentTimeTrue
-        barreRef.current.style.width = widthPercent + "%"
-    }
-
     const cssDelete = deleteMsg ? themeReducer ? "publi-dark" : "publi" : "publi-none"
 
     return load ?
@@ -169,19 +121,7 @@ export default function PublicationCard({open, data, noClick}) {
                 ?  <div className="bg-publi">
                     {data.type === "image"
                     ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => noClick ? null : open(data)} alt="Publication frame"/>
-                    :  <div className="video-content">                
-                            <video src={data.publicationFileUrl} className="video" ref={videoRef} onTimeUpdate={e => handleVideoRun(e)} ></video>
-                            <div className="video-controls">
-                                <div className="video-bar" ref={videoBarRef} onClick={e => handleClickVideo(e)}>
-                                    <div className="video-par-run" ref={barreRef}></div>
-                                </div>
-                                <div className="video-btn-content">
-                                    <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo()}></button>
-                                    <button className="video-btn video-btn-mute" onClick={() => handleMute()}>{mute}</button>
-                                    <input type="range" className="video-volume" min="0" max="100" defaultValue="50" step="1" ref={videoVolumeRef} onChange={() => handleChangeVolume()} />
-                                </div>
-                            </div>
-                        </div>          
+                    :   <Video data={data} />     
                     }
                   </div>
                 : null}

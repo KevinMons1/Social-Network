@@ -22,6 +22,7 @@ export default function MainHome() {
     const [newPubli, setNewPubli] = useState(false)
     const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [data, setData] = useState([])
+    const [dataSuggestFriend, setDataSuggestFriend] = useState([])
     const [alertMsg, setAlertMsg] = useState(false)
     const [dataPubliClick, setDataPubliClick] = useState(null)
 
@@ -33,6 +34,7 @@ export default function MainHome() {
                 payload: false
               })
             await getPublications()
+            await getSuggestFriend()
         }
         fetchData()
     }, [])
@@ -49,6 +51,14 @@ export default function MainHome() {
             setCountPublication(countPublication + 3)
         })
         .catch(err => console.log(err))
+    }
+ 
+    const getSuggestFriend = async () => {
+        await axios.get(`http://localhost:3001/api/user/suggest/friend/${userDataReducer.userId}`)
+            .then(res => {
+                setDataSuggestFriend(res.data)
+            })
+            .catch(err => console.log(err))   
     }
 
     const handleOpenCommentsPubli = (dataPubli) => {
@@ -67,45 +77,6 @@ export default function MainHome() {
         if (clientHeight + scrollTop >= scrollHeight - 20) {
             getPublications()
         }
-    }
-
-    const getSuggestFriend = () => {
-        axios.get(`http://localhost:3001/api/user/suggest/friend/${userDataReducer.userId}`)
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => console.log(err))
-    }
-
-    const homeContent = (item, index) => {
-        // if ((index % 5) === 0) { //!! A changer car 5 c'est trop peu (mettre 20 mais il faut plus de publication)
-        //     return (
-        //         <div key={index}>
-        //             <div className="suggest-friend">
-        //                 <p className={themeReducer ? "txt-dark" : null}>You know this persons ?</p>
-        //                 <div className="suggest-friend-content">
-        //                     <SuggestFriendCard />
-        //                     {getSuggestFriend()}
-        //                 </div>
-        //             </div>
-        //             <div key={index} className="box-publi">
-        //                 <PublicationCard open={handleOpenCommentsPubli} data={item} />
-        //             </div>
-        //         </div>
-        //     )
-        // } else {
-        //     return (
-        //         <div key={index} className="box-publi">
-        //             <PublicationCard open={handleOpenCommentsPubli} data={item} />
-        //         </div>
-        //     )
-        // }
-
-        return (
-            <div key={index} className="box-publi">
-                <PublicationCard open={handleOpenCommentsPubli} data={item} />
-            </div>
-        )
     }
 
     return (
@@ -132,9 +103,25 @@ export default function MainHome() {
                     </div>
                 </div>
                 <div>
+                {load 
+                    ?  <div className="suggest-friend">
+                            <p className={themeReducer ? "txt-dark" : null}>You know this persons ?</p>
+                            <div className="suggest-friend-container">           
+                                <div className="suggest-friend-content">
+                                    {dataSuggestFriend.map((item, index) => {
+                                        return <SuggestFriendCard key={index} data={item} />
+                                    })}                
+                                </div>
+                            </div>
+                        </div>                                              
+                    :   null}
                     {load 
                     ?   data.map((item, index) => {
-                            return homeContent(item, index)
+                            return (
+                                <div key={index} className="box-publi">
+                                    <PublicationCard open={handleOpenCommentsPubli} data={item} />
+                                </div>
+                            )
                         })
                     :   <Loader />
                     }

@@ -165,7 +165,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     return (
         <div className={themeReducer ? choiceContainer : choiceContainer}>
             <div className={themeReducer ? `${choiceTop} chatDiv-border-dark` : choiceTop}>
-                <UserCard data={data} />
+                <UserCard noOpen={true} data={data} />
             {choiceCss ? <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon" onClick={() => closeChat()} /> : null}
             </div>
             <div className={themeReducer ? `${choicechat} chatDiv-border-dark` : choicechat} ref={chatRef}>

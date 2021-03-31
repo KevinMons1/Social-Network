@@ -1,0 +1,58 @@
+.friends {
+    position: relative;
+    width: 60%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
+
+.mainFriends {
+    width: 100%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F0F2F5;
+    overflow: scroll;
+}
+
+.mainFriends-dark {
+    width: 100%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(37, 37, 37);
+    overflow: scroll;
+}
+
+.friends-icon {
+    font-size: 30px;
+    cursor: pointer;
+    border: none;
+}
+
+.friends-icon:hover {
+    transition: 0.3s;
+    color: #707070;
+}
+
+.friends-container {
+    width: 100%;
+}
+
+.friends-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #c2c2c2;
+    border-radius: 5px;
+    overflow-x: hidden;
+}
+
+.friend-card {
+    width: 50%;
+    margin: 10px;
+}

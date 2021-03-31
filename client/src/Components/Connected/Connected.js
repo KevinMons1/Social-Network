@@ -28,7 +28,7 @@ export default function Connected({choiceCss, friendClick}) {
 
     useEffect(() => {
         const fetchData = async () => {
-            await axios.get(`http://localhost:3001/api/user/connected/friends/${userDataReducer.userId}`)
+            await axios.get(`http://localhost:3001/api/user/userFriends/${userDataReducer.userId}`)
                 .then(res => {
                     // if res.data === true but this user haven't friends
                     if (res.data) {

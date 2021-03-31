@@ -1,5 +1,7 @@
 //TODO -> Protéger ces Routes plus tard
 //TODO -> thème en cookie
+//TODO -> Faire un slide avec useSpring ou useGesture pour la gallery avec les images au click
+//TODO -> avec react-web-notification, faire des notif browser quand il y a une notif
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
@@ -15,6 +17,9 @@ import Connected from "./Components/Connected/Connected"
 import Home from "./Components/Home/Index"
 import Chat from "./Components/Chat/Index"
 import Account from "./Components/Account/Index"
+import Gallery from "./Components/Gallery/Index"
+import Friends from "./Components/Friends/Index"
+import About from "./Components/About/Index"
 import Gaming from "./Components/Gaming/Index"
 import Live from "./Components/Gaming/Live"
 import Login from "./Components/Connexion/Login"
@@ -81,6 +86,9 @@ function App() {
                     <Switch location={location}>
                       <Route exact path="/" component={Home} /> 
                       <Route exact path="/account/:slug" component={Account} />
+                      <Route exact path="/account/:slug/gallery" component={Gallery} />
+                      <Route exact path="/account/:slug/friends" component={Friends} />
+                      <Route exact path="/account/:slug/about" component={About} />
                       <Route exact path="/gaming" component={Gaming} />
                       <Route excat path="/gaming/live/:slug" component={Live} />
                       <Route exact path="/chat/:slug" component={Chat} />

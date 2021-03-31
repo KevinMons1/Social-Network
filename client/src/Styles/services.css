@@ -177,8 +177,8 @@ Suggest friend card
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 125px;
-    height: 175px;
+    width: 200px;
+    height: 275px;
     margin: 10px;
     border: 1px solid #c2c2c2;
     border-radius: 5px;
@@ -192,8 +192,8 @@ Suggest friend card
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 125px;
-    height: 175px;
+    width: 200px;
+    height: 275px;
     margin: 10px;
     border: 1px solid #333333;
     border-radius: 5px;
@@ -204,7 +204,11 @@ Suggest friend card
 }
 
 .suggestFriendCard-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 60%;
+    cursor: pointer;
     overflow: hidden;
 }
 
@@ -218,6 +222,10 @@ Suggest friend card
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.suggestFriendCard-bottom > p {
+    cursor: pointer;
 }
 
 .suggestFriendCard-btn {

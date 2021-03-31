@@ -32,6 +32,7 @@ export default function StreamCard(props) {
             </div>
             
             <Link 
+                className="bg-stream"
                 to={{
                     pathname: `/gaming/live/${props.login}`,
                     state: {
@@ -39,9 +40,7 @@ export default function StreamCard(props) {
                         name: props.name
                     }
                 }}>
-                <div className="bg-stream">
-                    <img src={props.streamImg} alt="Frame of the game"/>
-                </div>
+                <img src={props.streamImg} alt="Frame of the game"/>
             </Link>
         </div>
     )

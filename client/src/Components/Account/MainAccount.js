@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import "../../Styles/account.css"
 import {useSelector, useDispatch} from "react-redux"
-import {useParams, useLocation, useHistory} from "react-router-dom"
+import {useParams, useLocation, useHistory, Link} from "react-router-dom"
 import axios from "axios"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -52,7 +52,7 @@ export default function MainAccount() {
                 })
                 .catch(err => console.log(err))
                 
-            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+                await axios.get(`http://localhost:3001/api/publications/account/${id}`)
                 .then(res => {
                     if (res.data.length === 0) {
                         setIsEmpty(true)
@@ -102,7 +102,7 @@ export default function MainAccount() {
     return (
         <div className={themeReducer ? "mainAccount-dark" : "mainAccount"}>
             {load ?
-                <div className={themeReducer ? "account-container-dark" : "account-container"}>
+                <div className="account-container">
                     {openCommentsPubli ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> : null}               
                     {openNewPubli ? <NewPubliBox /*publi={openNewPubli}*/ setPubli={setOpenNewPubli} />  : null}
                     {openModifyAccount ? <ModifyAccount slug={slug} setClose={setOpenModifyAccount} /> : null}
@@ -160,6 +160,21 @@ export default function MainAccount() {
                         </div>
                     </div>
 
+                    <div className={themeReducer ? "account-links-dark" : "account-links"}>
+                        <div className="account-box">
+                            <FontAwesomeIcon className="account-links-icon" icon="camera" />
+                            <Link to={{pathname: `/account/${slug}/gallery`}} className={themeReducer ? "txt-dark account-links-link" : "account-links-link"}>Gallery</Link>
+                        </div>
+                        <div className="account-box">
+                            <FontAwesomeIcon className="account-links-icon" icon="user-friends" />
+                            <Link to={`/account/${slug}/friends`} className={themeReducer ? "txt-dark account-links-link" : "account-links-link"}>Friends</Link>
+                        </div>
+                        <div className="account-box">
+                            <FontAwesomeIcon className="account-links-icon" icon="address-card" />
+                            <Link to={`/account/${slug}/about`} className={themeReducer ? "txt-dark account-links-link" : "account-links-link"}>About</Link>
+                        </div>
+                    </div>
+
                     <div className="account-publi">
                         {parseInt(slug) !== userDataReducer.userId
                         ? null
@@ -176,7 +191,7 @@ export default function MainAccount() {
 
                     {isEmpty
                     ?   <div className="account-empty">
-                            <p className={themeReducer ? "txt-dark" : null}>This account seems very empty to me ..</p>
+                            <p className={themeReducer ? "txt-dark" : null}>This account seems very empty to me ...</p>
                         </div>
                     : dataPublications.map((item, index) => {
                         return (
