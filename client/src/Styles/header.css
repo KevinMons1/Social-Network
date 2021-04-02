@@ -115,9 +115,7 @@ Middle
 }
 
 .header-middle-li {
-    width: 50%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     list-style: none;
     font-size: 25px;
@@ -125,7 +123,7 @@ Middle
 }
 
 .header-middle-text {
-    width: 50%;
+    width: 25%;
     margin-left: 15px;
     text-align: start;
 }
@@ -150,20 +148,30 @@ Middle
     color: #000!important;
 }
 
-.header-middle-icon {
-    padding: 5px;
-    border-radius: 50%;
-    font-size: 35px;
+.header-middle-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
     border: 1px solid #cecece;
+    border-radius: 50%;
     background-color: #ffffff;
 }
 
-.header-middle-icon-dark {
-    padding: 5px;
+.header-middle-icon-box-dark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    border: 1px solid #cecece;
     border-radius: 50%;
-    font-size: 35px;
-    border: 1px solid #414141;
-    background-color: rgb(36, 36, 36);
+}
+
+.header-middle-icon {
+    border-radius: 50%;
+    font-size: 30px;
 }
 
 .home-icon {

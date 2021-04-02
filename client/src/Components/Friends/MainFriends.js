@@ -67,8 +67,8 @@ export default function MainFriends() {
                     ?   <p className="friends-empty">This user does not have friends ...</p>
                     :   data.map((item, index) => {
                         return (
-                            <div className="friend-card" index={index} onClick={() => handleClickFriend(item)}>
-                                <UserCard noGreenBubble={true}  noOpen={true} data={item} />   
+                            <div className="friend-card" key={index} index={index} onClick={() => handleClickFriend(item)}>
+                                <UserCard tallCard={true}  noOpen={true} data={item} />   
                             </div>
                         )})
                     }

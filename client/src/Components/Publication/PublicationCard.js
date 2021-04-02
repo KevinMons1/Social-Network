@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
 import {Link} from "react-router-dom"
 import "../../Styles/publication.css"
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import moment from "moment"
 import axios from 'axios'
+import {socket} from "../../Api"
 import {useTransition, useSpring, animated} from "react-spring"
 import PublicationCardLoader from "./PublicationCardLoader"
 import PublicationDelete from "./PublicationDelete"
@@ -71,12 +72,22 @@ export default function PublicationCard({open, data, noClick}) {
         if (spam <= 4) {
             if (isLike) {
                 await axios.post(`http://localhost:3001/api/publications/like/delete/${data.publicationId}`, {userId: userDataReducer.userId})
-                    .then()
-                    .catch(err => console.log(err))
             } else if (isLike === false) {
                 await axios.post(`http://localhost:3001/api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
-                    .then()
-                    .catch(err => console.log(err))
+                await axios.post("http://localhost:3001/api/notifications/add", {
+                    receiver : data.userId,
+                    sender: userDataReducer.userId,
+                    type: "like"
+                })
+                socket.emit("notification", {
+                    receiver: data.userId,
+                    sender: {
+                        user: userDataReducer,
+                        content: {
+                            type: "like"
+                        }
+                    }
+                })
             }
         }
         setSpam(spam + 1)

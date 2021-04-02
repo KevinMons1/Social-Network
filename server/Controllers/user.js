@@ -86,7 +86,6 @@ exports.getAccountInformations = async (req, res) => {
         const queryFriend = "COUNT(friendId)"
 
         // Search main informations
-        //! Problème ici avec les COUNT ! et le count like doit être modifier car la on compte le nombre qu'il a liker lui et pas ce qu'il à reçu
         const result = await requestQuery(`
             SELECT ${queryUser}, ${queryImgProfile}, ${queryImgBanner} FROM users u
             LEFT JOIN userImages ip ON ip.userId = ? AND ip.type = "profile"

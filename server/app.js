@@ -15,6 +15,7 @@ const authRoutes = require("./Routers/auth")
 const userRoutes = require("./Routers/user")
 const publicationsRoutes = require("./Routers/publications")
 const chatRouter = require("./Routers/chat")
+const notificationsRoutes = require("./Routers/notifications")
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,26 +28,56 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes) 
 app.use('/api/publications', publicationsRoutes)
 app.use('/api/chat', chatRouter)
+app.use('/api/notifications', notificationsRoutes)
 
-let usersInRoom = []
-io.on('connection', (socket) => {            
-    // get user connect
-    socket.on('userConnected', (userId) => {
-        usersInRoom[userId] = socket.id
-        io.emit('userConnected', userId)
+let usersInChatRoom = []
+let usersConnected = []
+
+io.on('connection', (socket) => { 
+
+    //----
+    // Connection
+    //----
+
+    socket.on('userConnected', (user) => {    
+        usersConnected[user] = socket.id
+    })
+
+    socket.on('sendMyConnection', (user) => {
+        let friends = user.friends
+        let userId = user.userId
+        let socketFriendId
+               
+        //If a friends of user connected, the socketId is send
+        friends.forEach(friendId => {
+            socketFriendId = usersConnected[friendId]
+            if (socketFriendId !== undefined) io.to(socketFriendId).emit('sendMyConnection', userId)
+        })
+    })
+
+    //-----
+    // Chat
+    //-----
+
+    socket.on('userConnectedOnChat', (userId) => {
+        usersInChatRoom[userId] = socket.id   
     })
 
     // receive message and send message
     socket.on('sendMessage', data => {
         let { receiver } = data
-        let socketId = usersInRoom[receiver]
+        let socketId = usersInChatRoom[receiver]
 
         io.to(socketId).emit("newMessage", data)
-
     })
 
-    socket.on('disconnect', () => {
-        // console.log('user disconnected')
+    //----
+    // Notification
+    //----
+
+    socket.on("notification", data => {
+        let socketId = usersConnected[data.receiver]
+        io.to(socketId).emit("notification", data.sender)
     })
 })
 

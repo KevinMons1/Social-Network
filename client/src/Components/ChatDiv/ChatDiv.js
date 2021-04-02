@@ -5,13 +5,11 @@ import {useParams} from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
-import io from 'socket.io-client'
+import {socket} from "../../Api"
 import imageCompression from "browser-image-compression"
 import UserCard from '../Connected/UserCard'
 import Message from "./Message"
 import Gifs from "../Services/Gifs"
-
-const socket = io("localhost:3001")
 
 export default function ChatDiv({choiceCss, closeChat, data, index}) {
 
@@ -38,11 +36,6 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     /*
     ----- Socket.io for a real time chat -----
     */
-
-    // Get userConnected
-    // socket.on('userConnected', friend => {
-    //     console.log(friend)
-    // }) 
 
     // Send message
     socket.on('newMessage', dataMessage => {
@@ -71,8 +64,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
                 setAllMessages([])
             }
             setRoomId(dataRoomId)
-            // send my connection
-            await socket.emit('userConnected', userDataReducer.userId)
+            await socket.emit('userConnectedOnChat', userDataReducer.userId)
             setLoad(true)
             // Scrollbar appears at the bottom by default
             setTimeout(() => {

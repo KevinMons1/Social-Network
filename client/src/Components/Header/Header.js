@@ -48,25 +48,33 @@ export default function Header() {
             <div className="header-middle">
                 <ul className="header-middle-ul">
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer ? "home-icon header-middle-icon-dark" : "home-icon header-middle-icon"} icon="home" />
+                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
+                            <FontAwesomeIcon className="home-icon header-middle-icon" icon="home" />
+                        </div>
                         <div className="header-middle-text">
                             <Link to="/" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Home</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer ? "header-account-icon header-middle-icon-dark" : "header-account-icon header-middle-icon"} icon="user-circle" />
+                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
+                            <FontAwesomeIcon className="header-account-icon header-middle-icon" icon="user-circle" />
+                        </div>
                         <div className="header-middle-text">
                             <Link to={{pathname: `/account/${userDataReducer.userId}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer ? "gaming-icon header-middle-icon-dark" : "gaming-icon header-middle-icon"} icon="gamepad" />
+                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
+                            <FontAwesomeIcon className="gaming-icon header-middle-icon" icon="gamepad" />
+                        </div>
                         <div className="header-middle-text">
                             <Link to="/gaming" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"}>Gaming</Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
-                        <FontAwesomeIcon className={themeReducer ? "chat-icon header-middle-icon-dark" : "chat-icon header-middle-icon"} icon="comments" />
+                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
+                            <FontAwesomeIcon className="chat-icon header-middle-icon" icon="comments" />
+                        </div>
                         <div className="header-middle-text">
                             <Link to="/chat/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Chat</Link>
                         </div>

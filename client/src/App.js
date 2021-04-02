@@ -8,6 +8,7 @@ import "./Styles/app.css"
 import {Route, Switch, useLocation} from 'react-router-dom'
 import Cookie from "js-cookie"
 import axios from "axios"
+import io from 'socket.io-client'
 import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
 
@@ -40,13 +41,9 @@ function App() {
   const verifyPathname = () => {
     // Avoid listen pathname /:slug on root chat for not repeat animation and refresh page each change path
     if (location.pathname.includes("/chat/")) {
-      if (location.pathname.includes("/chat/empty")) {
-        return true
-      }
+      if (location.pathname.includes("/chat/empty")) return true
       return false
-    } else {
-      return true
-    } 
+    } else return true
   }
   const transitions = useTransition(location, location => location.pathname, {
     from: verifyPathname() ? {opacity: 0, transform: 'translate3d(-50%, 0, 0)', position: 'absolute'} : {opacity: 1, transform: 'translate3d(0, 0, 0)', position: 'absolute'},

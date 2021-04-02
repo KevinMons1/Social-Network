@@ -5,6 +5,7 @@ import {useParams, useLocation, useHistory, Link} from "react-router-dom"
 import axios from "axios"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
+import {socket} from "../../Api"
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationCard from '../Publication/PublicationCard'
 import PublicationComments from '../Publication/PublicationComments'
@@ -30,6 +31,7 @@ export default function MainAccount() {
     const [dataPubliClick, setDataPubliClick] = useState(null)
     const [isEmpty, setIsEmpty] = useState(true)
     const [isFriend, setIsFriend] = useState(false)
+    const [waiting, setWaiting] = useState(false)
 
     useEffect(() => {
         // Get informations for account
@@ -52,16 +54,16 @@ export default function MainAccount() {
                 })
                 .catch(err => console.log(err))
                 
-                await axios.get(`http://localhost:3001/api/publications/account/${id}`)
-                .then(res => {
-                    if (res.data.length === 0) {
-                        setIsEmpty(true)
-                    } else {
-                        setDataPublications(res.data)
-                        setIsEmpty(false)
-                    }
-                })
-                .catch(err => console.log(err))
+            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+            .then(res => {
+                if (res.data.length === 0) {
+                    setIsEmpty(true)
+                } else {
+                    setDataPublications(res.data)
+                    setIsEmpty(false)
+                }
+            })
+            .catch(err => console.log(err))
             
             await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
                 .then(res => {
@@ -92,11 +94,21 @@ export default function MainAccount() {
     }
 
     const handleAddFriend = () => {
-        axios.post(`http://localhost:3001/api/user/account/friend/add/${dataUser[0].userId}`, {userId: userDataReducer.userId})
-            .then(res => {
-                setIsFriend(true)
-            })
-            .catch(err => console.log(err))
+        setWaiting(true)
+        axios.post("http://localhost:3001/api/notifications/add", {
+            receiver : slug,
+            sender: userDataReducer.userId,
+            type: "invitation"
+        })
+        socket.emit("notification", {
+            receiver: slug,
+            sender: {
+                user: userDataReducer,
+                content: {
+                    type: "invitation"
+                }
+            }
+        })
     }
 
     return (
@@ -127,10 +139,14 @@ export default function MainAccount() {
                                         <p className={themeReducer ? "txt-dark" : null} onClick={() => setOpenRemoveFriend(true)}>Friend</p>
                                         <FontAwesomeIcon icon="user-friends" className={themeReducer ? "txt-dark" : "edit-icon"}/>
                                     </div>
-                                :   <div className="account-action">
-                                        <p className={themeReducer ? "txt-dark" : null} onClick={() => handleAddFriend()}>Add friend</p>
-                                        <FontAwesomeIcon icon="user-plus" className={themeReducer ? "txt-dark" : "edit-icon"}/>
-                                    </div>
+                                :  waiting 
+                                    ?   <div className="account-action">
+                                            <p className={themeReducer ? "txt-dark" : null}>Waiting...</p>
+                                        </div>
+                                    :  <div className="account-action">
+                                            <p className={themeReducer ? "txt-dark" : null} onClick={() => handleAddFriend()}>Add friend</p>
+                                            <FontAwesomeIcon icon="user-plus" className={themeReducer ? "txt-dark" : "edit-icon"}/>
+                                        </div>
                             :   <div className="account-action">
                                     <p className={themeReducer ? "txt-dark" : null} onClick={() => handleOpenModifyAccount()}>Modify my account</p>
                                     <FontAwesomeIcon icon="edit" className={themeReducer ? "txt-dark" : "edit-icon"}/>

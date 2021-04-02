@@ -16,6 +16,15 @@
     overflow: hidden;
 }
 
+.connected-title-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20%;
+}
+
 .connected-title {
     padding: 15px;
     color: #707070;

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
+import {useHistory} from "react-router-dom"
 import "../../Styles/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -7,6 +8,7 @@ import PublicationCard from "./PublicationCard"
 import moment from "moment"
 import Loader from "../Services/Loader"
 import axios from "axios"
+import {socket} from "../../Api"
 import {useTransition, animated, config} from "react-spring"
 
 export default function PublicationComments({close, data}) {
@@ -18,6 +20,7 @@ export default function PublicationComments({close, data}) {
     const userDataReducer = useSelector(state => state.UserData)
     const [dataComments, setDataComments] = useState([])
     const [isAnimated, setIsAnimated] = useState(true)
+    const history = useHistory()
     const transition = useTransition(isAnimated, null, {
         from: {opacity: 0, transform: "scale(0)", position: 'absolute'},
         enter: {opacity: 1, transform: "scale(1)"},
@@ -50,6 +53,28 @@ export default function PublicationComments({close, data}) {
                 .then(res => {
                     setAletCss(false)
                     setAlertMsg("Comment published !")
+                    setDataComments([...dataComments, {
+                        text: dataNewPubli.text,
+                        userId: dataNewPubli.userId,
+                        lastName: userDataReducer.lastName,
+                        firstName: userDataReducer.firstName,
+                        profileImage: userDataReducer.profileImage,
+                        date: Date.now()
+                    }])
+                    axios.post("http://localhost:3001/api/notifications/add", {
+                        receiver : data.userId,
+                        sender: userDataReducer.userId,
+                        type: "comment"
+                    })
+                    socket.emit("notification", {
+                        receiver: data.userId,
+                        sender: {
+                            user: userDataReducer,
+                            content: {
+                                type: "comment"
+                            }
+                        }
+                    })
                 })  
                 .catch(err => console.log(err))  
         } else {
@@ -67,6 +92,10 @@ export default function PublicationComments({close, data}) {
         setTimeout(() => {
             close()
         }, 200)
+    }
+
+    const handleClickProfile = userId => {
+        history.push(`/account/${userId}`)
     }
 
     return (
@@ -88,7 +117,7 @@ export default function PublicationComments({close, data}) {
                                     <div className={themeReducer ? "publi-open-bottom-dark" : "publi-open-bottom"} key={index}>
                                         <div className="publi-open-info-img-box">
                                             <div className="publi-open-img">
-                                                <img src={item.profileImage} alt="Frame profile"/>
+                                                <img onClick={() => handleClickProfile(item.userId)} src={item.profileImage} alt="Frame profile"/>
                                             </div>
                                         </div>
                                         <div className="publi-open-info-txt-box">
