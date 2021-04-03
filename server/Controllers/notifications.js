@@ -43,3 +43,27 @@ exports.getNotifications = async (req, res) => {
         if (i === result.length - 1) res.send(allResult)
     } 
 }
+
+// Delete notification
+exports.deleteNotification = async (req, res) => {
+    const { receiverId, senderId, type, date } = req.body
+    const _date = new Date(date)
+    
+    const result = await requestQuery("DELETE FROM notifications WHERE ( (receiverId = ? AND senderId = ?) OR (receiverId = ? AND senderId = ?) ) AND (type = ? AND date = ?) ",
+    [receiverId, senderId, senderId, receiverId, type, _date])
+}
+
+// Change value of view for true
+exports.updateView = (req, res) => {
+    let senderId, receiverId, type, date
+    
+    req.body.forEach(async element => {
+        senderId = element.senderId
+        receiverId = element.receiverId
+        type = element.type
+        date = new Date(element.date)
+
+        const result = await requestQuery("UPDATE notifications SET view = 1 WHERE ( (receiverId = ? AND senderId = ?) OR (receiverId = ? AND senderId = ?) ) AND (type = ? AND date = ?)",
+        [receiverId, senderId, senderId, receiverId, type, date])
+    })
+}

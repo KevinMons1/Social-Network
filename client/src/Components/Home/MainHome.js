@@ -7,7 +7,6 @@ import axios from "axios"
 import StoryCard from './StoryCard'
 import PublicationCard from '../Publication/PublicationCard'
 import NewPubliBox from '../Publication/NewPubliBox'
-import PublicationComments from '../Publication/PublicationComments'
 import Loader from "../Services/Loader"
 import SuggestFriendCard from '../Services/SuggestFriendCard'
 
@@ -20,24 +19,22 @@ export default function MainHome() {
     const [countPublication, setCountPublication] = useState(3)
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
-    const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [data, setData] = useState([])
     const [dataSuggestFriend, setDataSuggestFriend] = useState([])
     const [alertMsg, setAlertMsg] = useState(false)
-    const [dataPubliClick, setDataPubliClick] = useState(null)
 
     useEffect(() => {
         // Get publications
-        async function fetchData() {
+        const fetchData = async () => {
             await dispatch({
                 type: "CHANGE_ZINDEX",
                 payload: false
               })
-            await getPublications()
-            await getSuggestFriend()
-        }
-        fetchData()
-    }, [])
+              await getPublications()
+              await getSuggestFriend()
+            }
+            fetchData()
+        }, [])
     
     const getPublications = () => {
         axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
@@ -61,15 +58,6 @@ export default function MainHome() {
             .catch(err => console.log(err))   
     }
 
-    const handleOpenCommentsPubli = (dataPubli) => {
-        setDataPubliClick(dataPubli)
-        setOpenCommentsPubli(true)
-    }
-
-    const handleCloseCommentsPubli = () => {
-        setOpenCommentsPubli(false)
-    }
-
     // Scroll infini -> get publications with scroll
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
@@ -82,8 +70,6 @@ export default function MainHome() {
     return (
         <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
         
-            {openCommentsPubli ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> : null } 
-
             <div>
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
 
@@ -119,12 +105,11 @@ export default function MainHome() {
                     ?   data.map((item, index) => {
                             return (
                                 <div key={index} className="box-publi">
-                                    <PublicationCard open={handleOpenCommentsPubli} data={item} />
+                                    <PublicationCard data={item} />
                                 </div>
                             )
                         })
-                    :   <Loader />
-                    }
+                    :   <Loader />}
                     {alertMsg ? <p className="home-alertMsg">There is no more publication! Come back later :)</p> : null}
                 </div>
             </div>

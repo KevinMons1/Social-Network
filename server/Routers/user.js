@@ -6,7 +6,6 @@ const multer = require("../Middleware/multerImage")
 // Routes
 
 router.post('/account/friend/add/:id', user.addFriend)
-router.post('/account/friend/delete/:id', user.deleteFriend)
 router.post('/account/isFriend/:id', user.getIsFriend)
 
 router.get('/account/informations/:id', user.getAccountInformations)
@@ -17,5 +16,7 @@ router.get('/suggest/friend/:id', user.getSuggestFriend)
 router.put('/account/informations/update/:id', user.updateAccountInformations)
 router.put('/account/image/profile/:id', multer.single('file'), user.uploadImageProfile)
 router.put('/account/image/banner/:id', multer.single('file'), user.uploadImageBanner)
+
+router.delete('/account/friend/delete/:id', user.deleteFriend)
 
 module.exports = router

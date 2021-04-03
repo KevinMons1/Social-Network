@@ -5,7 +5,7 @@
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
-import {Route, Switch, useLocation} from 'react-router-dom'
+import {MemoryRouter, Route, Switch, useLocation} from 'react-router-dom'
 import Cookie from "js-cookie"
 import axios from "axios"
 import io from 'socket.io-client'
@@ -16,6 +16,7 @@ import {useTransition, animated, config} from "react-spring"
 import Header from "./Components/Header/Header"
 import Connected from "./Components/Connected/Connected"
 import Home from "./Components/Home/Index"
+import Publication from "./Components/Publication/Index"
 import Chat from "./Components/Chat/Index"
 import Account from "./Components/Account/Index"
 import Gallery from "./Components/Gallery/Index"
@@ -82,6 +83,7 @@ function App() {
                   <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
                     <Switch location={location}>
                       <Route exact path="/" component={Home} /> 
+                      <Route exact path="/publication/:slug" component={Publication} /> 
                       <Route exact path="/account/:slug" component={Account} />
                       <Route exact path="/account/:slug/gallery" component={Gallery} />
                       <Route exact path="/account/:slug/friends" component={Friends} />

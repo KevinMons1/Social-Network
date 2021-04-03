@@ -10,6 +10,15 @@
     box-shadow: 6px 6px 14px -6px rgba(156,156,156,1);
 }
 
+.publication {
+    position: relative;
+    width: 60%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
+
 .publi-dark {
     position: relative;
     width: 75%;

@@ -8,4 +8,8 @@ router.post('/add', notifications.addNewNotification)
 
 router.get('/all/:id', notifications.getNotifications)
 
+router.put('/view/update', notifications.updateView)
+
+router.delete('/delete', notifications.deleteNotification)
+
 module.exports = router

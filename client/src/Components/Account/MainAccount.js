@@ -8,7 +8,7 @@ import "../../Assets/fontawesome"
 import {socket} from "../../Api"
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationCard from '../Publication/PublicationCard'
-import PublicationComments from '../Publication/PublicationComments'
+import PublicationComments from '../Publication/MainPublication'
 import ModifyAccount from "./ModifyAccount"
 import AccountLoader from "./AccountLoader"
 import RemoveFriend from "./RemoveFriend"
@@ -23,12 +23,10 @@ export default function MainAccount() {
     const themeReducer = useSelector(state => state.Theme)
     const [load, setLoad] = useState(false)
     const [openNewPubli, setOpenNewPubli] = useState(false)
-    const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [openModifyAccount, setOpenModifyAccount] = useState(false)
     const [openRemoveFriend, setOpenRemoveFriend] = useState(false)
     const [dataUser, setDataUser] = useState(null)
     const [dataPublications, setDataPublications] = useState(null)
-    const [dataPubliClick, setDataPubliClick] = useState(null)
     const [isEmpty, setIsEmpty] = useState(true)
     const [isFriend, setIsFriend] = useState(false)
     const [waiting, setWaiting] = useState(false)
@@ -75,15 +73,6 @@ export default function MainAccount() {
         fetchDataAccount()
     }, [location])
 
-    const handleCloseCommentsPubli = () => {
-        setOpenCommentsPubli(false)
-    }
-
-    const handleOpenCommentsPubli = (dataPubli) => {
-        setDataPubliClick(dataPubli)
-        setOpenCommentsPubli(!openCommentsPubli)
-    }
-
     const handleOpenModifyAccount = () => {
         setOpenModifyAccount(!openModifyAccount)
     }
@@ -115,7 +104,6 @@ export default function MainAccount() {
         <div className={themeReducer ? "mainAccount-dark" : "mainAccount"}>
             {load ?
                 <div className="account-container">
-                    {openCommentsPubli ? <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} /> : null}               
                     {openNewPubli ? <NewPubliBox /*publi={openNewPubli}*/ setPubli={setOpenNewPubli} />  : null}
                     {openModifyAccount ? <ModifyAccount slug={slug} setClose={setOpenModifyAccount} /> : null}
                     {openRemoveFriend ? <RemoveFriend slug={slug} friendId={dataUser[0].userId} setClose={handleDeleteFriend} /> : null}
@@ -212,7 +200,7 @@ export default function MainAccount() {
                     : dataPublications.map((item, index) => {
                         return (
                             <div key={index} className="box-publi">
-                                <PublicationCard open={handleOpenCommentsPubli} data={item} />
+                                <PublicationCard data={item} />
                             </div>
                         )
                     })

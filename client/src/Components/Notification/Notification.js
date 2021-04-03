@@ -24,8 +24,7 @@ export default function Notification() {
     })
 
     socket.on("notification", userData => {
-        console.log(userData)
-        setData([...data, userData])
+        setData([userData, ...data])
         setCount(count + 1)
     })
 
@@ -47,8 +46,17 @@ export default function Notification() {
     }, [])
 
     const handleClickHide = () => {
+        let changeData = []
         setIsAnimated(!isAnimated)
         setCount(0)
+
+        data.forEach(element => {
+            if (element.content.view === 0) changeData.push(element.content)
+        })
+
+        axios.put("http://localhost:3001/api/notifications/view/update", changeData)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     return (

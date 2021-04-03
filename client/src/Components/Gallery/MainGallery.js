@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
-import PublicationComments from '../Publication/PublicationComments'
+import PublicationComments from '../Publication/MainPublication'
 import Video from "../Publication/Video"
 
 export default function MainGallery() {  
@@ -16,7 +16,6 @@ export default function MainGallery() {
     const [load, setLoad] = useState(false)
     const [isEmpty, setIsEmpty] = useState(false)
     const [data, setData] = useState([])
-    const [openCommentsPubli, setOpenCommentsPubli] = useState(false)
     const [dataPubliClick, setDataPubliClick] = useState(false)
 
     useEffect(() => { 
@@ -51,27 +50,21 @@ export default function MainGallery() {
         }, [location])
 
         
-    const handleClickBack = () => {
-        let path = location.pathname
-        let lastPath = path.split('/gallery')
-        history.push(lastPath[0])
+    const handleBack = () => {
+        let path = location.state.path
+        history.push(path)
     }
 
     const handleClickPublication = item => {
-        setOpenCommentsPubli(true)
-        setDataPubliClick(item)
-    }
-
-    const handleCloseCommentsPubli = () => {
-        setOpenCommentsPubli(false)
+        history.push(`/publication/${item.publicationId}`, {
+            data: item,
+            path: location.pathname
+        })
     }
 
     return ( load ?
-        <div className={themeReducer ? "mainGallery-dark" : "mainGallery"}>
-             {openCommentsPubli ?
-                <PublicationComments close={handleCloseCommentsPubli} data={dataPubliClick} />
-                : null}           
-                <FontAwesomeIcon onClick={() => handleClickBack()} icon="arrow-left" className={themeReducer ? "txt-dark gallery-icon" : "gallery-icon"}/>
+        <div className={themeReducer ? "mainGallery-dark" : "mainGallery"}>         
+            <FontAwesomeIcon onClick={() => handleBack()} icon="arrow-left" className={themeReducer ? "txt-dark gallery-icon" : "gallery-icon"}/>
             <div className="gallery-container">
                 <h2 className={themeReducer ? "txt-dark" : null}>Images</h2>
                 <div className="gallery-content">
@@ -80,8 +73,8 @@ export default function MainGallery() {
                     :   data.map((item, index) => {
                         return (
                             item.type === "image" 
-                            ?   <div onClick={() => handleClickPublication(item)} key={index} className="gallery-img">
-                                    <img  className="gallery-element" src={item.publicationFileUrl} alt={`Frame publichsed of this user`} />
+                            ?   <div key={index} className="gallery-img">
+                                    <img onClick={() => handleClickPublication(item)} className="gallery-element" src={item.publicationFileUrl} alt={`Frame publichsed of this user`} />
                                 </div>    
                             : null           
                         )})
@@ -96,7 +89,7 @@ export default function MainGallery() {
                         :   data.map((item, index) => {
                                 return (
                                     item.type === "video"
-                                    ?   <div onClick={() => handleClickPublication(item)} key={index} key={index} className="gallery-video">
+                                    ?   <div key={index} key={index} className="gallery-video">
                                             <Video clickNo={true} className="gallery-element" data={{publicationFileUrl: item.publicationFileUrl}} />
                                         </div>        
                                     : null     

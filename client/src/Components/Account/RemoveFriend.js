@@ -22,7 +22,7 @@ export default function RemoveFriend({ setClose, friendId }) {
     })
 
     const handleDelete = () => {
-        axios.post(`http://localhost:3001/api/user/account/friend/delete/${friendId}`, {userId: userDataReducer.userId})
+        axios.delete(`http://localhost:3001/api/user/account/friend/delete/${friendId}`, {data: {userId: userDataReducer.userId}})
             .then(res => {
                 if (res.data.alert) handleCloseRemoveFriend()
             })

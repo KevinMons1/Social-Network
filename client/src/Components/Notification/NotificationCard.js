@@ -4,15 +4,18 @@ import UserCard from '../Connected/UserCard'
 import moment from "moment"
 import axios from "axios"
 
-export default function NotificationCard({isView, data}) {
+export default function NotificationCard({ data }) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const [message, setMessage] = useState("")
     const [load, setLoad] = useState(false)
     const [isChoice, setIsChoice] = useState(false)
+    const [isView, setIsView] = useState(true)
 
     useEffect(() => {
+        setIsView(data.content.view)
+
         switch (data.content.type) {
             case "like":
                 setMessage(`To liked your post !`)
@@ -32,27 +35,30 @@ export default function NotificationCard({isView, data}) {
         setLoad(true)
     }, [])
 
-    const handleClickInvitation = choice => {
-        if (choice) {
-            axios.post(`http://localhost:3001/api/user/account/friend/add/${data.user.userId}`, {userId: userDataReducer.userId})
-                .then(res => {
-                    setIsChoice(true)
-                })
-                .catch(err => console.log(err))
-        } else setLoad(false)
+    const handleClickInvitation = async choice => {
+        if (choice) setIsChoice(true)
+        else setLoad(false)
+        
+        await axios.delete("http://localhost:3001/api/notifications/delete", {data: {
+            type: "invitation",
+            receiverId: data.content.receiverId,
+            senderId: data.content.senderId,
+            date: data.content.date
+        }})
+
     }
 
     const messageStyle = themeReducer ? " notification-msg-dark " : " notification-msg "
     
     return ( load ?
         <div className="notification-element">
-            <small className={themeReducer ? "notification-time txt-dark" : "notification-time"}>{moment(Date.now()).fromNow()}</small>
+            <small className={themeReducer ? "notification-time txt-dark" : "notification-time"}>{moment(data.content.date).fromNow()}</small>
             <div className="notification-user">
                 <UserCard data={data.user} />   
             </div>
             <div className="notification-alert">
                 <p className={isView ? messageStyle : messageStyle + "noView" }>{message}</p>
-                <div className="notification-new"></div>
+               {!isView ? <div className="notification-new"></div> : null}
             </div>
            {data.content.type === "invitation" 
            ? (!isChoice) 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
-import {Link} from "react-router-dom"
+import {Link, useHistory, useLocation} from "react-router-dom"
 import "../../Styles/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -12,10 +12,12 @@ import PublicationCardLoader from "./PublicationCardLoader"
 import PublicationDelete from "./PublicationDelete"
 import Video from "./Video"
 
-export default function PublicationCard({open, data, noClick}) { 
+export default function PublicationCard({ data, noClick }) { 
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const history = useHistory()
+    const location = useLocation()
     const [hashtag, setHashtag] = useState("")
     const [deleteAlert, setDeleteAlert] = useState(false)
     const [deleteMsg, setDeleteMsg] = useState(true)
@@ -71,15 +73,9 @@ export default function PublicationCard({open, data, noClick}) {
 
         if (spam <= 4) {
             if (isLike) {
-                await axios.post(`http://localhost:3001/api/publications/like/delete/${data.publicationId}`, {userId: userDataReducer.userId})
+                await axios.delete(`http://localhost:3001/api/publications/like/delete/${data.publicationId}`, {data: {userId: userDataReducer.userId}})
             } else if (isLike === false) {
-                await axios.post(`http://localhost:3001/api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
-                await axios.post("http://localhost:3001/api/notifications/add", {
-                    receiver : data.userId,
-                    sender: userDataReducer.userId,
-                    type: "like"
-                })
-                socket.emit("notification", {
+                await socket.emit("notification", {
                     receiver: data.userId,
                     sender: {
                         user: userDataReducer,
@@ -88,9 +84,22 @@ export default function PublicationCard({open, data, noClick}) {
                         }
                     }
                 })
+                await axios.post(`http://localhost:3001/api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
+                await axios.post("http://localhost:3001/api/notifications/add", {
+                    receiver : data.userId,
+                    sender: userDataReducer.userId,
+                    type: "like"
+                })
             }
         }
         setSpam(spam + 1)
+    }
+
+    const handleClickPublication = () => {
+        history.push(`/publication/${data.publicationId}`, {
+            data: data,
+            path: location.pathname
+        })
     }
 
     const cssDelete = deleteMsg ? themeReducer ? "publi-dark" : "publi" : "publi-none"
@@ -125,13 +134,13 @@ export default function PublicationCard({open, data, noClick}) {
                 </div>
 
                 <div className="text-publi">
-                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => noClick ? null : open(data)}>{data.text}</p>
+                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => noClick ? null : handleClickPublication()}>{data.text}</p>
                 </div>
             </div>
                 {data.publicationFileUrl != null 
                 ?  <div className="bg-publi">
                     {data.type === "image"
-                    ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => noClick ? null : open(data)} alt="Publication frame"/>
+                    ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => noClick ? null : handleClickPublication()} alt="Publication frame"/>
                     :   <Video data={data} />     
                     }
                   </div>

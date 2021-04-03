@@ -76,6 +76,22 @@ exports.getLikes = async (req, res) => {
 
 }
 
+// Get one publication
+exports.getOnePublication = async (req, res) => {
+    const id = req.params.id
+    const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
+    const queryUsers = "u.lastName, u.firstName"
+    const queryImg = "pc.text as publicationFileUrl, ui.url as userImageUrl, pc.type"
+
+    const result = await requestQuery(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
+    LEFT JOIN users u ON u.userId = p.userId 
+    LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+    LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
+    WHERE p.publicationId = ?`, [id])
+
+     res.send(result)
+}
+
 // Get all publication by all users
 exports.getPublicationsHome = async (req, res) => {
     const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
