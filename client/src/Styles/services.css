@@ -260,3 +260,93 @@ Suggest friend card
 .suggestFriendCard-btn-dark:hover {
     color: #f3f3f3;
 }
+
+/*
+//////////////////////// 
+Full file
+//////////////////////// 
+*/
+
+.fullFile {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+}
+
+.fullFile-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #000;
+    width: 100vw;
+    height: 100vh;
+}
+
+.fullFile-close-icon {
+    position: absolute;
+    padding: 5px;
+    top: 10px;
+    right: 10px;
+    font-size: 35px;
+    color: #FF7272;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.fullFile-close-icon:hover {
+    transition: 0.3s;
+    color: #ff4747;
+}
+
+.fullFile-user {
+    position: absolute;
+    display: flex;
+    left: 10px;
+    margin: 10px;
+    padding: 5px;
+    background-color: #494949;
+    border-radius: 9px;
+    opacity: 0.8;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.fullFile-user:hover {
+    transition: 0.3s;
+    opacity: 1;
+}
+
+.fullFile-user-img-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
+    overflow: hidden;
+    z-index: 2;
+}
+
+.fullFile-user-img {
+    width: 40px;   
+    height: 40px;
+    object-fit: cover;
+}
+
+.fullFile-user-info {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}
+
+.fullFile-user-info > p {
+    color: #fff;
+    cursor: pointer;
+}
+
+.fullFile-img {
+    height: 100%;
+    object-fit: cover;
+}

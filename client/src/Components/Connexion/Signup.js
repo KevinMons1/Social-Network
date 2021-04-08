@@ -19,11 +19,11 @@ export default function Signup() {
 
     const verifyInformations = () => {
         let regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
-        let name = data.lastName
-        let surname = data.firstName
+        let lastName = data.lastName
+        let firstName = data.firstName
 
-        if (surname.length > 2 && name.length > 2) {
-            if (surname.match(regex) && name.match(regex)) {
+        if (firstName.length > 2 && lastName.length > 2) {
+            if (firstName.match(regex) && lastName.match(regex)) {
                 if (data.password.length >= 6) {
                     if (data.password === passwordVerify) {
                         return true
@@ -39,12 +39,12 @@ export default function Signup() {
                 }
             } else {
                 setAletCss(true)
-                setAlertMsg("Do not use special characters for your name and surname !")
+                setAlertMsg("Do not use special characters for your lastName and firstName !")
                 return false
             }
         } else {
             setAletCss(true)
-            setAlertMsg("Your name and surname must contain at least 2 characters !")
+            setAlertMsg("Your lastName and firstName must contain at least 2 characters !")
             return false
         }
     }

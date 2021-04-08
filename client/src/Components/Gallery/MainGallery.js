@@ -16,7 +16,6 @@ export default function MainGallery() {
     const [load, setLoad] = useState(false)
     const [isEmpty, setIsEmpty] = useState(false)
     const [data, setData] = useState([])
-    const [dataPubliClick, setDataPubliClick] = useState(false)
 
     useEffect(() => { 
         // Get informations for account
@@ -51,14 +50,28 @@ export default function MainGallery() {
 
         
     const handleBack = () => {
-        let path = location.state.path
-        history.push(path)
+        let path = location.pathname
+        let lastPath = path.split('/gallery')
+        history.push(lastPath[0])
     }
 
     const handleClickPublication = item => {
+        let dataGallery = []
+        let dataGalleryIndex
+
+        // To seek for slider
+        data.forEach(publication => {
+            if (publication.type === item.type) dataGallery.push(publication)
+        })
+        // To search index of this publication
+        dataGalleryIndex = dataGallery.findIndex(publication => publication.publicationId === item.publicationId)
+
         history.push(`/publication/${item.publicationId}`, {
             data: item,
-            path: location.pathname
+            path: location.pathname,
+            isGallery: true,
+            dataGallery,
+            dataGalleryIndex
         })
     }
 
@@ -73,8 +86,8 @@ export default function MainGallery() {
                     :   data.map((item, index) => {
                         return (
                             item.type === "image" 
-                            ?   <div key={index} className="gallery-img">
-                                    <img onClick={() => handleClickPublication(item)} className="gallery-element" src={item.publicationFileUrl} alt={`Frame publichsed of this user`} />
+                            ?   <div onClick={() => handleClickPublication(item)} key={index} className="gallery-img">
+                                    <img className="gallery-element" src={item.publicationFileUrl} alt={`Frame publichsed of this user`} />
                                 </div>    
                             : null           
                         )})
@@ -89,7 +102,7 @@ export default function MainGallery() {
                         :   data.map((item, index) => {
                                 return (
                                     item.type === "video"
-                                    ?   <div key={index} key={index} className="gallery-video">
+                                    ?   <div onClick={() => handleClickPublication(item)} key={index} key={index} className="gallery-video">
                                             <Video clickNo={true} className="gallery-element" data={{publicationFileUrl: item.publicationFileUrl}} />
                                         </div>        
                                     : null     

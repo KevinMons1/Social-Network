@@ -5,10 +5,9 @@
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
-import {MemoryRouter, Route, Switch, useLocation} from 'react-router-dom'
+import {Route, Switch, useLocation} from 'react-router-dom'
 import Cookie from "js-cookie"
 import axios from "axios"
-import io from 'socket.io-client'
 import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
 
@@ -24,6 +23,7 @@ import Friends from "./Components/Friends/Index"
 import About from "./Components/About/Index"
 import Gaming from "./Components/Gaming/Index"
 import Live from "./Components/Gaming/Live"
+import FullFile from "./Components/Services/FullFile"
 import Login from "./Components/Connexion/Login"
 import Signup from "./Components/Connexion/Signup"
 import PasswordForget from "./Components/Connexion/PasswordForget"
@@ -76,6 +76,7 @@ function App() {
       ? authorization 
         ? 
           <div className={themeReduceur ? "App-dark" : "App"}>
+            <FullFile />
             <Header />
             <div className="container">
               {transitions.map(({item: location, props, key}) => {

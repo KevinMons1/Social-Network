@@ -34,9 +34,9 @@ export default function Header() {
                 <div className="header-banner-box">
                     <img src={userDataReducer.bannerImage} alt="Your banner frame"/>
                 </div>
-                <div className={themeReducer ? "search-top-dark" : "search-top"}>
+                <div className="search-top">
                     <FontAwesomeIcon className="search-icon" icon="search" />
-                    <input className={themeReducer ? "search txt-dark" : "search"} type="search" placeholder="Search..."/>
+                    <input className="search" type="search" placeholder="Search..."/>
                 </div>
                 <div className="img-profile-box">
                     <Link to={{pathname: `/account/${userDataReducer.userId}`}}>

@@ -112,6 +112,10 @@ export default function Connected({choiceCss, friendClick}) {
         }
     }
 
+    const handleChangeInput = e => {
+        //e.target.value
+    }
+
     return (
         <section className={themeReducer ? "connected-dark" : "connected"}>
             <div className="connected-title-box">
@@ -128,8 +132,7 @@ export default function Connected({choiceCss, friendClick}) {
                     : null}  
                 </div>
                 <div className={themeReducer.Theme ? "search-top-dark connected-search" : "search-top connected-search"}>
-                    <FontAwesomeIcon className="search-icon" icon="search" />
-                    <input className={themeReducer.Theme ? "search txt-dark" : "search"} type="text" placeholder="Search..."/>
+                    <input onChange={e => handleChangeInput(e)} className={themeReducer.Theme ? "search txt-dark" : "search"} type="text" placeholder="Search..."/>
                 </div>
             </div>
              

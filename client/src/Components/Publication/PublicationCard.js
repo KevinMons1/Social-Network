@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import {Link, useHistory, useLocation} from "react-router-dom"
 import "../../Styles/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,10 +12,11 @@ import PublicationCardLoader from "./PublicationCardLoader"
 import PublicationDelete from "./PublicationDelete"
 import Video from "./Video"
 
-export default function PublicationCard({ data, noClick }) { 
+export default function PublicationCard({ data, fullFile }) { 
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
     const [hashtag, setHashtag] = useState("")
@@ -96,10 +97,17 @@ export default function PublicationCard({ data, noClick }) {
     }
 
     const handleClickPublication = () => {
-        history.push(`/publication/${data.publicationId}`, {
-            data: data,
-            path: location.pathname
-        })
+        if (fullFile) {
+           dispatch({
+               type: "OPEN_FULL_FILE",
+               payload: data
+           })
+        } else {
+            history.push(`/publication/${data.publicationId}`, {
+                data: data,
+                path: location.pathname
+            })
+        }
     }
 
     const cssDelete = deleteMsg ? themeReducer ? "publi-dark" : "publi" : "publi-none"
@@ -133,14 +141,14 @@ export default function PublicationCard({ data, noClick }) {
                     </div>
                 </div>
 
-                <div className="text-publi">
-                    <p className={themeReducer ? 'txt-dark' : null} onClick={() => noClick ? null : handleClickPublication()}>{data.text}</p>
+                <div onClick={() => data.type === "video" ? handleClickPublication() : null} className={data.type === "video" ? "text-pointer text-publi" : "text-publi"}>
+                    <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
                 </div>
             </div>
                 {data.publicationFileUrl != null 
                 ?  <div className="bg-publi">
                     {data.type === "image"
-                    ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => noClick ? null : handleClickPublication()} alt="Publication frame"/>
+                    ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => handleClickPublication()} alt="Publication frame"/>
                     :   <Video data={data} />     
                     }
                   </div>

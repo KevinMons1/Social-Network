@@ -1,13 +1,18 @@
 import React, {useState, useRef} from 'react'
+import {useDispatch} from "react-redux"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import "../../Assets/fontawesome"
 
-export default function Video({ data, clickNo }) {
+export default function Video({ data, clickNo, isTall }) {
 
     const videoRef = useRef()
     const videoVolumeRef = useRef()
     const videoBarRef = useRef()
     const btnPlayRef = useRef()
     const barreRef = useRef()
-    const [mute, setMute] = useState("Mute")
+    const dispatch = useDispatch()
+    const [mute, setMute] = useState(false)
+    const [double, setDouble] = useState(false)
 
     const handleVideo = () => {
         if (!clickNo) {
@@ -36,10 +41,10 @@ export default function Video({ data, clickNo }) {
         if (!clickNo) {
             if (videoRef.current.muted) {
                 videoRef.current.muted = false
-                setMute("Mute")
+                setMute(false)
             } else {
                 videoRef.current.muted = true
-                setMute("Unmute")
+                setMute(true)
             }
         }
     }
@@ -62,17 +67,48 @@ export default function Video({ data, clickNo }) {
         }
     }
 
+    const handleDoubleClick = () => {
+        setDouble(!double)
+        if (double) {
+            btnPlayRef.current.className = "video-btn video-btn-play video-play"
+            videoRef.current.pause()
+            dispatch({
+                type: "OPEN_FULL_FILE",
+                payload: data
+            })
+        } else {
+            dispatch({
+                type: "CLOSE_FULL_FILE"
+            })
+        }
+    }
+
     return (
-        <div className="video-content">                
-            <video src={data.publicationFileUrl} className="video" ref={videoRef} onTimeUpdate={e => handleVideoRun(e)} ></video>
+        <div className={isTall ? "video-content-tall" : "video-content"}>                
+            <video 
+                src={data.publicationFileUrl} 
+                className={isTall ? "video-tall" : "video"}
+                ref={videoRef} 
+                onClick={() => handleVideo()} 
+                onTimeUpdate={e => handleVideoRun(e)}
+                onDoubleClick={() => handleDoubleClick()}>
+            </video>
             <div className="video-controls">
                 <div className="video-bar" ref={videoBarRef} onClick={e => handleClickVideo(e)}>
                     <div className="video-par-run" ref={barreRef}></div>
                 </div>
                 <div className="video-btn-content">
                     <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo()}></button>
-                    <button className="video-btn video-btn-mute" onClick={() => handleMute()}>{mute}</button>
+                    <button className="video-btn video-btn-mute" onClick={() => handleMute()}>
+                        {mute 
+                        ?   <FontAwesomeIcon icon="volume-mute" />
+                        :   <FontAwesomeIcon icon="volume-up" />
+                        }
+                    </button>
                     <input type="range" className="video-volume" min="0" max="100" defaultValue="50" step="1" ref={videoVolumeRef} onChange={() => handleChangeVolume()} />
+                    <button className="video-btn" onClick={() => handleDoubleClick()}>
+                        <div className="video-rectangle"></div>
+                    </button>
                 </div>
             </div>
         </div>

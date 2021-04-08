@@ -9,7 +9,7 @@ import Loader from "../Services/Loader"
 import axios from "axios"
 import {socket} from "../../Api"
 
-export default function PublicationComments() {
+export default function MainPublication() {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
@@ -21,6 +21,8 @@ export default function PublicationComments() {
     const [load, setLoad] = useState(false)
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
+    const [isLeft, setIsLeft] = useState(false)
+    const [isRight, setIsRight] = useState(false)
     const [dataComments, setDataComments] = useState([])
     const [dataNewPubli, setDataNewPubli] = useState({
         userId: userDataReducer.userId,
@@ -30,7 +32,7 @@ export default function PublicationComments() {
     useEffect(() => {
         setLoad(false)
         const fetchData = async () => {
-            if (location.state === undefined) {
+            if (typeof location.state === undefined || location.state === false) {
                 await axios.get(`http://localhost:3001/api/publications/one/${slug}`)
                     .then(res => {
                         setIsBack(false)
@@ -38,6 +40,18 @@ export default function PublicationComments() {
                     })
                     .catch(err => console.log(err))
             } else  {
+                // Hide arrow left and arrow right
+                if (location.state.isGallery) {
+                    const { dataGallery, dataGalleryIndex } = location.state
+                    if (dataGalleryIndex === 0) setIsLeft(false)
+                    else setIsLeft(true)
+                    if (dataGalleryIndex === dataGallery.length - 1) setIsRight(false)
+                    else setIsRight(true)                  
+                }
+                else {
+                    setIsLeft(false)
+                    setIsRight(false)
+                }
                 setIsBack(true)
                 setData(location.state.data)
             }
@@ -100,7 +114,47 @@ export default function PublicationComments() {
 
     const handleBack = () => {
         let path = location.state.path
-        history.push(path)
+        history.push(path, true)
+    }
+
+    const handleNext = direction => {
+        if (typeof location.state.isGallery !== undefined) {       
+            const { dataGallery, dataGalleryIndex } = location.state
+            const pathGallery = location.state.path
+            let newIndex
+            let newPublication
+            
+            if (direction === "left" && isLeft) {
+                newIndex = dataGalleryIndex - 1
+                newPublication = dataGallery[newIndex]
+    
+                history.push(`/publication/${newPublication.publicationId}`, {
+                    data: newPublication,
+                    path: pathGallery,
+                    isGallery: true,
+                    dataGallery,
+                    dataGalleryIndex: newIndex
+                })
+            } else if (direction === "right" && isRight) {
+                newIndex = dataGalleryIndex + 1
+                newPublication = dataGallery[newIndex]
+    
+                history.push(`/publication/${newPublication.publicationId}`, {
+                    data: newPublication,
+                    path: pathGallery,
+                    isGallery: true,
+                    dataGallery,
+                    dataGalleryIndex: newIndex
+                })
+            }
+        }
+    }
+
+    window.onkeydown = e => {
+        if (e.repeat) return
+
+        if (e.key === "ArrowLeft") handleNext("left")
+        else if (e.key === "ArrowRight") handleNext("right")
     }
 
     return (load ?
@@ -110,7 +164,9 @@ export default function PublicationComments() {
             </div>
             <div className="publi-open-bottom-container">
                 <div className="publi-open-top">
-                    <PublicationCard data={data} noClick={true} />
+                    {isLeft ? <FontAwesomeIcon onClick={() => handleNext("left")} icon="chevron-left" className={themeReducer ? "txt-dark gallery-chevron-icon gallery-chevron-icon-left" : "gallery-chevron-icon gallery-chevron-icon-left"}/> : null}
+                    <PublicationCard data={data} fullFile={true} />
+                    {isRight ? <FontAwesomeIcon onClick={() => handleNext("right")} icon="chevron-right" className={themeReducer ? "txt-dark gallery-chevron-icon gallery-chevron-icon-right" : "gallery-chevron-icon gallery-chevron-icon-right"}/> : null}
                 </div>
 
                 {dataComments.map((item, index) => {

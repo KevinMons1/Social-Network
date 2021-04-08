@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
+import {useLocation, useHistory} from "react-router-dom"
 import "../../Styles/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -14,8 +15,11 @@ export default function MainHome() {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const dataHomeReducer = useSelector(state => state.DataHome)
     const dispatch = useDispatch()
     const scrollRef = useRef()
+    const location = useLocation()
+    const history = useHistory()
     const [countPublication, setCountPublication] = useState(3)
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
@@ -23,17 +27,35 @@ export default function MainHome() {
     const [dataSuggestFriend, setDataSuggestFriend] = useState([])
     const [alertMsg, setAlertMsg] = useState(false)
 
+    window.onbeforeunload = (event) => {
+        const e = event || window.event;
+        e.preventDefault();
+        if (e) history.replace({...history.location, state: false})
+      }
+
     useEffect(() => {
-        // Get publications
-        const fetchData = async () => {
-            await dispatch({
-                type: "CHANGE_ZINDEX",
-                payload: false
-              })
-              await getPublications()
-              await getSuggestFriend()
-            }
+        if (location.state) {
+            setData(dataHomeReducer.publications)
+            setDataSuggestFriend(dataHomeReducer.suggestFirends)
+            setCountPublication(dataHomeReducer.countPublication)
+            setLoad(true)
+            setTimeout(() => {
+                scrollRef.current.scrollTop = dataHomeReducer.scrollTop
+            }, 100);
+        } else {
+            // Get publications
+            const fetchData = async () => {
+                await dispatch({
+                    type: "CHANGE_ZINDEX",
+                    payload: false
+                })
+                await dispatch({type: "RESET"})
+                await getPublications()
+                await getSuggestFriend()
+                setLoad(true)
+                }
             fetchData()
+        }
         }, [])
     
     const getPublications = () => {
@@ -43,7 +65,6 @@ export default function MainHome() {
                 setAlertMsg(true)
             } else {
                 setData([...data, res.data[0], res.data[1], res.data[2]])
-                setLoad(true)
             }
             setCountPublication(countPublication + 3)
         })
@@ -65,6 +86,20 @@ export default function MainHome() {
         if (clientHeight + scrollTop >= scrollHeight - 20) {
             getPublications()
         }
+    }
+
+    // Save position and data
+    const handleClickPublication = () => {
+        const { scrollTop } = scrollRef.current
+        dispatch({
+            type: 'CHANGE_DATA_HOME',
+            payload: {
+                publications: data,
+                suggestFirends: dataSuggestFriend,
+                scrollTop,
+                countPublication: countPublication
+            }
+        })
     }
 
     return (
@@ -104,7 +139,7 @@ export default function MainHome() {
                     {load 
                     ?   data.map((item, index) => {
                             return (
-                                <div key={index} className="box-publi">
+                                <div onClick={() => handleClickPublication()} key={index} className="box-publi">
                                     <PublicationCard data={item} />
                                 </div>
                             )
