@@ -5,14 +5,19 @@ import {Link, useHistory} from 'react-router-dom'
 import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
+import axios from "axios"
+import SearchUsers from "./SearchUsers"
 
 export default function Header() {
 
     const history = useHistory()
-    const [theme, setTheme] = useState(true)
     const dispatch = useDispatch()
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const [theme, setTheme] = useState(true)
+    const [txtInput, setTxtInput] = useState("")
+    const [isSearch, setIsSearch] = useState(false)
+    const [dataSearch, setDataSearch] = useState(null)
     
     const handleTheme = () => {
         dispatch({
@@ -28,15 +33,34 @@ export default function Header() {
         window.location.reload();
     }
 
+    const handleChangeInput = e => {
+        if (e.target.value === "") return setIsSearch(false)
+        setTxtInput(e.target.value)
+    }
+
+    const handleSearch = e => {
+        axios.get(`http://localhost:3001/api/user/search/${txtInput}`)
+            .then(res => {
+                setDataSearch(res.data)
+                setIsSearch(true)
+            })
+            .catch(err => console.log(err))
+    }
+
     return (
         <header className={themeReducer ? "header-dark" : "header"}>
+            {isSearch 
+            ? <SearchUsers data={dataSearch} />
+            : null}
             <div className="header-top">
                 <div className="header-banner-box">
                     <img src={userDataReducer.bannerImage} alt="Your banner frame"/>
                 </div>
                 <div className="search-top">
-                    <FontAwesomeIcon className="search-icon" icon="search" />
-                    <input className="search" type="search" placeholder="Search..."/>
+                    <div className="search-input">
+                        <button onClick={() => handleSearch()} className="search-btn"><FontAwesomeIcon className="search-icon" icon="search" /></button>
+                        <input onChange={e => handleChangeInput(e)} className="search" type="search" placeholder="Search..."/>
+                    </div>
                 </div>
                 <div className="img-profile-box">
                     <Link to={{pathname: `/account/${userDataReducer.userId}`}}>

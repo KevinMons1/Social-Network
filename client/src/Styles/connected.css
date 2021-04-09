@@ -54,6 +54,24 @@ Top || Input search style is in header.css
 .connected-search {
     margin-top: 15px!important;
     margin-bottom: 15px!important;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: 25px;
+    margin: 5px;
+    background-color: #fff;
+    border: 1px solid #707070;
+    border-radius: 10px;
+}
+
+.connected-search-input {
+    width: 80%;
+    margin-left: 5px;
+    background: none;
+    border: none;
+    outline: none;
 }
 
 .search-icon {

@@ -68,7 +68,7 @@ export default function MainFriends() {
                     :   data.map((item, index) => {
                         return (
                             <div className="friend-card" key={index} index={index} onClick={() => handleClickFriend(item)}>
-                                <UserCard tallCard={true}  noOpen={true} data={item} />   
+                                <UserCard tallCard={true} noOpen={true} data={item} />   
                             </div>
                         )})
                     }

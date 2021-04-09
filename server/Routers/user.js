@@ -12,6 +12,7 @@ router.get('/account/informations/:id', user.getAccountInformations)
 router.get('/userFriends/:id', user.getFriends)
 router.get('/connected/friends/chat/:id', user.getFriendsChat)
 router.get('/suggest/friend/:id', user.getSuggestFriend)
+router.get('/search/:id', user.getSearchUser)
 
 router.put('/account/informations/update/:id', user.updateAccountInformations)
 router.put('/account/image/profile/:id', multer.single('file'), user.uploadImageProfile)

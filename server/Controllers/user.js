@@ -31,6 +31,15 @@ const publicationsDefault = async (id, type, imageUrl, txt) => {
     const result2 = await requestQuery(`INSERT INTO publicationContent (publicationId, userId, text, type) VALUES (?, ?, ?, "image")`, [publiId, id, imageUrl])
 }
 
+// Add friend
+exports.addFriend = async (req, res) => {
+    const { userId } = req.body
+    const friendId = req.params.id
+
+    const result = await requestQuery('INSERT INTO friends (user1Id, user2Id) VALUES(?, ?)', [userId, friendId])
+    res.send({alert: true})
+}
+
 // Get all information for display each user who speaking white the user
 const getFriendsChatPromisse = async (element, id) => {
     return await new Promise(async resolve => {
@@ -61,15 +70,6 @@ const getFriendsChatPromisse = async (element, id) => {
             }
         }
     })
-}
-
-// Add friend
-exports.addFriend = async (req, res) => {
-    const { userId } = req.body
-    const friendId = req.params.id
-
-    const result = await requestQuery('INSERT INTO friends (user1Id, user2Id) VALUES(?, ?)', [userId, friendId])
-    res.send({alert: true})
 }
 
 // Get account informations
@@ -208,6 +208,32 @@ exports.getSuggestFriend = async (req, res) => {
         if (user != 0) allResult.push(user)
     })
     res.send(allResult)  
+}
+
+// Get search users
+exports.getSearchUser = async (req, res) => {
+    const name = req.params.id
+    const queryUser = "u.userId, u.lastName, u.firstName"
+    const queryImg = "ui.url as profileImage"
+    const isTwoName = name.includes(" ")
+    let name1, name2, nameSlice, result
+    
+    if (isTwoName) {
+        nameSlice = name.split(" ")
+        name1 = nameSlice[0]
+        name2 = nameSlice[1]
+        result = await requestQuery(`
+            SELECT ${queryUser}, ${queryImg} FROM users u 
+            LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+            WHERE SUBSTR(u.lastName, 1, ${name1.length}) = ? AND SUBSTR(u.firstName, 1, ${name2.length}) = ? OR
+            SUBSTR(u.lastName, 1, ${name2.length}) = ? AND SUBSTR(u.firstName, 1, ${name1.length}) = ? LIMIT 0, 15`, [name1, name2, name2, name1])
+    } else if (!isTwoName) {
+        result = await requestQuery(`
+            SELECT ${queryUser}, ${queryImg} FROM users u 
+            LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+            WHERE SUBSTR(u.lastName, 1, ${name.length}) = ? OR SUBSTR(u.firstName, 1, ${name.length}) = ? LIMIT 0, 15`, [name, name])
+    }
+    res.send(result)
 }
 
 // Update informations

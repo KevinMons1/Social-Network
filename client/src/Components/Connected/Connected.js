@@ -14,12 +14,13 @@ export default function Connected({choiceCss, friendClick}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
-    const [usersCard, setUsersCard] = useState([])
-    const [usersCardChat, setUsersCardChat] = useState([])
     const [load, setLoad] = useState(false)
     const [chat, setChat] = useState(false)
     const [isAnimated, setIsAnimated] = useState(false)
     const [friendEmpty, setFriendEmpty] = useState(false)
+    const [usersCard, setUsersCard] = useState([])
+    const [usersCardChat, setUsersCardChat] = useState([])
+    const [usersChat, setUsersChat] = useState([])
     const [userCardClick, setUserCardClick] = useState(null)
     const [friendsConnected, setFriendsConnected] = useState([])
     const transitionContent = useTransition(isAnimated, null, {
@@ -68,6 +69,7 @@ export default function Connected({choiceCss, friendClick}) {
                 setFriendEmpty(true)       
                 res.data.forEach(friend => {
                     if (friend != null) {
+                        setUsersChat(usersChat => [...usersChat, friend])
                         setUsersCardChat(usersCardChat => [...usersCardChat, <UserCard data={friend} text={true} open={() => handleOpenChat(friend)} />])      
                         setFriendEmpty(false)      
                     }
@@ -113,7 +115,16 @@ export default function Connected({choiceCss, friendClick}) {
     }
 
     const handleChangeInput = e => {
-        //e.target.value
+        let isFind = false
+        let name = ""
+        let usersFind = []
+
+        usersChat.forEach(user => {
+            name = user.lastName.toLowerCase() + " " + user.firstName.toLowerCase()
+            isFind = name.includes(e.target.value.toLowerCase())
+            if (isFind) usersFind.push(<UserCard data={user} text={true} open={() => handleOpenChat(user)} />)
+        })
+        setUsersCardChat(usersFind)
     }
 
     return (
@@ -131,8 +142,8 @@ export default function Connected({choiceCss, friendClick}) {
                         })   
                     : null}  
                 </div>
-                <div className={themeReducer.Theme ? "search-top-dark connected-search" : "search-top connected-search"}>
-                    <input onChange={e => handleChangeInput(e)} className={themeReducer.Theme ? "search txt-dark" : "search"} type="text" placeholder="Search..."/>
+                <div className="connected-search">
+                    <input onChange={e => handleChangeInput(e)} className={themeReducer.Theme ? "connected-search-input txt-dark" : "connected-search-input"} type="text" placeholder="Search..."/>
                 </div>
             </div>
              

@@ -1,4 +1,5 @@
 .header {
+    position: relative;
     width: 20%;
     height: 100vh;
     background-color: #F0F2F5;
@@ -7,6 +8,7 @@
 }
 
 .header-dark {
+    position: relative;
     width: 20%;
     height: 100vh;
     background-color: #252525;
@@ -33,15 +35,24 @@ Top
 
 .search-top {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+}
+
+.search-input {
+    display: flex;
     justify-content: center;
     align-items: center;
     width: auto;
-    height: 15%;
+    height: 25px;
     margin: 5px;
-    background-color: #fff;
     border: 1px solid #707070;
+    background-color: #fff;
     border-radius: 10px;
-    z-index: 2;
 }
 
 .search {
@@ -52,8 +63,20 @@ Top
     outline: none;
 }
 
+.search-btn {
+    border: none;
+    background: none;
+    outline: none;
+}
+
 .search-icon {
     opacity: 0.5;
+    cursor: pointer;
+}
+
+.search-icon:hover {
+    transition: 0.3s;
+    opacity: 1;
 }
 
 .header-banner-box {
@@ -274,3 +297,18 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+/*
+//////////////////////// 
+Search Users
+//////////////////////// 
+*/
+
+.searchUsers {
+    position: absolute;
+    padding: 40px 5px;
+    background: #f1f1f1;
+    height: 100vh;
+    width: 100%;
+    z-index: 5;
+    overflow-y: scroll;
+}
