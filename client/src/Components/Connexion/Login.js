@@ -1,16 +1,15 @@
 import React, {useState} from 'react'
 import "../../Styles/connexion.css"
-import {Link, useHistory} from "react-router-dom"
-import axios from "axios"
+import {Link} from "react-router-dom"
+import Auth from "../../Auth"
 import Cookie from "js-cookie"
 import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
 
 export default function Login() {
 
-    const history = useHistory()
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
-    const [check, setCheck] = useState(false)
+    const [isCheck, setIsCheck] = useState(false)
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -22,22 +21,20 @@ export default function Login() {
 
     const handleSubmit = e => {
         e.preventDefault()
-
-        axios.post("http://localhost:3001/api/auth/login", data)
-            .then(res => {
-                if (!res.data.alert) {
-                    if (check) {
-                        Cookie.set('user', res.data.token, {expires: 30})
-                    } else {
-                        Cookie.set('user', res.data.token, {expires: 1})
-                    }
-                    history.push({pathname: '/'})
-                    window.location.reload()
+        const fetch = async () => {
+            const res = await Auth.login(data)
+            if (!res.alert) {
+                if (isCheck) {
+                    Cookie.set('user', res.token, {expires: 30})
+                } else {
+                    Cookie.set('user', res.token, {expires: 1})
                 }
-                setAletCss(res.data.alert)
-                setAlertMsg(res.data.message)
-            })
-            .catch(err => console.log(err))
+                window.location.reload()
+            }
+            setAletCss(res.alert)
+            setAlertMsg(res.message)
+        }
+        fetch()
     }
 
     return (
@@ -62,7 +59,7 @@ export default function Login() {
                         <input required type="password" name="password" className="connexion-input" onChange={e => handleChange(e)}/>
                     </div>
                     <div className="connexion-info connexion-checkbox">
-                        <input type="checkbox" name="remember" className="connexion-input-checkbox" onChange={() => setCheck(!check)} />
+                        <input type="checkbox" name="remember" className="connexion-input-checkbox" onChange={() => setIsCheck(!isCheck)} />
                         <label htmlFor="remember" className="connexion-label-checkbox">Remember me</label>
                     </div>
                     <div className="connexion-submit">

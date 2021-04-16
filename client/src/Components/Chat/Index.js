@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {useHistory, useParams} from "react-router-dom"
+import {withRouter, useHistory, useParams} from "react-router-dom"
 import "../../Styles/chat.css"
 
 //Components
@@ -7,7 +7,7 @@ import MainChat from "./MainChat"
 import Connected from "../Connected/Connected"
 import ChatEmpty from "./ChatEmpty"
 
-export default function Index() {
+export default withRouter(function Index() {
 
     const [friendClick, setFriendClick] = useState(false)
     const [data, setData] = useState(null)
@@ -31,4 +31,4 @@ export default function Index() {
             {friendClick ? <MainChat data={data} /> : <ChatEmpty />}
         </section>
     )
-}
+})

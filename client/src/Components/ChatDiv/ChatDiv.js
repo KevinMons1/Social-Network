@@ -21,7 +21,6 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     const dispatch = useDispatch()
     const { slug } = useParams()
     const [searchGif, setSearchGif] = useState("dogs")
-    const [urlGif, setUrlGif] = useState("")
     const [gifVisible, setGifVisible] = useState(false)
     const [load, setLoad] = useState(false)
     const [allMessages, setAllMessages] = useState([])
@@ -37,7 +36,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     ----- Socket.io for a real time chat -----
     */
 
-    // Send message
+    // get new message
     socket.on('newMessage', dataMessage => {
         const id = slug === undefined ? data.userId : slug
         if (dataMessage.sender.toString() === id.toString()) {
@@ -46,6 +45,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     })
     
     useEffect(() => {
+        setLoad(false)
         const fetch = async () => {
             await dispatch({
                 type: "CHANGE_ZINDEX",
@@ -98,6 +98,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
         setAllMessages([...allMessages, message])
 
         socket.emit('sendMessage', message)
+        socket.emit('notificationChat', message)
         axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
         setMessage({...message, text: ""})
         messageRef.current.value = ""
@@ -125,6 +126,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
                             type: "image"
                         }
                         socket.emit('sendMessage', newImage)
+                        socket.emit('notificationChat', newImage)
                         setAllMessages([...allMessages, newImage])
                     })
                     .catch(err => console.log(err))
@@ -142,6 +144,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
             type: "gif"
         }
         socket.emit('sendMessage', newGif)
+        socket.emit('notificationChat', newGif)
         axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, newGif)
         setAllMessages([...allMessages, newGif])
     }

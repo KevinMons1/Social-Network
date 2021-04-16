@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import "../../Styles/services.css"
 import {useSelector} from "react-redux"
 import {useHistory} from "react-router-dom"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import "../../Assets/fontawesome"
 import {socket} from "../../Api"
 import axios from "axios"
 

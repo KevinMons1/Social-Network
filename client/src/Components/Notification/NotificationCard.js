@@ -7,7 +7,6 @@ import axios from "axios"
 export default function NotificationCard({ data }) {
 
     const themeReducer = useSelector(state => state.Theme)
-    const userDataReducer = useSelector(state => state.UserData)
     const [message, setMessage] = useState("")
     const [load, setLoad] = useState(false)
     const [isChoice, setIsChoice] = useState(false)
@@ -58,7 +57,7 @@ export default function NotificationCard({ data }) {
             </div>
             <div className="notification-alert">
                 <p className={isView ? messageStyle : messageStyle + "noView" }>{message}</p>
-               {!isView ? <div className="notification-new"></div> : null}
+               {isView ? null : <div className="notification-new"></div>}
             </div>
            {data.content.type === "invitation" 
            ? (!isChoice) 

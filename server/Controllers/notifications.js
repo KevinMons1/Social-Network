@@ -19,7 +19,9 @@ const requestQuery = async (query, params) => {
 // Add new notification
 exports.addNewNotification = async (req, res) => {
     const { sender, receiver, type } = req.body
-    const result = await requestQuery("INSERT INTO notifications (senderId, receiverId, type) VALUES (?, ?, ?)", [sender, receiver, type])
+    if (sender !== receiver) {
+        const result = await requestQuery("INSERT INTO notifications (senderId, receiverId, type) VALUES (?, ?, ?)", [sender, receiver, type])
+    }
 }
 
 // Get all notification of user

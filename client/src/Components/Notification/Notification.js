@@ -24,11 +24,16 @@ export default function Notification() {
     })
 
     socket.on("notification", userData => {
-        setData([userData, ...data])
-        setCount(count + 1)
+        if (userData.user.userId !== userDataReducer.userId) {
+            const data = userData
+            setData(item => [data, ...item])
+            console.log(data)
+            setCount(count + 1)
+        }
     })
 
     useEffect(() => {
+        setLoad(false)
         const fetch = async () => {
             await axios.get(`http://localhost:3001/api/notifications/all/${userDataReducer.userId}`)
                 .then(res => {
@@ -61,7 +66,7 @@ export default function Notification() {
 
     return (
         <div className="notification">
-        <div className="notification-icon-box" onClick={() => handleClickHide()}>
+            <div className="notification-icon-box" onClick={() => handleClickHide()}>
                 <FontAwesomeIcon className={themeReducer ? "notification-icon-dark" : "notification-icon"} icon="bell"/>
                 {count > 0 ? <div className="notification-icon-number">{count}</div> : null}
             </div>
@@ -74,9 +79,7 @@ export default function Notification() {
                     </div>
                    {load 
                    ? data.map((item, index) => {
-                        return (
-                            <NotificationCard isView={false} data={item} key={index} />
-                        )
+                        return <NotificationCard isView={false} data={item} key={index} />
                     })
                    : null
                     }

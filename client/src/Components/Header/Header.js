@@ -6,6 +6,7 @@ import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
+import Auth from "../../Auth"
 import SearchUsers from "./SearchUsers"
 
 export default function Header() {
@@ -28,8 +29,8 @@ export default function Header() {
     }
 
     const handleDisconnect = () => {
+        Auth.logout()
         Cookie.remove('user')
-        history.push({pathname: '/'})
         window.location.reload();
     }
 
@@ -39,19 +40,26 @@ export default function Header() {
     }
 
     const handleSearch = e => {
-        axios.get(`http://localhost:3001/api/user/search/${txtInput}`)
-            .then(res => {
-                setDataSearch(res.data)
-                setIsSearch(true)
-            })
-            .catch(err => console.log(err))
+        const regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
+        if (txtInput.length >= 1 && txtInput.match(regex)) {
+            axios.get(`http://localhost:3001/api/user/search/${txtInput}`)
+                .then(res => {
+                    setDataSearch(res.data)
+                    setIsSearch(true)
+                })
+                .catch(err => console.log(err))
+        }
+    }
+
+    const handleKeyDown = e => {
+        if (e.repeat) return
+
+        if (e.key === "Enter") handleSearch()
     }
 
     return (
         <header className={themeReducer ? "header-dark" : "header"}>
-            {isSearch 
-            ? <SearchUsers data={dataSearch} />
-            : null}
+            <SearchUsers isSearch={isSearch} data={dataSearch} />
             <div className="header-top">
                 <div className="header-banner-box">
                     <img src={userDataReducer.bannerImage} alt="Your banner frame"/>
@@ -59,7 +67,7 @@ export default function Header() {
                 <div className="search-top">
                     <div className="search-input">
                         <button onClick={() => handleSearch()} className="search-btn"><FontAwesomeIcon className="search-icon" icon="search" /></button>
-                        <input onChange={e => handleChangeInput(e)} className="search" type="search" placeholder="Search..."/>
+                        <input onKeyDown={e => handleKeyDown(e)} onChange={e => handleChangeInput(e)} className="search" type="search" placeholder="Search..."/>
                     </div>
                 </div>
                 <div className="img-profile-box">

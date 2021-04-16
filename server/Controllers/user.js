@@ -54,7 +54,7 @@ const getFriendsChatPromisse = async (element, id) => {
             resolve(allResult)
         } else {
             // Take last message
-            const result2 = await requestQuery(`SELECT text, type FROM roomMessages WHERE roomId = ? ORDER BY Date DESC LIMIT 0,1`, [result[0].roomId])
+            const result2 = await requestQuery(`SELECT text, type, date FROM roomMessages WHERE roomId = ? ORDER BY Date DESC LIMIT 0,1`, [result[0].roomId])
             if (result2.length == 0) {
                 resolve(false)
             } else {
@@ -65,7 +65,7 @@ const getFriendsChatPromisse = async (element, id) => {
                     SELECT ${queryUser}, ${queryImg} FROM users u
                     LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
                     WHERE u.userId = ?`, [friendId, friendId])
-                allResult = {...result3[0], text: result2[0].text, type: result2[0].type}
+                allResult = {...result3[0], text: result2[0].text, type: result2[0].type, date: result2[0].date}
                 resolve(allResult)
             }
         }
@@ -179,11 +179,12 @@ exports.getFriendsChat = async (req, res) => {
     count = resultFriendId.length
     resultFriendId.forEach(async element => {
         result2 = await getFriendsChatPromisse(element, id)
-        if (result2 != false) {
-            allResult.push(await getFriendsChatPromisse(element, id))  
-        }
+        if (result2 != false) allResult.push(result2)  
         i++
-        if (count == i) res.send(allResult)
+        if (count == i) {
+            const _allResult = await allResult.sort((a, b) => b.date - a.date)
+            res.send(_allResult)
+        }
     })
 }
 

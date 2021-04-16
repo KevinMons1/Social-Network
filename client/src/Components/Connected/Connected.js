@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useSelector} from "react-redux"
 import "../../Styles/connected.css"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import "../../Assets/fontawesome"
 import axios from "axios"
 import {useTransition, config, animated} from "react-spring"
 import {socket} from "../../Api"
@@ -15,11 +13,10 @@ export default function Connected({choiceCss, friendClick}) {
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const [load, setLoad] = useState(false)
-    const [chat, setChat] = useState(false)
     const [isAnimated, setIsAnimated] = useState(false)
     const [friendEmpty, setFriendEmpty] = useState(false)
     const [usersCard, setUsersCard] = useState([])
-    const [usersCardChat, setUsersCardChat] = useState([])
+    const [usersDataChat, setUsersDataChat] = useState([])
     const [usersChat, setUsersChat] = useState([])
     const [userCardClick, setUserCardClick] = useState(null)
     const [friendsConnected, setFriendsConnected] = useState([])
@@ -32,18 +29,28 @@ export default function Connected({choiceCss, friendClick}) {
 
     socket.on('sendMyConnection', friendId => {
         // See if friendId is already encoding
-        let isFind = friendsConnected.find(friend => friend === friendId)
-        if (typeof isFind !== 'number') {
-            setFriendsConnected([...friendsConnected, friendId])
-            let updateUsersCard = usersCard.map(item => {
-                if (item.props.data.userId === friendId) {
-                    return <UserCard isConnected={true} data={item.props.data} text={false} noGreenBubble={true} open={() => handleOpenChat(item.props.data)} />
-                }
-                return item
-            })
-            setUsersCard(updateUsersCard)
+        if (load) {
+            let newUserCard
+            let isFind = friendsConnected.find(friend => friend === friendId)
+            if (typeof isFind !== 'number') {
+                setFriendsConnected([...friendsConnected, friendId])
+                let updateUsersCard = usersCard.map((item) => {
+                    if (item.data.userId === friendId) {
+                        newUserCard = {
+                            isConnected: true,
+                            data: item.data
+                        }
+                        return newUserCard
+                    }
+                    else return item
+                })
+                updateUsersCard = updateUsersCard.filter(user => user.data.userId !== friendId)
+                setUsersCard([newUserCard, ...updateUsersCard])
+            }
         }
     })
+
+    socket.on("notificationChat", userData => { if (load) handleClickUserChat(userData, true) })
 
     useEffect(() => {
         // Send userId on server for realTime components
@@ -56,7 +63,10 @@ export default function Connected({choiceCss, friendClick}) {
                 // if res.data === true but this user haven't friends
                 if (res.data) {
                     res.data.forEach(friend => {
-                        setUsersCard(usersCard => [...usersCard, <UserCard data={friend} text={false} open={() => handleOpenChat(friend)} />])
+                        setUsersCard(usersCard => [...usersCard, {
+                            isConnected: false,
+                            data: friend
+                        }])
                         friends.push(friend.userId)
                     })         
                 } else {
@@ -70,8 +80,11 @@ export default function Connected({choiceCss, friendClick}) {
                 res.data.forEach(friend => {
                     if (friend != null) {
                         setUsersChat(usersChat => [...usersChat, friend])
-                        setUsersCardChat(usersCardChat => [...usersCardChat, <UserCard data={friend} text={true} open={() => handleOpenChat(friend)} />])      
-                        setFriendEmpty(false)      
+                        setUsersDataChat(usersDataChat => [...usersDataChat, {
+                            isView: false,
+                            data: friend
+                        }])      
+                        setFriendEmpty(false)    
                     }
                 })               
             })
@@ -99,18 +112,36 @@ export default function Connected({choiceCss, friendClick}) {
 
     const handleCloseChat = () => {
         setIsAnimated(false)
-        setTimeout(() => {
-            setChat(false)
-        }, 200);
     }
 
     const handleOpenChat = (friendData) => {
         if (choiceCss) {
             setUserCardClick(<ChatDiv index={false} closeChat={handleCloseChat} choiceCss={true} data={friendData} />)
             setIsAnimated(true)
-            setChat(true)
         } else {
             friendClick(friendData)
+        }
+    }
+
+    const handleClickUserChat = (userData, isServer) => {
+        if (isServer) {
+            if (userData.sender !== userDataReducer.userId) {
+                setUsersDataChat(user => user.map(item => item.data.userId === userData.sender ? {
+                        isView: true,
+                        data: {
+                            ...item.data,
+                            text: userData.text,
+                            type: userData.type
+                        }
+                    } : item )
+                )
+            }
+        } else {
+            setUsersDataChat(user => user.map(item => item.data.userId === userData.data.userId ? {
+                    data: {...item.data},
+                    isView: false
+                } : item )
+            )
         }
     }
 
@@ -120,11 +151,11 @@ export default function Connected({choiceCss, friendClick}) {
         let usersFind = []
 
         usersChat.forEach(user => {
-            name = user.lastName.toLowerCase() + " " + user.firstName.toLowerCase()
-            isFind = name.includes(e.target.value.toLowerCase())
-            if (isFind) usersFind.push(<UserCard data={user} text={true} open={() => handleOpenChat(user)} />)
+            name = user.data.lastName.toLowerCase() + " " + user.data.firstName.toLowerCase()
+            isFind = name.data.includes(e.target.value.toLowerCase())
+            if (isFind) usersFind.push(user)
         })
-        setUsersCardChat(usersFind)
+        setUsersDataChat(usersFind)
     }
 
     return (
@@ -138,7 +169,7 @@ export default function Connected({choiceCss, friendClick}) {
                 <div className="friends-boxs">                     
                     {load 
                     ? usersCard.map((item, index) => {
-                        return <div key={index}>{item}</div>
+                        return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
                         })   
                     : null}  
                 </div>
@@ -147,20 +178,20 @@ export default function Connected({choiceCss, friendClick}) {
                 </div>
             </div>
              
-             <div>
+             <div className="connected-bottom">
                 {transitionContent.map(({item, key, props}) => item &&(
                     <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
                 ))}
-                <div className="connected-bottom">
-                        <div className="friends-boxs">             
-                            {load 
-                            ? friendEmpty 
-                                ? <small>You are not friends !</small>
-                                :  usersCardChat.map((item, index) => {
-                                    return <div key={index}>{item}</div>
-                                    }) 
-                            : null}  
-                        </div>  
+                <div className="friends-boxs">             
+                    {load 
+                    ? friendEmpty 
+                        ? <small>You are not friends !</small>
+                        :  usersDataChat.map((item, index) => {
+                            return  <div key={index} onClick={() => handleClickUserChat(item, false)}>
+                                        <UserCard isConnected={false} isView={item.isView} data={item.data} text={true} open={() => handleOpenChat(item.data)} />
+                                    </div>
+                            }) 
+                    : null}  
                 </div>  
              </div>
         </section>

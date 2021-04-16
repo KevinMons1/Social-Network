@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
-import {useLocation, useHistory} from "react-router-dom"
+import {useLocation, useHistory, useParams} from "react-router-dom"
 import "../../Styles/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -11,7 +11,7 @@ import NewPubliBox from '../Publication/NewPubliBox'
 import Loader from "../Services/Loader"
 import SuggestFriendCard from '../Services/SuggestFriendCard'
 
-export default function MainHome() {
+export default function MainHome({ isHome }) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
@@ -20,6 +20,7 @@ export default function MainHome() {
     const scrollRef = useRef()
     const location = useLocation()
     const history = useHistory()
+    let { slug } = useParams()
     const [countPublication, setCountPublication] = useState(3)
     const [load, setLoad] = useState(false)
     const [newPubli, setNewPubli] = useState(false)
@@ -57,18 +58,71 @@ export default function MainHome() {
             fetchData()
         }
         }, [])
+
+        
     
     const getPublications = () => {
-        axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
-        .then(res => {
-            if (res.data === false) {
-                setAlertMsg(true)
+        if (isHome) {
+            axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
+                .then(res => {
+                    if (res.data === false  || res.data.length === 0) {
+                        setAlertMsg(true)
+                    } else {
+                        console.log(res.data.length)
+                        switch (res.data.length) {
+                            case 1:
+                                setData(item => [...item, res.data[0]])
+                                break;
+    
+                            case 2: 
+                                setData(item => [...item, res.data[0], res.data[1]])
+                                break;
+                        
+                            default:
+                                setData(item => [...item, res.data[0], res.data[1], res.data[2]])
+                                break;
+                        }
+                    }
+                    setCountPublication(countPublication + 3)
+                })
+                .catch(err => console.log(err))
+
+        } else if (!isHome) {
+            const regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
+
+            if (slug.match(regex) && slug !== null && slug !== undefined) {
+                slug = slug.toLowerCase()
+
+                axios.get(`http://localhost:3001/api/publications/hashtag/${countPublication}`, {
+                    params: {
+                        hashtag: slug
+                        }
+                    })
+                .then(res => {
+                    if (res.data === false  || res.data.length === 0) {
+                        setAlertMsg(true)
+                    } else {
+                        switch (res.data.length) {
+                            case 1:
+                                setData(item => [...item, res.data[0]])
+                                break;
+    
+                            case 2: 
+                                setData(item => [...item, res.data[0], res.data[1]])
+                                break;
+                        
+                            default:
+                                setData(item => [...item, res.data[0], res.data[1], res.data[2]])
+                                break;
+                        }
+                    }
+                    setCountPublication(countPublication + 3)
+                })
+                .catch(err => console.log(err))
             } else {
-                setData([...data, res.data[0], res.data[1], res.data[2]])
+                history.push("/")
             }
-            setCountPublication(countPublication + 3)
-        })
-        .catch(err => console.log(err))
+        }
     }
  
     const getSuggestFriend = async () => {
@@ -123,7 +177,7 @@ export default function MainHome() {
                         </div>
                     </div>
                 </div>
-                <div>
+            <div>
                 {load 
                     ?  <div className="suggest-friend">
                             <p className={themeReducer ? "txt-dark" : null}>You know this persons ?</p>
@@ -136,6 +190,13 @@ export default function MainHome() {
                             </div>
                         </div>                                              
                     :   null}
+
+                    {!isHome
+                    ?   <div className="home-hashtag-box">
+                            <div className="home-hashtag">#{slug}</div>
+                        </div>
+                    : null}
+
                     {load 
                     ?   data.map((item, index) => {
                             return (

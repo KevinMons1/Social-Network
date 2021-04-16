@@ -1,15 +1,14 @@
 //TODO -> Protéger ces Routes plus tard
 //TODO -> thème en cookie
-//TODO -> Faire un slide avec useSpring ou useGesture pour la gallery avec les images au click
-//TODO -> avec react-web-notification, faire des notif browser quand il y a une notif
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
-import {Route, Switch, useLocation} from 'react-router-dom'
-import Cookie from "js-cookie"
-import axios from "axios"
+import {Route, Switch, useHistory, useLocation} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
+
+import ProtectedRoute from "./ProtectedRoute"
+import Auth from "./Auth"
 
 // Components
 import Header from "./Components/Header/Header"
@@ -32,13 +31,13 @@ import Loader from "./Components/Services/Loader"
 
 function App() {
 
-  const authCookie = Cookie.get("user")
   const themeReduceur = useSelector(state => state.Theme)
   const zIndexReduceur = useSelector(state => state.ZIndexReduceur)
-  const [authorization, setAuthorization] = useState(false)
   const [load, setLoad] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false)
   const dispatch = useDispatch()
   const location = useLocation()
+  const history = useHistory()
   const verifyPathname = () => {
     // Avoid listen pathname /:slug on root chat for not repeat animation and refresh page each change path
     if (location.pathname.includes("/chat/")) {
@@ -48,68 +47,60 @@ function App() {
   }
   const transitions = useTransition(location, location => location.pathname, {
     from: verifyPathname() ? {opacity: 0, transform: 'translate3d(-50%, 0, 0)', position: 'absolute'} : {opacity: 1, transform: 'translate3d(0, 0, 0)', position: 'absolute'},
-    enter: verifyPathname() ? {opacity: 1, transform: 'translate3d(0%, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
+    enter: verifyPathname() ? {opacity: 1, transform: 'translate3d(0, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
     leave: verifyPathname() ? {opacity: 0, transform: 'translate3d(50%, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
     config: config.stiff
   })
 
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
-        .then(res => {
-          setAuthorization(res.data.authorization)
-          if (res.data.authorization) {
-            dispatch({
-              type: "ADD_DATA",
-              payload: res.data.informations
-            })
-          }
+    const fetch = async () => {
+      let data = await Auth.loginWithCookie()
+      if (Auth.isAuthenticated()) {
+        dispatch({
+          type: "ADD_DATA",
+          payload: data
         })
-        .catch(err => console.log(err))
-        setLoad(true)
+        if (location.pathname === "/login") history.push({pathname: '/'})
+        setAuthenticated(true)
+      } 
+      setLoad(true)
     }
-    fecthData()
+    fetch()
   }, [])
 
   return (
-    load 
-      ? authorization 
-        ? 
-          <div className={themeReduceur ? "App-dark" : "App"}>
-            <FullFile />
-            <Header />
-            <div className="container">
-              {transitions.map(({item: location, props, key}) => {
-                return (
-                  <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
-                    <Switch location={location}>
-                      <Route exact path="/" component={Home} /> 
-                      <Route exact path="/publication/:slug" component={Publication} /> 
-                      <Route exact path="/account/:slug" component={Account} />
-                      <Route exact path="/account/:slug/gallery" component={Gallery} />
-                      <Route exact path="/account/:slug/friends" component={Friends} />
-                      <Route exact path="/account/:slug/about" component={About} />
-                      <Route exact path="/gaming" component={Gaming} />
-                      <Route excat path="/gaming/live/:slug" component={Live} />
-                      <Route exact path="/chat/:slug" component={Chat} />
-                      <Route component={Error} />
-                    </Switch>
-                  </animated.div>
-                )
-              })}
-            </div>
-            <Connected choiceCss={true} />
-          </div>
-      
-          : <Switch>
-            <Route exact path={["/login", "/"]} component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/password-forget" component={PasswordForget} />
-            <Route component={Error} />
-          </Switch>
-      : <Loader />
-  );
-
+    load ? 
+      <div className={themeReduceur ? "App-dark" : "App"}>
+        <ProtectedRoute component={FullFile} />
+        <ProtectedRoute component={Header} />
+        <div className="container">
+          {transitions.map(({item: location, props, key}) => {
+            return (
+              <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
+                <Switch location={location}>
+                  <ProtectedRoute isHome={true} exact path="/" component={Home} /> 
+                  <ProtectedRoute isHome={false} exact path="/hashtag/:slug" component={Home} /> 
+                  <ProtectedRoute exact path="/publication/:slug" component={Publication} /> 
+                  <ProtectedRoute exact path="/account/:slug" component={Account} />
+                  <ProtectedRoute exact path="/account/:slug/gallery" component={Gallery} />
+                  <ProtectedRoute exact path="/account/:slug/friends" component={Friends} />
+                  <ProtectedRoute exact path="/account/:slug/about" component={About} />
+                  <ProtectedRoute exact path="/gaming" component={Gaming} />
+                  <ProtectedRoute excat path="/gaming/live/:slug" component={Live} />
+                  <ProtectedRoute exact path="/chat/:slug" component={Chat} />
+                  {!authenticated ? <Route exact path="/login" component={Login} /> : null}
+                  {!authenticated ? <Route exact path="/signup" component={Signup} /> : null}
+                  {!authenticated ? <Route exact path="/password-forget" component={PasswordForget} /> : null} 
+                  <Route component={Error} />
+                </Switch>
+              </animated.div>
+            )
+          })}
+        </div>
+        <ProtectedRoute component={Connected} choiceCss={true} />
+      </div>
+  : <Loader />
+  )
 }
 
 export default App;

@@ -94,10 +94,10 @@ exports.getOnePublication = async (req, res) => {
 
 // Get all publication by all users
 exports.getPublicationsHome = async (req, res) => {
+    const maxCount = req.params.id
     const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
     const queryUsers = "u.lastName, u.firstName"
     const queryImg = "pc.text as publicationFileUrl, ui.url as userImageUrl, pc.type"
-    const maxCount = req.params.id
     let minCount = maxCount - 3
     let countPublication
 
@@ -111,6 +111,32 @@ exports.getPublicationsHome = async (req, res) => {
         LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
         LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
         ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, null)
+    res.send(result2)
+    } else {
+        res.send(false)
+    }
+}
+
+// Get all publication by hashtag
+exports.getPublicationsHashtag = async (req, res) => {
+    const maxCount = req.params.id
+    const hashtag = req.query.hashtag
+    const queryPublications = "p.publicationId, p.userId, p.text as text, p.hashtag, p.commentsTotal, p.date"
+    const queryUsers = "u.lastName, u.firstName"
+    const queryImg = "pc.text as publicationFileUrl, ui.url as userImageUrl, pc.type"
+    let minCount = maxCount - 3
+    let countPublication
+
+    // Verify if there is no more publication
+    const result = await requestQuery(`SELECT COUNT(publicationId) as countPublication FROM publications`, null)
+    countPublication = result[0].countPublication
+    if (parseInt(maxCount) <= countPublication - 3) {
+    //Order by id DESC to sort from new to oldest
+    const result2 = await requestQuery(`SELECT ${queryPublications}, ${queryUsers}, ${queryImg} FROM publications p 
+        LEFT JOIN users u ON u.userId = p.userId 
+        LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
+        LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
+        WHERE SUBSTR(p.hashtag, 1, ${hashtag.length}) = ? ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, [hashtag])
     res.send(result2)
     } else {
         res.send(false)

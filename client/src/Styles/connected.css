@@ -128,6 +128,13 @@ UserCard
 
 .friend-box {
     width: 100%;
+    margin: 2px;
+}
+
+.friend-box:hover {
+    transition: 0.08s;
+    background-color: #e0dfdf;
+    border-radius: 5px;
 }
 
 .friend-connected {
@@ -184,8 +191,24 @@ UserCard
 }
 
 .friend-text {
+    position: relative;
     width: 100%;
     margin-left: 15px;
     font-size: 12px;
     opacity: 0.5;
+}
+
+.friend-view {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.friend-text-new {
+    position: absolute;
+    top: -45px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #FFD072;
 }

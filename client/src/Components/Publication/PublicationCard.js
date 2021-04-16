@@ -41,9 +41,7 @@ export default function PublicationCard({ data, fullFile }) {
     useEffect(() => {
         // To separate a long string into several hashtags if there is a need
         if (data.hashtag.length > 0) {
-            let _hashtag = data.hashtag
-            _hashtag = _hashtag.replace(";", " #")
-            _hashtag = "#" + _hashtag
+            let _hashtag = data.hashtag.split(";")
             setHashtag(_hashtag)
         }        
 
@@ -76,15 +74,17 @@ export default function PublicationCard({ data, fullFile }) {
             if (isLike) {
                 await axios.delete(`http://localhost:3001/api/publications/like/delete/${data.publicationId}`, {data: {userId: userDataReducer.userId}})
             } else if (isLike === false) {
-                await socket.emit("notification", {
-                    receiver: data.userId,
-                    sender: {
-                        user: userDataReducer,
-                        content: {
-                            type: "like"
+                if (spam === 0) {
+                    await socket.emit("notification", {
+                        receiver: data.userId,
+                        sender: {
+                            user: userDataReducer,
+                            content: {
+                                type: "like"
+                            }
                         }
-                    }
-                })
+                    })
+                }
                 await axios.post(`http://localhost:3001/api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
                 await axios.post("http://localhost:3001/api/notifications/add", {
                     receiver : data.userId,
@@ -108,6 +108,10 @@ export default function PublicationCard({ data, fullFile }) {
                 path: location.pathname
             })
         }
+    }
+
+    const handleClickHastag = item => {
+        history.push(`/hashtag/${item}`)
     }
 
     const cssDelete = deleteMsg ? themeReducer ? "publi-dark" : "publi" : "publi-none"
@@ -137,7 +141,11 @@ export default function PublicationCard({ data, fullFile }) {
                         </div>
                     </div>
                     <div className="right-publi">
-                        <p className={themeReducer ? 'txt-dark' : null}>{hashtag}</p>
+                        {hashtag.length >= 1 
+                        ?    hashtag.map((item, index) => {
+                                return <p onClick={() => handleClickHastag(item)} key={index} className={themeReducer ? 'txt-dark right-publi-hashtag' : "right-publi-hashtag"}>#{item}</p>
+                            })
+                        : null}
                     </div>
                 </div>
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import "./../../Styles/services.css"
-import {Link} from "react-router-dom"
+import {withRouter, Link} from "react-router-dom"
 import ErrorGif from "../../Assets/Images/error.gif"
 
-export default function Error() {
+export default withRouter(function Error() {
     return (
         <section className="error">
             <img src={ErrorGif} alt="Error 404 page not found"/>
@@ -15,4 +15,4 @@ export default function Error() {
             </div>
         </section>
     )
-}
+})
