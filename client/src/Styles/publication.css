@@ -338,9 +338,12 @@ NewPubliBox
     top: 0;
     right: 0;
     bottom: 0;
-    border-radius: 10px;
     background-color: #707070;
     z-index: 1000;
+}
+
+.deleteMsg-opacity {
+    border-radius: 10px;
 }
 
 .new-publi-content {
@@ -365,9 +368,11 @@ NewPubliBox
 
 .new-publi-content-dark {
     position: absolute;
-    top: 25%;
-    left: 5%;
-    transform: translate(-50%, -50%);
+    top: 10%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -381,9 +386,38 @@ NewPubliBox
     z-index: 1001;
 }
 
+.top-new-publi {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
 .icon-new-publi-dark {
     color: #707070;
     font-size: 25px;
+}
+
+.icon-new-publi-story {
+    color: #707070;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.icon-new-publi-story-dark {
+    color: #f1f1f1;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.icon-new-publi-story:hover  {
+    transition: 0.3s;
+    color: #000;
+}
+
+.icon-new-publi-story-dark:hover  {
+    transition: 0.3s;
+    opacity: 0.5;
 }
 
 .new-publi-icon-btn {
@@ -505,9 +539,21 @@ NewPubliBox
     cursor: pointer;
 }
 
+.icon-write-new-publi-dark {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #f1f1f1;
+    cursor: pointer;
+}
+
 .icon-write-new-publi:hover {
     transition: 0.3s;
     color: #000;
+}
+
+.icon-write-new-publi-dark:hover {
+    transition: 0.3s;
+    opacity: 0.5;
 }
 
 .new-publi-hashtag-box {

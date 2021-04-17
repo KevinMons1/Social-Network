@@ -38,6 +38,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
 
     // get new message
     socket.on('newMessage', dataMessage => {
+        console.log(dataMessage)
         const id = slug === undefined ? data.userId : slug
         if (dataMessage.sender.toString() === id.toString()) {
             setAllMessages([...allMessages, dataMessage])
@@ -72,7 +73,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
             }, 250)
         }
         fetch()
-    }, [data])
+    }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchRoomId = async () => {
         return await new Promise(resolve => {

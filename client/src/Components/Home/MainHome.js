@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
 import StoryCard from './StoryCard'
+import NewStoryBox from "./NewStoryBox"
 import PublicationCard from '../Publication/PublicationCard'
 import NewPubliBox from '../Publication/NewPubliBox'
 import Loader from "../Services/Loader"
@@ -21,9 +22,10 @@ export default function MainHome({ isHome }) {
     const location = useLocation()
     const history = useHistory()
     let { slug } = useParams()
-    const [countPublication, setCountPublication] = useState(3)
     const [load, setLoad] = useState(false)
+    const [countPublication, setCountPublication] = useState(3)
     const [newPubli, setNewPubli] = useState(false)
+    const [newStory, setNewStory] = useState(false)
     const [data, setData] = useState([])
     const [dataSuggestFriend, setDataSuggestFriend] = useState([])
     const [alertMsg, setAlertMsg] = useState(false)
@@ -52,15 +54,14 @@ export default function MainHome({ isHome }) {
                 })
                 await dispatch({type: "RESET"})
                 await getPublications()
+                await getStorys()
                 await getSuggestFriend()
                 setLoad(true)
                 }
             fetchData()
         }
-        }, [])
+        }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-        
-    
     const getPublications = () => {
         if (isHome) {
             axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
@@ -68,7 +69,6 @@ export default function MainHome({ isHome }) {
                     if (res.data === false  || res.data.length === 0) {
                         setAlertMsg(true)
                     } else {
-                        console.log(res.data.length)
                         switch (res.data.length) {
                             case 1:
                                 setData(item => [...item, res.data[0]])
@@ -125,6 +125,14 @@ export default function MainHome({ isHome }) {
         }
     }
  
+    const getStorys = async () => {
+        await axios.get(`http://localhost:3001/api/publications/story/${userDataReducer.userId}`)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => console.log(err)) 
+    }
+
     const getSuggestFriend = async () => {
         await axios.get(`http://localhost:3001/api/user/suggest/friend/${userDataReducer.userId}`)
             .then(res => {
@@ -156,14 +164,19 @@ export default function MainHome({ isHome }) {
         })
     }
 
+    const handleClickNewStory = () => {
+        setNewStory(!newStory)
+    }
+
     return (
         <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
         
             <div>
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
+                {newStory ? <NewStoryBox setPubli={setNewStory} />  : null}
 
                 <div className="storys">
-                    <div className={themeReducer ? "story-add border-dark" : "story-add"}>
+                    <div onClick={() => handleClickNewStory()} className={themeReducer ? "story-add border-dark" : "story-add"}>
                         <FontAwesomeIcon icon="plus" className={themeReducer ? "story-icon txt-dark" : "story-icon"}/>
                     </div>
                     <StoryCard />

@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
-import PublicationComments from '../Publication/MainPublication'
 import Video from "../Publication/Video"
 
 export default function MainGallery() {  
@@ -46,7 +45,7 @@ export default function MainGallery() {
                 }
                 fetchDataAccount()
                 setLoad(true)
-        }, [location])
+        }, [location]) // eslint-disable-line react-hooks/exhaustive-deps
 
         
     const handleBack = () => {
@@ -102,7 +101,7 @@ export default function MainGallery() {
                         :   data.map((item, index) => {
                                 return (
                                     item.type === "video"
-                                    ?   <div onClick={() => handleClickPublication(item)} key={index} key={index} className="gallery-video">
+                                    ?   <div onClick={() => handleClickPublication(item)} key={index} className="gallery-video">
                                             <Video clickNo={true} className="gallery-element" data={{publicationFileUrl: item.publicationFileUrl}} />
                                         </div>        
                                     : null     

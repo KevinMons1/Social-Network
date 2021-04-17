@@ -32,7 +32,7 @@ export default function NotificationCard({ data }) {
                 break;
         }
         setLoad(true)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClickInvitation = async choice => {
         if (choice) setIsChoice(true)

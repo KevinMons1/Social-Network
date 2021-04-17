@@ -13,19 +13,15 @@ export default function Message({data, isMe}) {
         switch (data.type) {
             case "text":
                 return <p className="msg-txt">{data.text}</p>
-                break;
 
             case "image":
                 return <img className="msg-img" src={data.text} alt="frame message"/>
-                break;
 
             case "gif":
-                return <iframe className="msg-gif" src={data.text} alt="Gif"></iframe>
-                break;
+                return <iframe title={data.text} className="msg-gif" src={data.text} alt="Gif"></iframe>
 
             default:
                 return null
-                break;
         }
     }
 

@@ -52,7 +52,7 @@ export default function PublicationCard({ data, fullFile }) {
                 setLoad(true)
             })
             .catch(err => console.log(err))
-        }, [])
+        }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleDelete = () => {
         if (data.userId === userDataReducer.userId) {

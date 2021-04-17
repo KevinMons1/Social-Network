@@ -89,7 +89,7 @@ export default function MainGaming() {
             setLoad(true)
         }
         fetchData()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleLanguage = choice => {
         let newDataArray = [];

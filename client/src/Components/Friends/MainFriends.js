@@ -45,7 +45,7 @@ export default function MainFriends() {
                 }
                 fetchDataAccount()
                 setLoad(true)
-        }, [location])
+        }, [location]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClickFriend = (friend) => {
         history.push(`/account/${friend.userId}`)

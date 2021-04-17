@@ -11,7 +11,7 @@ export default function ChatEmpty() {
             type: "CHANGE_ZINDEX",
             payload: true
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className={themeReducer ? "chatEmpty-dark" : "chatEmpty"}>

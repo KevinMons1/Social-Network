@@ -66,7 +66,7 @@ function App() {
       setLoad(true)
     }
     fetch()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     load ? 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import "../../Styles/header.css"
-import {Link, useHistory} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -11,7 +11,6 @@ import SearchUsers from "./SearchUsers"
 
 export default function Header() {
 
-    const history = useHistory()
     const dispatch = useDispatch()
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)

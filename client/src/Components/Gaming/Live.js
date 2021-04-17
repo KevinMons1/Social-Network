@@ -17,7 +17,7 @@ export default function Live() {
             type: "CHANGE_ZINDEX",
             payload: false
           })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <section className="gaming">

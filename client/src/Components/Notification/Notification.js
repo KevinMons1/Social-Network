@@ -27,7 +27,6 @@ export default function Notification() {
         if (userData.user.userId !== userDataReducer.userId) {
             const data = userData
             setData(item => [data, ...item])
-            console.log(data)
             setCount(count + 1)
         }
     })
@@ -48,7 +47,7 @@ export default function Notification() {
             setLoad(true)
         }
         fetch()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClickHide = () => {
         let changeData = []

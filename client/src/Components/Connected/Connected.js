@@ -97,7 +97,7 @@ export default function Connected({choiceCss, friendClick}) {
             sendMyConnectionOnTime(friends)
         }
         fetchData()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     // To give the connection to those who connected after using it
     const sendMyConnectionOnTime = (friends) => {

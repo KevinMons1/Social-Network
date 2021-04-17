@@ -8,7 +8,6 @@ import "../../Assets/fontawesome"
 import {socket} from "../../Api"
 import NewPubliBox from '../Publication/NewPubliBox'
 import PublicationCard from '../Publication/PublicationCard'
-import PublicationComments from '../Publication/MainPublication'
 import ModifyAccount from "./ModifyAccount"
 import AccountLoader from "./AccountLoader"
 import RemoveFriend from "./RemoveFriend"
@@ -71,7 +70,7 @@ export default function MainAccount() {
             setLoad(true)
         }
         fetchDataAccount()
-    }, [location])
+    }, [location]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleOpenModifyAccount = () => {
         setOpenModifyAccount(!openModifyAccount)

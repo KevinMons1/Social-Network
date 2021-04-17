@@ -63,7 +63,7 @@ http.listen("3001", () => {
         // Chat
         //-----
     
-        socket.on('userConnectedOnChat', (userId) => {
+        socket.on('userConnectedOnChat', userId => {
             usersInChatRoom[userId] = socket.id   
         })
     
@@ -71,7 +71,6 @@ http.listen("3001", () => {
         socket.on('sendMessage', data => {
             let { receiver } = data
             let socketId = usersInChatRoom[receiver]
-    
             io.to(socketId).emit("newMessage", data)
         })
     

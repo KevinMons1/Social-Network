@@ -15,11 +15,11 @@ export default withRouter(function Index() {
     const history = useHistory()
 
     useEffect(() => {
-        if (slug.toString() != "empty") {
+        if (slug.toString() !== "empty") {
             setFriendClick(true)
             setData(history.location.state)
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleFriendClick = (data) => {
         history.push({pathname: `/chat/${data.userId}`, state: data})

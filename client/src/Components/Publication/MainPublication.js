@@ -64,7 +64,7 @@ export default function MainPublication() {
             setLoad(true)
         }
         fetchData()
-    }, [location])
+    }, [location]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSubmit = e => {
         e.preventDefault()
