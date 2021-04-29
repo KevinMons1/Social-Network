@@ -56,7 +56,12 @@ export default function PublicationCard({ data, fullFile }) {
 
     const handleDelete = () => {
         if (data.userId === userDataReducer.userId) {
-            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.userId + "-" + data.publicationId}`)
+            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.userId + "-" + data.publicationId}`, {
+                data: {
+                    file: data.publicationFileUrl,
+                    type: data.type === "image" ? "image" : "video"
+                }
+            })
                 .then(res => {
                     if (res.data.alert) {
                         setDeleteMsg(false)

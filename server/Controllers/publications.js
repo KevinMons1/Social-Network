@@ -1,4 +1,6 @@
 const db = require("../db")
+const fs = require("fs")
+const path = require("path")
 
 //
 // Functions globale
@@ -19,21 +21,11 @@ const requestQuery = async (query, params) => {
 // Add a new publication
 exports.addNewPublication = async (req, res) => {
     const id = req.params.id
+    const {text, hashtag} = req.body
+    let hashtagTxt = hashtag === undefined ? null : hashtag.join(";")
 
-    if (typeof req.body.type === "undefined") {
-        const {text, hashtag} = req.body
-        let hashtagTxt = hashtag === undefined ? null : hashtag.join(";")
-    
-        const result = await requestQuery("INSERT INTO publications (userId, text, hashtag) VALUES (?, ?, ?)", [id, text, hashtagTxt])
-        res.send({alert: true, publicationId: result.insertId})  
-
-    } else if (typeof req.body.type === "string" && req.body.type === "story") {
-        const { type } = req.body
-
-        const result = await requestQuery("INSERT INTO publications (userId, type) VALUES (?, ?)", [id, type])
-        res.send({alert: true, publicationId: result.insertId}) 
-
-    } else res.send({alert: false})  
+    const result = await requestQuery("INSERT INTO publications (userId, text, hashtag) VALUES (?, ?, ?)", [id, text, hashtagTxt])
+    res.send({alert: true, publicationId: result.insertId})  
 }
 
 // Add image of new publication
@@ -96,7 +88,7 @@ exports.getOnePublication = async (req, res) => {
     LEFT JOIN users u ON u.userId = p.userId 
     LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
     LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
-    WHERE p.publicationId = ? AND p.type IS NULL`, [id])
+    WHERE p.publicationId = ?`, [id])
 
      res.send(result)
 }
@@ -119,34 +111,11 @@ exports.getPublicationsHome = async (req, res) => {
         LEFT JOIN users u ON u.userId = p.userId 
         LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
         LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
-        WHERE p.type IS NULL ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, null)
+        ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, null)
     res.send(result2)
     } else {
         res.send(false)
     }
-}
-
-// Get story of friends
-exports.getStorys = async (req, res) => {
-    const id = req.params.id
-    const result = await requestQuery(`SELECT user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?`, [id, id])
-    let result2
-    let friends = []
-    let allResult = []
-    
-    result.forEach(friend => {
-        if (friend.user1Id == id) friends.push(friend.user2Id)
-        else if (friend.user2Id == id) friends.push(friend.user1Id)
-    })
-    
-    friends.forEach(async friend => {
-        result2 = await requestQuery(`SELECT publicationId, userId, date FROM publications
-        WHERE type = "story" AND userId = ? ORDER BY date DESC LIMIT 0, 15`, [friend])
-        if (typeof result2[0] !== "undefined") allResult.push(result2[0])
-    })
-    console.log(allResult)
-
-    res.send(allResult)
 }
 
 // Get all publication by hashtag
@@ -168,7 +137,7 @@ exports.getPublicationsHashtag = async (req, res) => {
         LEFT JOIN users u ON u.userId = p.userId 
         LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
         LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
-        WHERE SUBSTR(p.hashtag, 1, ${hashtag.length}) = ? AND p.type IS NULL ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, [hashtag])
+        WHERE SUBSTR(p.hashtag, 1, ${hashtag.length}) = ? ORDER BY p.publicationId DESC LIMIT ${minCount}, ${maxCount}`, [hashtag])
     res.send(result2)
     } else {
         res.send(false)
@@ -201,8 +170,7 @@ exports.getAccountPublications = async (req, res) => {
         LEFT JOIN users u ON u.userId = p.userId 
         LEFT JOIN userImages ui ON ui.userId = u.userId AND ui.type = "profile"
         LEFT JOIN publicationContent pc ON pc.publicationId = p.publicationId AND (pc.type = "image" OR pc.type = "video")
-        WHERE p.userId = ? AND p.type IS NULL
-        ORDER BY p.publicationId DESC`, [id])
+        WHERE p.userId = ? ORDER BY p.publicationId DESC`, [id])
     res.send(result)
 }
 
@@ -210,10 +178,20 @@ exports.getAccountPublications = async (req, res) => {
 exports.deletePublication = async (req, res) => {
     const id = req.params.id.split("-")
     const publicationId = id[1]
+    const file = req.body.file
+    const type = req.body.type
+    const find = file.search("/Videos/")
+    let fileSplit = ""
+
+    if (find > 0) fileSplit = file.split("Videos/")
+    else if (find < 0) fileSplit = file.split("Images/")
 
     const result = await requestQuery("DELETE FROM publications WHERE publicationId = ?", [publicationId])
     const result2 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="image"`, [publicationId])
     const result3 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="comment"`, [publicationId])
+    
+    deleteFile(fileSplit[1], type)
+
     res.send({message: "Publications deleted !", alert: true})
 
 }
@@ -225,4 +203,18 @@ exports.deleteLike = async (req, res) => {
 
     const result = await requestQuery('DELETE FROM likes WHERE userId = ? AND publicationId = ?', [userId, publicationId])
     res.send(result)
+}
+
+const deleteFile = (pathFile, type) => {
+    let allPath = ""
+
+    if (type === "image") allPath = path.join(__dirname, `../Images/${pathFile}`)
+    if (type === "video") allPath = path.join(__dirname, `../Videos/${pathFile}`)
+
+    fs.unlink(allPath, (err) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+    })
 }

@@ -172,10 +172,6 @@ export default function MainAccount() {
                             <FontAwesomeIcon className="account-links-icon" icon="user-friends" />
                             <Link to={`/account/${slug}/friends`} className={themeReducer ? "txt-dark account-links-link" : "account-links-link"}>Friends</Link>
                         </div>
-                        <div className="account-box">
-                            <FontAwesomeIcon className="account-links-icon" icon="address-card" />
-                            <Link to={`/account/${slug}/about`} className={themeReducer ? "txt-dark account-links-link" : "account-links-link"}>About</Link>
-                        </div>
                     </div>
 
                     <div className="account-publi">

@@ -41,7 +41,7 @@ export default function FullFile() {
                         <p>{fullFileReducer.firstName} {fullFileReducer.lastName}</p>
                     </div>
                 </div>
-            {type()}
+                {type()}
             </div>
         </div>
     : null)

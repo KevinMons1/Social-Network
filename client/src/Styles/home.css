@@ -85,63 +85,6 @@
 
 /*
 //////////////////////// 
-Story
-//////////////////////// 
-*/
-
-.storys {
-    display: flex;
-}
-
-.story-box {
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    border: 2px solid #4b7bff;
-    border-radius: 9px;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-.story-box:hover {
-    transition: 0.3s;
-    opacity: 0.85;
-}
-
-.story-name {
-    text-align: center;
-    font-size: 15px;
-    z-index: 10;
-}
-
-.story-add {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    border: 2px solid #000;
-    border-radius: 9px;
-    opacity: 0.25;
-    cursor: pointer;
-}
-
-.story-add:hover {
-    transition: 0.3s;
-    opacity: 0.1;
-}
-
-.story-icon {
-    font-size: 25px;
-}
-
-.story-img {
-    height: 100%;
-}
-
-/*
-//////////////////////// 
 New Publication
 //////////////////////// 
 */

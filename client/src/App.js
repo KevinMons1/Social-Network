@@ -19,7 +19,6 @@ import Chat from "./Components/Chat/Index"
 import Account from "./Components/Account/Index"
 import Gallery from "./Components/Gallery/Index"
 import Friends from "./Components/Friends/Index"
-import About from "./Components/About/Index"
 import Gaming from "./Components/Gaming/Index"
 import Live from "./Components/Gaming/Live"
 import FullFile from "./Components/Services/FullFile"
@@ -79,12 +78,11 @@ function App() {
               <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
                 <Switch location={location}>
                   <ProtectedRoute isHome={true} exact path="/" component={Home} /> 
-                  <ProtectedRoute isHome={false} exact path="/hashtag/:slug" component={Home} /> 
+                  <ProtectedRoute isHome={false} exact path="/hashtag/:slug" component={Home} />
                   <ProtectedRoute exact path="/publication/:slug" component={Publication} /> 
                   <ProtectedRoute exact path="/account/:slug" component={Account} />
                   <ProtectedRoute exact path="/account/:slug/gallery" component={Gallery} />
                   <ProtectedRoute exact path="/account/:slug/friends" component={Friends} />
-                  <ProtectedRoute exact path="/account/:slug/about" component={About} />
                   <ProtectedRoute exact path="/gaming" component={Gaming} />
                   <ProtectedRoute excat path="/gaming/live/:slug" component={Live} />
                   <ProtectedRoute exact path="/chat/:slug" component={Chat} />

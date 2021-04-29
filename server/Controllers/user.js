@@ -50,14 +50,12 @@ const getFriendsChatPromisse = async (element, id) => {
 
         // Take roomId
         const result = await requestQuery(`SELECT roomId FROM privaterooms WHERE friendId = ?`, [element.friendId])
-        if (result[0] === undefined) {
-            resolve(allResult)
-        } else {
+        if (result[0] === undefined) resolve(allResult)
+        else {
             // Take last message
             const result2 = await requestQuery(`SELECT text, type, date FROM roomMessages WHERE roomId = ? ORDER BY Date DESC LIMIT 0,1`, [result[0].roomId])
-            if (result2.length == 0) {
-                resolve(false)
-            } else {
+            if (result2.length == 0) resolve(false)
+            else {
                 // Take id of friend
                 friendId = element.user1Id == id ? element.user2Id : element.user1Id
                 // Get informations of friend
@@ -116,12 +114,8 @@ exports.getAccountInformations = async (req, res) => {
                         [id, id, id, id])
                     res.send({alert: false, userData: [result[0], result4[0]]})
                 }
-            } else {
-                res.send({alert: true})
-            }
-    } else {
-        res.send({alert: true})
-    }
+            } else res.send({alert: true})
+    } else res.send({alert: true})
 }
 
 // Get friend
@@ -130,11 +124,8 @@ exports.getIsFriend = async (req, res) => {
     const friendId = req.params.id
 
     const result = await requestQuery("SELECT friendId FROM friends WHERE user1Id = ? AND user2Id = ? OR user1Id = ? AND user2Id = ?",  [userId, friendId, friendId, userId])
-    if (result.length === 0) {
-        res.send(false)
-    } else {
-        res.send(true)
-    }
+    if (result.length === 0) res.send(false)
+    else res.send(true)
 }
 
 // Get friends of user
@@ -160,9 +151,7 @@ exports.getFriends = async (req, res) => {
 
             count++
             friends = [...friends, result[0]]
-            if (count === friendsId.length) {
-                res.send(friends)
-            }
+            if (count === friendsId.length) res.send(friends)
         })
     }
 }
