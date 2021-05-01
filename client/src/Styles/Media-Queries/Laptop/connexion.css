@@ -1,0 +1,25 @@
+/*
+1024 x 674
+*/
+
+@media screen and (max-width: 1024px) {
+    .connexion-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 65%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 1428px) {
+    .connexion-name {
+        flex-direction: column;
+    }
+
+    .connexion-name > div {
+        display: flex;
+        flex-direction: column;
+    }
+}
+

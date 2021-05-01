@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import {useLocation, useHistory, useParams} from "react-router-dom"
 import "../../Styles/home.css"
+import "../../Styles/Media-Queries/Tablet/home.css"
+import "../../Styles/Media-Queries/MobileL/home.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
@@ -155,7 +157,7 @@ export default function MainHome({ isHome }) {
     return (
         <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
         
-            <div>
+            <div className="mainHome-top">
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
 
                 <div className="new-publi">

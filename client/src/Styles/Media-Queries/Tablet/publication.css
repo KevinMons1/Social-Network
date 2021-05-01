@@ -1,0 +1,55 @@
+@media screen and (max-width: 860px) {
+    .publication {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .publication-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainMublication {
+        width: 100%;
+        height: 90vh;
+        padding: 2px;
+        overflow-x: hidden;
+    }
+    
+    .mainMublication-dark {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .publi-open, .publi-open-dark {
+        height: 87vh;
+    }
+
+    .new-publi-content, .new-publi-content-dark {
+        width: 100vw;
+        top: 2%;
+    }
+
+    .new-publi-img-box {
+        height: 150px;
+    }
+
+    .new-publi-box, .new-publi-box-dark {
+        height: 150px;
+    }
+
+    .bg-publi {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-height: 60vh;
+        background: #000;
+        overflow: hidden;
+    }
+
+ 
+
+    .publi-open-btn {
+        width: 20%;
+    } 
+}

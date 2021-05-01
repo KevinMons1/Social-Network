@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import "../../Styles/gaming.css"
+import "../../Styles/Media-Queries/Tablet/gaming.css"
 import {useSelector, useDispatch} from "react-redux"
 import {apiTwitch} from "../../Api"
 import StreamCard from "./StreamCard"

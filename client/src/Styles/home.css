@@ -34,6 +34,10 @@
     overflow-y: scroll;
 }
 
+.mainHome-top {
+    width: 100%;
+}
+
 .home-alertMsg {
     margin: 50px;
     text-align: center;

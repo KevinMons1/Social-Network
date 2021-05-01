@@ -1,0 +1,11 @@
+@media screen and (max-width: 337px) {
+    .header-middle-li {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 303px) {
+    .header-middle-li {
+        font-size: 11px;
+    }
+}

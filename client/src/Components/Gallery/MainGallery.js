@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import "../../Styles/gallery.css"
+import "../../Styles/Media-Queries/Tablet/gallery.css"
 import {useLocation, useHistory} from "react-router-dom"
 import {useSelector, useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

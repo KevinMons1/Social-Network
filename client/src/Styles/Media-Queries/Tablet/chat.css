@@ -1,0 +1,23 @@
+@media screen and (max-width: 860px) {
+    .chat {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .chat-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainChat, .chatEmpty {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .mainChat-dark, .chatEmpty-dark {
+        width: 100%;
+        padding: 2px;
+    }
+}

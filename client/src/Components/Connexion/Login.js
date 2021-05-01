@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import "../../Styles/connexion.css"
+import "../../Styles/Media-Queries/Laptop/connexion.css"
+import "../../Styles/Media-Queries/Tablet/connexion.css"
 import {Link} from "react-router-dom"
 import Auth from "../../Auth"
 import Cookie from "js-cookie"

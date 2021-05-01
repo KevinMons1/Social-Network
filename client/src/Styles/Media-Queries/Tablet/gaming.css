@@ -1,0 +1,21 @@
+@media screen and (max-width: 860px) {
+    .gaming {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .gaming-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainGaming {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .mainGaming-dark {
+        width: 100%;
+        padding: 2px;
+    }
+}

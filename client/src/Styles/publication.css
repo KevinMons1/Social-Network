@@ -476,7 +476,7 @@ NewPubliBox
 
 .new-publi-box-dark {
     display: flex;
-    min-height: 200px;
+    height: 200px;
     padding: 5px;
     border: 1px solid #fff;
     border-radius: 10px;

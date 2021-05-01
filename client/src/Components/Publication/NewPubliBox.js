@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react'
 import "../../Styles/publication.css"
+import "../../Styles/Media-Queries/Tablet/publication.css"
 import {useSelector} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"

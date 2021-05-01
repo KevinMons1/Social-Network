@@ -1,0 +1,25 @@
+@media screen and (max-width: 860px) {
+    .account {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .account-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainAccount {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .mainAccount-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .account-icon {
+        width: 40%;
+    }
+}

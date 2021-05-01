@@ -1,0 +1,21 @@
+@media screen and (max-width: 860px) {
+    .gallery {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .gallery-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainGallery {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .mainGallery-dark {
+        width: 100%;
+        padding: 2px;
+    }
+}

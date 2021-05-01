@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useSelector} from "react-redux"
 import "../../Styles/connected.css"
 import axios from "axios"
+import { useMediaQuery } from 'react-responsive'
 import {useTransition, config, animated} from "react-spring"
 import {socket} from "../../Api"
 import UserCard from './UserCard'
@@ -12,6 +13,7 @@ export default function Connected({choiceCss, friendClick}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const [load, setLoad] = useState(false)
     const [isAnimated, setIsAnimated] = useState(false)
     const [friendEmpty, setFriendEmpty] = useState(false)
@@ -158,7 +160,44 @@ export default function Connected({choiceCss, friendClick}) {
         setUsersDataChat(usersFind)
     }
 
-    return (
+    return isTabletOrMobile ? (
+        <section className={themeReducer ? "connected-dark" : "connected"}>
+            <div className="connected-title-box">
+                <p className={themeReducer ? "connected-title-dark" : "connected-title"}>Connected</p>
+                <Notification />
+            </div>
+
+            <div className="connected-top">
+                <div className="friends-boxs">                     
+                    {load 
+                    ? usersCard.map((item, index) => {
+                        return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
+                        })   
+                    : null}  
+                </div>
+                <div className="connected-search">
+                    <input onChange={e => handleChangeInput(e)} className={themeReducer.Theme ? "connected-search-input txt-dark" : "connected-search-input"} type="text" placeholder="Search..."/>
+                </div>
+            </div>
+             
+             <div className="connected-bottom">
+                {transitionContent.map(({item, key, props}) => item &&(
+                    <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
+                ))}
+                <div className="friends-boxs">             
+                    {load 
+                    ? friendEmpty 
+                        ? <small>You are not friends !</small>
+                        :  usersDataChat.map((item, index) => {
+                            return  <div key={index} onClick={() => handleClickUserChat(item, false)}>
+                                        <UserCard isConnected={false} isView={item.isView} data={item.data} text={true} open={() => handleOpenChat(item.data)} />
+                                    </div>
+                            }) 
+                    : null}  
+                </div>  
+             </div>
+        </section>
+    ) : (
         <section className={themeReducer ? "connected-dark" : "connected"}>
             <div className="connected-title-box">
                 <p className={themeReducer ? "connected-title-dark" : "connected-title"}>Connected</p>

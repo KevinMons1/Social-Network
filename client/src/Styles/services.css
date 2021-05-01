@@ -272,6 +272,7 @@ Full file
     width: 100vw;
     height: 100vh;
     z-index: 100;
+    overflow: hidden;
 }
 
 .fullFile-box {
@@ -279,8 +280,13 @@ Full file
     display: flex;
     justify-content: center;
     background-color: #000;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+}
+
+.fullFile-img {
+    max-width: 100vw;
+    object-fit: contain;
 }
 
 .fullFile-close-icon {
@@ -344,9 +350,4 @@ Full file
 .fullFile-user-info > p {
     color: #fff;
     cursor: pointer;
-}
-
-.fullFile-img {
-    height: 100%;
-    object-fit: cover;
 }

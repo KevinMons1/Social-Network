@@ -1,0 +1,21 @@
+@media screen and (max-width: 860px) {
+    .home {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .home-dark {
+        width: 100%;
+        padding: 2px;
+    }
+
+    .mainHome {
+        width: 100%;
+        padding: 2px;
+    }
+    
+    .mainHome-dark {
+        width: 100%;
+        padding: 2px;
+    }
+}

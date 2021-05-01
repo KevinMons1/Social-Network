@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {withRouter, useHistory, useParams} from "react-router-dom"
 import "../../Styles/chat.css"
+import "../../Styles/Media-Queries/Tablet/chat.css"
+import { useMediaQuery } from 'react-responsive'
 
 //Components
 import MainChat from "./MainChat"
@@ -13,6 +15,7 @@ export default withRouter(function Index() {
     const [data, setData] = useState(null)
     const { slug } = useParams()
     const history = useHistory()
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
 
     useEffect(() => {
         if (slug.toString() !== "empty") {
@@ -21,13 +24,20 @@ export default withRouter(function Index() {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    console.log(friendClick) //!!! Continuer ici, vérifier le clikc pour faire disparaitre Connectec
+
     const handleFriendClick = (data) => {
         history.push({pathname: `/chat/${data.userId}`, state: data})
     }
 
-    return (
+    return isTabletOrMobile ? (
         <section className="chat">
             <Connected choiceCss={false} friendClick={(data) => handleFriendClick(data)} />
+            {friendClick ? <MainChat data={data} /> : <ChatEmpty />}
+        </section>
+    ) : (
+        <section className="chat">
+            {friendClick ? <Connected choiceCss={false} friendClick={(data) => handleFriendClick(data)} /> : null}
             {friendClick ? <MainChat data={data} /> : <ChatEmpty />}
         </section>
     )

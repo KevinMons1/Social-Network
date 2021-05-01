@@ -3,6 +3,8 @@
 
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
+import "./Styles/Media-Queries/Tablet/app.css"
+import { useMediaQuery } from 'react-responsive'
 import {Route, Switch, useHistory, useLocation} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
@@ -37,6 +39,7 @@ function App() {
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
   const verifyPathname = () => {
     // Avoid listen pathname /:slug on root chat for not repeat animation and refresh page each change path
     if (location.pathname.includes("/chat/")) {
@@ -95,7 +98,7 @@ function App() {
             )
           })}
         </div>
-        <ProtectedRoute component={Connected} choiceCss={true} />
+        {!isTabletOrMobile ? <ProtectedRoute component={Connected} choiceCss={true} /> : null}
       </div>
   : <Loader />
   )

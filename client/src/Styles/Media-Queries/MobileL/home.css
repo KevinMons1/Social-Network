@@ -1,0 +1,9 @@
+@media screen and (max-width: 550px) {
+    .icon-new-publi {
+        font-size: 20px;
+    }
+    
+    .input-new-publi {
+        font-size: 15px;
+    }
+}

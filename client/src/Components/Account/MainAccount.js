@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import "../../Styles/account.css"
+import "../../Styles/Media-Queries/Tablet/account.css"
+import "../../Styles/Media-Queries/MobileL/account.css"
+import "../../Styles/Media-Queries/MobileS/account.css"
 import {useSelector, useDispatch} from "react-redux"
 import {useParams, useLocation, useHistory, Link} from "react-router-dom"
 import axios from "axios"
@@ -124,7 +127,7 @@ export default function MainAccount() {
                             ?  isFriend
                                 ?   <div className="account-action">
                                         <p className={themeReducer ? "txt-dark" : null} onClick={() => setOpenRemoveFriend(true)}>Friend</p>
-                                        <FontAwesomeIcon icon="user-friends" className={themeReducer ? "txt-dark" : "edit-icon"}/>
+                                        <FontAwesomeIcon icon="user-friends" className={themeReducer ? "txt-dark" : "account-icon action-icon"}/>
                                     </div>
                                 :  waiting 
                                     ?   <div className="account-action">
@@ -132,11 +135,11 @@ export default function MainAccount() {
                                         </div>
                                     :  <div className="account-action">
                                             <p className={themeReducer ? "txt-dark" : null} onClick={() => handleAddFriend()}>Add friend</p>
-                                            <FontAwesomeIcon icon="user-plus" className={themeReducer ? "txt-dark" : "edit-icon"}/>
+                                            <FontAwesomeIcon icon="user-plus" className={themeReducer ? "txt-dark" : "account-icon action-icon"}/>
                                         </div>
                             :   <div className="account-action">
                                     <p className={themeReducer ? "txt-dark" : null} onClick={() => handleOpenModifyAccount()}>Modify my account</p>
-                                    <FontAwesomeIcon icon="edit" className={themeReducer ? "txt-dark" : "edit-icon"}/>
+                                    <FontAwesomeIcon icon="edit" className={themeReducer ? "txt-dark" : "account-icon action-icon"}/>
                                 </div>
                             }
 
@@ -144,15 +147,15 @@ export default function MainAccount() {
                             <div className="account-bottom">
                                 <div className="account-icon">
                                     <div className="account-icon-box">
-                                        <FontAwesomeIcon icon="heart" className="heart-icon"/>
+                                        <FontAwesomeIcon icon="heart" className="heart-icon account-bottom-icon"/>
                                         <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser[1].likesTotal}</p>
                                     </div>
                                     <div className="account-icon-box">
-                                        <FontAwesomeIcon icon="user-friends" className="user-friends-icon"/>
+                                        <FontAwesomeIcon icon="user-friends" className="user-friends-icon account-bottom-icon"/>
                                         <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser[1].friendsTotal}</p>
                                     </div>
                                     <div className="account-icon-box">
-                                        <FontAwesomeIcon icon="pen" className="pen-icon"/>
+                                        <FontAwesomeIcon icon="pen" className="pen-icon account-bottom-icon"/>
                                         <p className={themeReducer ? "account-icon-nbr-dark" : "account-icon-nbr"}>{dataUser[1].publicationsTotal}</p>
                                     </div>
                                 </div>

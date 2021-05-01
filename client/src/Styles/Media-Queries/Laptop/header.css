@@ -1,0 +1,29 @@
+/*
+1024 x 674
+*/
+
+@media screen and (max-width: 1024px) {
+    .header-middle-li {
+        font-size: 20px;
+        margin: 10px;
+    }
+
+    .header-middle-icon {
+        font-size: 25px;
+    }
+
+    .header-middle-icon-box {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .header-middle-icon-box-dark {
+        width: 35px;
+        height: 35px;
+    }
+
+    .header-middle-text {
+        margin-left: 5px;
+        text-align: start;
+    }
+}

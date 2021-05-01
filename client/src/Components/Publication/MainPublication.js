@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import "../../Styles/publication.css"
+import "../../Styles/Media-Queries/Tablet/publication.css"
 import {useSelector} from "react-redux"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -1,0 +1,44 @@
+
+@media screen and (max-width: 570px) {
+    .account-bg {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .account-action {
+        right: 10px;
+    }
+    
+    .account-action > p {
+        font-size: 12px;
+        margin: 5px;
+    }
+
+    .account-icon {
+        font-size: 14px;
+    }
+
+    .account-bottom-icon {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .account-action {
+        right: 10px;
+    }
+    
+    .account-action > p {
+        font-size: 12px;
+        margin: 5px;
+    }
+
+    .account-icon {
+        font-size: 12px;
+    }
+
+    .action-icon {
+        display: none;
+    }
+}
