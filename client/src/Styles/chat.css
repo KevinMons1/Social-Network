@@ -62,6 +62,11 @@ ChatDiv
     cursor: pointer;
 }
 
+.chatDiv-icon-arrow {
+    font-size: 18px;
+    margin: 0 10px;
+}
+
 .chatDiv-close-icon:hover {
     transition: 0.3s;
     color: #ff4747;

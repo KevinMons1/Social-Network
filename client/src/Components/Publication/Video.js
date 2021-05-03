@@ -2,6 +2,7 @@ import React, {useState, useRef} from 'react'
 import {useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
+import { useMediaQuery } from 'react-responsive'
 
 export default function Video({ data, clickNo, isTall }) {
 
@@ -11,6 +12,7 @@ export default function Video({ data, clickNo, isTall }) {
     const btnPlayRef = useRef()
     const barreRef = useRef()
     const dispatch = useDispatch()
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const [mute, setMute] = useState(false)
     const [double, setDouble] = useState(false)
 
@@ -60,8 +62,9 @@ export default function Video({ data, clickNo, isTall }) {
             let rect = videoBarRef.current.getBoundingClientRect()
             let width = rect.width
             let x = e.clientX - rect.left // Get where you clicked
-            let widthPercent = (x * 100) / width
-            let currentTimeTrue = (widthPercent * 60) / 100
+            let widthPercent = ((x * 100) / width)
+            let currentTimeTrue = (widthPercent * videoRef.current.duration) / 100
+
             videoRef.current.currentTime = currentTimeTrue
             barreRef.current.style.width = widthPercent + "%"
         }
@@ -82,7 +85,7 @@ export default function Video({ data, clickNo, isTall }) {
             })
         }
     }
-
+    // Avec le isTabletOrMobile faire au click apparaître la barre
     return (
         <div className={isTall ? "video-content-tall" : "video-content"}>                
             <video 

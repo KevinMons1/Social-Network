@@ -131,7 +131,7 @@ export default function Header() {
         </header>
     : 
         <header className={themeReducer ? "header-dark" : "header"}>
-            <SearchUsers isSearch={isSearch} data={dataSearch} />
+            <SearchUsers isSearch={isSearch} setIsSearch={setIsSearch} data={dataSearch} />
 
         <div className="header-content-top">
             <div className={isSearch ? "serach-top isSearch" : "search-top"}>

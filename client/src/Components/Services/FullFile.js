@@ -11,7 +11,7 @@ export default function FullFile() {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const type = () => {   
+    const type = () => {  
         if (fullFileReducer.type === "image") return <img className="fullFile-img" src={fullFileReducer.publicationFileUrl} alt="frame"/>
         else if (fullFileReducer.type === "video") return <Video data={fullFileReducer} isTall={true} />    
     }

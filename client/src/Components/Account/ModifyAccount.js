@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import "../../Styles/account.css"
+import "../../Styles/Media-Queries/Tablet/account.css"
 import {useSelector} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -148,7 +149,7 @@ export default function ModifyAccount({ setClose, slug }) {
     }
 
     return (
-        <div className="account-modify-container">
+        <div className={themeReducer ? "account-modify-container-dark" : "account-modify-container"}>
             {transitionContentOpacity.map(({item, key, props}) => item && (
                 <animated.div key={key} style={props} className="account-modify-opacity"></animated.div>
             ))}

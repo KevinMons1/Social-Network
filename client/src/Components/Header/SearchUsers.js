@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 import {useTransition, animated} from "react-spring"
 import UserCard from "../Connected/UserCard"
 
-export default function SearchUsers({ data, isSearch }) {
+export default function SearchUsers({ data, isSearch, setIsSearch }) {
 
     const history = useHistory()
     const themeReducer = useSelector(state => state.Theme)
@@ -23,6 +23,7 @@ export default function SearchUsers({ data, isSearch }) {
     }, [isSearch])
 
     const handleClick = user => {
+        setIsSearch(false)
         history.push(`/account/${user.userId}`)
     }
 

@@ -22,4 +22,30 @@
     .account-icon {
         width: 40%;
     }
+
+    .account-remove-friend-content, .account-remove-friend-content-dark {
+        top: 35%;
+        width: 75vw;
+    }
+
+    .account-modify-content, .account-modify-content-dark {
+        top: 2%;
+        width: 90vw;
+    }
+
+    .account-modify-close-icon {
+        font-size: 18px;
+    }
+
+    .account-modify-form {
+        width: 90%;
+    }
+
+    .account-modify-img-box {
+        margin: 10px;
+    }
+
+    .account-modify-btn, .account-modify-btn-dark {
+        font-size: 18px;
+    }
 }

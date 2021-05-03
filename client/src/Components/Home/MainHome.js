@@ -43,7 +43,7 @@ export default function MainHome({ isHome }) {
             setLoad(true)
             setTimeout(() => {
                 scrollRef.current.scrollTop = dataHomeReducer.scrollTop
-            }, 100);
+            }, 200);
         } else {
             // Get publications
             const fetchData = async () => {
@@ -62,6 +62,7 @@ export default function MainHome({ isHome }) {
 
     const getPublications = () => {
         if (isHome) {
+            console.log(countPublication)
             axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
                 .then(res => {
                     if (res.data === false  || res.data.length === 0) {
@@ -134,7 +135,6 @@ export default function MainHome({ isHome }) {
     // Scroll infini -> get publications with scroll
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
-        
         if (clientHeight + scrollTop >= scrollHeight - 20) {
             getPublications()
         }

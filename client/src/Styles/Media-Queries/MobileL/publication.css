@@ -1,0 +1,5 @@
+@media screen and (max-width: 570px) {
+    .publi, .publi-dark {
+        width: 85%;
+    }
+}

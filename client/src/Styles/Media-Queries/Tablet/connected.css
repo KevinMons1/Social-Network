@@ -1,15 +1,25 @@
-@media screen and (max-width: 956px) {
-    .connexion-left {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
+@media screen and (max-width: 860px) {
+    .connected, .connected-dark {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        z-index: 5;
+        overflow: hidden;
     }
 
-    .connexion-right {
-        display: none;
+    .connected-top {
+        height: 40%;
     }
+
+    .connected-bottom {
+        height: 44%;
+    }
+
+    .connected-search-input {
+        width: 95%;
+    }
+
 }
 
 

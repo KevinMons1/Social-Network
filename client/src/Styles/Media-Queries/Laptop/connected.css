@@ -1,0 +1,23 @@
+@media screen and (max-width: 1145px) {
+    .connected-title-box {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 10%;
+    }
+    
+    .connected-title {
+        padding: 10px;
+        color: #707070;
+        font-size: 20px;
+    }
+    
+    .connected-title-dark {
+        padding: 15px;
+        color: #f1f1f1;
+        font-size: 25px;
+    }
+    
+}

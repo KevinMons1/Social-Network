@@ -4,6 +4,7 @@
 
 @media screen and (max-width: 550px) {
     .header, .header-dark {
+        height: 12vh;
         margin-top: 5px;
     }
 
@@ -50,7 +51,7 @@
 
 @media screen and (max-width: 470px) {
     .header, .header-dark {
-        height: 12vh;
+        height: 10vh;
     }
 
     .header-middle-li {

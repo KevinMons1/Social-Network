@@ -255,9 +255,11 @@ Modify account
 
 .account-modify-content-dark {
     position: absolute;
-    top: 15%;
-    left: 5%;
-    transform: translate(-50%, -50%);
+    top: 10%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -272,13 +274,13 @@ Modify account
 }
 
 .account-modify-icon-btn {
+    margin-bottom: 10px;
     border: none;
     outline: none;
-    margin-bottom: 15px;
 }
 
 .account-modify-icon-btn-dark {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     background-color: #252525;
     border: none;
     outline: none;
@@ -467,8 +469,10 @@ Remove Friend
 .account-remove-friend-content {
     position: absolute;
     top: 45%;
-    left: 5%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -484,9 +488,11 @@ Remove Friend
 
 .account-remove-friend-content-dark {
     position: absolute;
-    top: 50%;
-    left: 5%;
-    transform: translate(-50%, -50%);
+    top: 45%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;

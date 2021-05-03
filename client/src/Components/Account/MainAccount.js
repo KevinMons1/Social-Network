@@ -79,9 +79,9 @@ export default function MainAccount() {
         setOpenModifyAccount(!openModifyAccount)
     }
 
-    const handleDeleteFriend = () => {
+    const handleDeleteFriend = (choice) => {
         setOpenRemoveFriend(false)
-        setIsFriend(false)
+        setIsFriend(choice)
     }
 
     const handleAddFriend = () => {
@@ -108,7 +108,7 @@ export default function MainAccount() {
                 <div className="account-container">
                     {openNewPubli ? <NewPubliBox /*publi={openNewPubli}*/ setPubli={setOpenNewPubli} />  : null}
                     {openModifyAccount ? <ModifyAccount slug={slug} setClose={setOpenModifyAccount} /> : null}
-                    {openRemoveFriend ? <RemoveFriend slug={slug} friendId={dataUser[0].userId} setClose={handleDeleteFriend} /> : null}
+                    {openRemoveFriend ? <RemoveFriend slug={slug} friendId={dataUser[0].userId} setClose={(choice) => handleDeleteFriend(choice)} /> : null}
 
                     <div className={themeReducer ? "account-top-dark" : "account-top"}>
                         <div className="account-bg">

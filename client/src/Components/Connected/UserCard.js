@@ -22,7 +22,7 @@ export default function UserCard({ noOpen, tallCard, open, text, data, isConnect
     }
 
     return (
-        <div className="friend-box">             
+        <div className={themeReducer ? "friend-box-dark" : "friend-box"}>             
             <div className="friend-connected">
                 <div className="friend-info">                  
                     <div className={tallCard ? "connected-img-friend-tall" : "connected-img-friend"}>

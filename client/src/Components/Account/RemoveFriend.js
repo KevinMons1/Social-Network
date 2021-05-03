@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import "../../Styles/Media-Queries/Tablet/account.css"
 import { useTransition, animated, config } from "react-spring"
 import {useSelector} from "react-redux"
 import axios from "axios"
@@ -24,15 +25,15 @@ export default function RemoveFriend({ setClose, friendId }) {
     const handleDelete = () => {
         axios.delete(`http://localhost:3001/api/user/account/friend/delete/${friendId}`, {data: {userId: userDataReducer.userId}})
             .then(res => {
-                if (res.data.alert) handleCloseRemoveFriend()
+                if (res.data.alert) handleCloseRemoveFriend(false)
             })
             .catch(err => console.log(err))
     }
 
-    const handleCloseRemoveFriend = () => {
+    const handleCloseRemoveFriend = (choice) => {
         setIsAnimated(!isAnimated)
         setTimeout(() => {
-            setClose()
+            setClose(choice)
         }, 200);
     }
 
@@ -46,7 +47,7 @@ export default function RemoveFriend({ setClose, friendId }) {
                     <p className={themeReducer ? "txt-dark" : null}>You are sure to delete this friend ?</p>
                     <div>
                         <button className="deleteMsg-btn delBtn1" onClick={() => handleDelete()}>DELETE</button>
-                        <button className="deleteMsg-btn delBtn2" onClick={() => handleCloseRemoveFriend()}>CANCEL</button>
+                        <button className="deleteMsg-btn delBtn2" onClick={() => handleCloseRemoveFriend(true)}>CANCEL</button>
                     </div>
             </animated.div>
             ))}

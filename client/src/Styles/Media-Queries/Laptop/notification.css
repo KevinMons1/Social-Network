@@ -1,0 +1,16 @@
+@media screen and (max-width: 1145px) {   
+    .notification-icon-box {
+        width: 35px;
+        height: 35px;
+    }
+
+    .notification-icon {
+        font-size: 20px;
+        color: #252525;
+    }
+
+    .notification-icon-dark {
+        font-size: 20px;
+        color: #f1f1f1;
+    } 
+}

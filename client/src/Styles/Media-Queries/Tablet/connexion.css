@@ -1,12 +1,14 @@
 @media screen and (max-width: 956px) {
-    .connected {
-        position: absolute;
-        width: 100vw;
-        height: 100vh;
-        border-left: 1px solid #c2c2c2;
-        background-color: #F0F2F5;
-        z-index: 5;
-        overflow: hidden;
+    .connexion-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .connexion-right {
+        display: none;
     }
 }
 

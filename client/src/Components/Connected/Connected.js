@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {useSelector} from "react-redux"
 import "../../Styles/connected.css"
+import "../../Styles/Media-Queries/Laptop/connected.css"
+import "../../Styles/Media-Queries/Tablet/connected.css"
 import axios from "axios"
 import { useMediaQuery } from 'react-responsive'
 import {useTransition, config, animated} from "react-spring"
@@ -19,7 +21,7 @@ export default function Connected({choiceCss, friendClick}) {
     const [friendEmpty, setFriendEmpty] = useState(false)
     const [usersCard, setUsersCard] = useState([])
     const [usersDataChat, setUsersDataChat] = useState([])
-    const [usersChat, setUsersChat] = useState([])
+    const [usersChatDefault, setUsersChatDefault] = useState([])
     const [userCardClick, setUserCardClick] = useState(null)
     const [friendsConnected, setFriendsConnected] = useState([])
     const transitionContent = useTransition(isAnimated, null, {
@@ -81,7 +83,10 @@ export default function Connected({choiceCss, friendClick}) {
                 setFriendEmpty(true)       
                 res.data.forEach(friend => {
                     if (friend != null) {
-                        setUsersChat(usersChat => [...usersChat, friend])
+                        setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
+                            isView: false,
+                            data: friend
+                        }])
                         setUsersDataChat(usersDataChat => [...usersDataChat, {
                             isView: false,
                             data: friend
@@ -152,21 +157,21 @@ export default function Connected({choiceCss, friendClick}) {
         let name = ""
         let usersFind = []
 
-        usersChat.forEach(user => {
-            name = user.data.lastName.toLowerCase() + " " + user.data.firstName.toLowerCase()
-            isFind = name.data.includes(e.target.value.toLowerCase())
-            if (isFind) usersFind.push(user)
-        })
-        setUsersDataChat(usersFind)
+        if (e.target.value === "") setUsersDataChat(usersChatDefault)
+        else {
+            usersDataChat.forEach(user => {
+                name = user.data.lastName.toLowerCase() + " " + user.data.firstName.toLowerCase()
+                isFind = name.includes(e.target.value.toLowerCase())
+                if (isFind) usersFind.push(user)
+            })
+            setUsersDataChat(usersFind)
+        }
+        console.log(e.target.value === "")
+        console.log(usersDataChat)
     }
 
     return isTabletOrMobile ? (
         <section className={themeReducer ? "connected-dark" : "connected"}>
-            <div className="connected-title-box">
-                <p className={themeReducer ? "connected-title-dark" : "connected-title"}>Connected</p>
-                <Notification />
-            </div>
-
             <div className="connected-top">
                 <div className="friends-boxs">                     
                     {load 

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import {Link, useHistory, useLocation} from "react-router-dom"
 import "../../Styles/publication.css"
+import "../../Styles/Media-Queries/MobileL/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import moment from "moment"

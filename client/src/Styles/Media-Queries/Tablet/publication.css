@@ -1,4 +1,5 @@
 @media screen and (max-width: 860px) {
+   
     .publication {
         width: 100%;
         padding: 2px;
@@ -46,8 +47,6 @@
         background: #000;
         overflow: hidden;
     }
-
- 
 
     .publi-open-btn {
         width: 20%;

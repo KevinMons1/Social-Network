@@ -1,25 +1,29 @@
 import React, {useEffect, useState, useRef} from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import "../../Styles/chat.css"
-import {useParams} from "react-router-dom"
+import {useParams, useHistory} from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import axios from "axios"
+import { useMediaQuery } from 'react-responsive'
 import {socket} from "../../Api"
 import imageCompression from "browser-image-compression"
 import UserCard from '../Connected/UserCard'
 import Message from "./Message"
 import Gifs from "../Services/Gifs"
 
-export default function ChatDiv({choiceCss, closeChat, data, index}) {
+export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnChat}) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const messageRef = useRef()
     const chatRef = useRef()
     const openFile = useRef()
     const dispatch = useDispatch()
-    const { slug } = useParams()
+    let { slug } = useParams()
+    const history = useHistory()
+    const [data, setData] = useState(null)
     const [searchGif, setSearchGif] = useState("dogs")
     const [gifVisible, setGifVisible] = useState(false)
     const [load, setLoad] = useState(false)
@@ -28,7 +32,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     const [message, setMessage] = useState({
         text: "",
         sender: userDataReducer.userId,
-        receiver: data.userId,
+        receiver: null,
         type: "text"
     })
 
@@ -38,7 +42,6 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
 
     // get new message
     socket.on('newMessage', dataMessage => {
-        console.log(dataMessage)
         const id = slug === undefined ? data.userId : slug
         if (dataMessage.sender.toString() === id.toString()) {
             setAllMessages([...allMessages, dataMessage])
@@ -46,12 +49,30 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     })
     
     useEffect(() => {
-        setLoad(false)
+        setLoad(false) 
         const fetch = async () => {
             await dispatch({
                 type: "CHANGE_ZINDEX",
                 payload: index
             })
+            if (typeof dataClick === "undefined") {
+                let dataFriends
+                let findFriend
+                if (parseInt(slug.split("-")[1]) !== userDataReducer.userId) return history.push("/chat/empty")
+                
+                slug = slug.split("-")[0] 
+                dataFriends = await fetchDataFriends()
+                dataFriends = dataFriends.data
+                findFriend = await dataFriends.find(element => element.userId === parseInt(slug))
+
+                if (typeof findFriend === "undefined") return history.push("/chat/empty")
+                setData(findFriend)
+                setMessage({...message, receiver: findFriend.userId})
+            } else {
+                setData(dataClick)
+                setMessage({...message, receiver: dataClick.userId})
+            }
+
             // get roomId
             const dataFetchRoomId = await fetchRoomId()
             const dataRoomId = dataFetchRoomId.data.roomId
@@ -73,7 +94,14 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
             }, 250)
         }
         fetch()
-    }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dataClick]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const fetchDataFriends = async () => {
+        return await new Promise(resolve => {
+            const dataFecth = axios.get(`http://localhost:3001/api/user/userFriends/${userDataReducer.userId}`)
+            resolve(dataFecth)
+        })
+    }
 
     const fetchRoomId = async () => {
         return await new Promise(resolve => {
@@ -96,13 +124,15 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
 
     const handleSubmitText = e => {
         e.preventDefault()
-        setAllMessages([...allMessages, message])
-
-        socket.emit('sendMessage', message)
-        socket.emit('notificationChat', message)
-        axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
-        setMessage({...message, text: ""})
-        messageRef.current.value = ""
+        if (message.text !== "") {
+            setAllMessages([...allMessages, message])
+    
+            socket.emit('sendMessage', message)
+            socket.emit('notificationChat', message)
+            axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
+            setMessage({...message, text: ""})
+            messageRef.current.value = ""
+        }
     } 
 
     const handleSubmitImage = e => {
@@ -154,6 +184,12 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
         setGifVisible(!gifVisible)  
     }
 
+    const handleKeyDown = e => {
+        if (e.repeat) return
+
+        if (e.key === "Enter") handleSubmitText(e)
+    }
+
     const choiceContainer = choiceCss ? "chatDiv-container-mini" : "chatDiv-container"
     const choiceTop = choiceCss ? "chatDiv-top-mini" : "chatDiv-top"
     const choicechat = choiceCss ? "chatDiv-chat-mini" : "chatDiv-chat"
@@ -161,7 +197,8 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
     return (
         <div className={themeReducer ? choiceContainer : choiceContainer}>
             <div className={themeReducer ? `${choiceTop} chatDiv-border-dark` : choiceTop}>
-                <UserCard noOpen={true} data={data} />
+                {isTabletOrMobile ? <FontAwesomeIcon icon="arrow-left" className="chatDiv-icon-arrow" onClick={() => returnChat()} /> : null}
+                {load ? <UserCard noOpen={true} data={data}/> : null}
             {choiceCss ? <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon" onClick={() => closeChat()} /> : null}
             </div>
             <div className={themeReducer ? `${choicechat} chatDiv-border-dark` : choicechat} ref={chatRef}>
@@ -175,7 +212,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
                  ?   <div className="chat-searchGif">
                          <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon close-gif" onClick={() => handleVisible()} />
                          <div className="chat-gif-search-container">
-                             <div className="search-top chat-gif-search">
+                             <div className="connected-search chat-gif-search">
                                  <FontAwesomeIcon className="search-icon" icon="search" />
                                  <input className="search" type="search" placeholder="Search..." onChange={e => setSearchGif(e.target.value)} />
                              </div>
@@ -192,7 +229,7 @@ export default function ChatDiv({choiceCss, closeChat, data, index}) {
                 </div>
                 <form className="new-msg-box">
                     <button onClick={e => handleSubmitText(e)} ><FontAwesomeIcon className="icon-send-msg" icon="paper-plane" /></button>
-                    <textarea ref={messageRef} name="text" onChange={e => setMessage({...message, [e.target.name]: e.target.value})} className="new-msg-textarea"></textarea>
+                    <textarea onKeyDown={e => handleKeyDown(e)}  ref={messageRef} name="text" onChange={e => setMessage({...message, [e.target.name]: e.target.value})} className="new-msg-textarea"></textarea>
                 </form>
             </div>
         </div>
