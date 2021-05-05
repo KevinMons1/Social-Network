@@ -2,7 +2,11 @@ import axios from "axios"
 import io from "socket.io-client"
 
 // Socket.io
-export const socket = io("localhost:3001")
+export const socket = io("localhost:3001", {
+    forceNew : false , 
+    secure : true ,
+    transports: [ 'websocket' ] 
+})
 
 // Twitch API
 export const apiTwitch = axios.create({

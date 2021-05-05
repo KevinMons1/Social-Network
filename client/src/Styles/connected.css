@@ -20,21 +20,42 @@
     position: relative;
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     padding: 0 20%;
 }
 
-.connected-title {
+.connected-title-box-chat {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.connected-title{
     padding: 15px;
     color: #707070;
     font-size: 25px;
+}
+
+.connected-title-chat {
+    padding: 5px;
+    color: #707070;
+    font-size: 18px;
 }
 
 .connected-title-dark {
     padding: 15px;
     color: #f1f1f1;
     font-size: 25px;
+}
+
+.connected-title-dark-chat {
+    padding: 5px;
+    color: #f1f1f1;
+    font-size: 18px;
 }
 
 /*

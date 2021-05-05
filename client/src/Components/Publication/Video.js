@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 
 export default function Video({ data, clickNo, isTall }) {
 
+    const videoControlsRef = useRef()
     const videoRef = useRef()
     const videoVolumeRef = useRef()
     const videoBarRef = useRef()
@@ -14,16 +15,32 @@ export default function Video({ data, clickNo, isTall }) {
     const dispatch = useDispatch()
     const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const [mute, setMute] = useState(false)
-    const [double, setDouble] = useState(false)
+    const [toTall, setToTall] = useState(false)
+    const [isClicked, setIsClicked] = useState(false)
 
-    const handleVideo = () => {
+    const handleVideo = (isClickWithBtn) => {
         if (!clickNo) {
-            if (videoRef.current.paused) {
-                btnPlayRef.current.className = "video-btn video-btn-play video-pause"
-                videoRef.current.play()
+            if (isClickWithBtn) {
+                if (videoRef.current.paused) {
+                    btnPlayRef.current.className = "video-btn video-btn-play video-pause"
+                    videoRef.current.play()
+                } else {
+                    btnPlayRef.current.className = "video-btn video-btn-play video-play"
+                    videoRef.current.pause()
+                }              
             } else {
-                btnPlayRef.current.className = "video-btn video-btn-play video-play"
-                videoRef.current.pause()
+                const isTallClass = isTall 
+                ? "video-content-mobile-tall"
+                : "video-content-mobile"
+
+                if (isTabletOrMobile) {
+                    if (isClicked) {
+                        videoControlsRef.current.className = "video-controls"
+                    } else {
+                        videoControlsRef.current.className = `video-controls ${isTallClass}`
+                    }
+                    setIsClicked(!isClicked)
+                }
             }
         }
     }
@@ -71,37 +88,52 @@ export default function Video({ data, clickNo, isTall }) {
     }
 
     const handleDoubleClick = () => {
-        setDouble(!double)
-        if (double) {
+        if (isTall) {
+            dispatch({
+                type: "CLOSE_FULL_FILE"
+            })
+        } else {
             btnPlayRef.current.className = "video-btn video-btn-play video-play"
             videoRef.current.pause()
             dispatch({
                 type: "OPEN_FULL_FILE",
                 payload: data
             })
-        } else {
+        }
+    }
+
+    const handleClickTall = () => {
+        if (toTall || isTall) {
             dispatch({
                 type: "CLOSE_FULL_FILE"
             })
+        } else {
+            btnPlayRef.current.className = "video-btn video-btn-play video-play"
+            videoRef.current.pause()
+            dispatch({
+                type: "OPEN_FULL_FILE",
+                payload: data
+            })
         }
+        setToTall(!toTall)
     }
-    // Avec le isTabletOrMobile faire au click apparaître la barre
+
     return (
         <div className={isTall ? "video-content-tall" : "video-content"}>                
             <video 
                 src={data.publicationFileUrl} 
                 className={isTall ? "video-tall" : "video"}
                 ref={videoRef} 
-                onClick={() => handleVideo()} 
+                onClick={() => isTabletOrMobile ? handleVideo(false) : handleVideo(true)} 
                 onTimeUpdate={e => handleVideoRun(e)}
                 onDoubleClick={() => handleDoubleClick()}>
             </video>
-            <div className="video-controls">
+            <div ref={videoControlsRef} className="video-controls">
                 <div className="video-bar" ref={videoBarRef} onClick={e => handleClickVideo(e)}>
                     <div className="video-par-run" ref={barreRef}></div>
                 </div>
                 <div className="video-btn-content">
-                    <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo()}></button>
+                    <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo(true)}></button>
                     <button className="video-btn video-btn-mute" onClick={() => handleMute()}>
                         {mute 
                         ?   <FontAwesomeIcon icon="volume-mute" />
@@ -109,7 +141,7 @@ export default function Video({ data, clickNo, isTall }) {
                         }
                     </button>
                     <input type="range" className="video-volume" min="0" max="100" defaultValue="50" step="1" ref={videoVolumeRef} onChange={() => handleChangeVolume()} />
-                    <button className="video-btn" onClick={() => handleDoubleClick()}>
+                    <button className="video-btn" onClick={() => handleClickTall()}>
                         <div className="video-rectangle"></div>
                     </button>
                 </div>

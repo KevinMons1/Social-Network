@@ -1,11 +1,13 @@
 @media screen and (max-width: 860px) {
     .account {
         width: 100%;
+        height: 88vh;
         padding: 2px;
     }
     
     .account-dark {
         width: 100%;
+        height: 88vh;
         padding: 2px;
     }
 

@@ -131,6 +131,14 @@
     transition: all 0.2s;
 }
 
+.video-content-mobile {
+    transform: translateY(-35px)!important;
+}
+
+.video-content-mobile-tall {
+    transform: translateY(0)!important;
+}
+
 .video-content:hover .video-controls {
     transform: translateY(0);
 }

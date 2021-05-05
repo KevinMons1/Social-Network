@@ -1,5 +1,6 @@
 .notification {
-    width: 100%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 /*
@@ -20,6 +21,18 @@ Icon
     cursor: pointer;
 }
 
+.notification-icon-box-chat {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #707070;
+    cursor: pointer;
+}
+
 .notification-icon {
     font-size: 25px;
     color: #252525;
@@ -27,6 +40,16 @@ Icon
 
 .notification-icon-dark {
     font-size: 25px;
+    color: #f1f1f1;
+}
+
+.notification-icon-chat {
+    font-size: 18px;
+    color: #252525;
+}
+
+.notification-icon-dark-chat {
+    font-size: 18px;
     color: #f1f1f1;
 }
 
@@ -49,6 +72,20 @@ Icon
     height: 22px;
     top: -10px;
     right: -10px;
+    background-color: #F98C8D;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.notification-icon-number-chat {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    top: -5px;
+    right: -5px;
     background-color: #F98C8D;
     border-radius: 50%;
     color: #fff;

@@ -9,7 +9,7 @@ import {socket} from "../../Api"
 import axios from "axios"
 import NotificationCard from "./NotificationCard"
 
-export default function Notification() {
+export default function Notification({ choiceCss }) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
@@ -66,9 +66,9 @@ export default function Notification() {
 
     return (
         <div className="notification">
-            <div className="notification-icon-box" onClick={() => handleClickHide()}>
-                <FontAwesomeIcon className={themeReducer ? "notification-icon-dark" : "notification-icon"} icon="bell"/>
-                {count > 0 ? <div className="notification-icon-number">{count}</div> : null}
+            <div className={choiceCss ? "notification-icon-box-chat" : "notification-icon-box"} onClick={() => handleClickHide()}>
+                <FontAwesomeIcon className={choiceCss ? themeReducer ? "notification-icon-dark-chat" : "notification-icon-chat" : themeReducer ? "notification-icon-dark" : "notification-icon"} icon="bell"/>
+                {count > 0 ? <div className={choiceCss ? "notification-icon-number-chat" : "notification-icon-number"}>{count}</div> : null}
             </div>
 
             {transitionContent.map(({item, key, props}) => item &&(

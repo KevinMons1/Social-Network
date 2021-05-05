@@ -123,7 +123,7 @@ export default function Connected({choiceCss, friendClick}) {
 
     const handleOpenChat = (friendData) => {
         if (choiceCss) {
-            setUserCardClick(<ChatDiv index={false} closeChat={handleCloseChat} choiceCss={true} data={friendData} />)
+            setUserCardClick(<ChatDiv index={false} closeChat={handleCloseChat} choiceCss={true} dataClick={friendData} />)
             setIsAnimated(true)
         } else {
             friendClick(friendData)
@@ -166,8 +166,6 @@ export default function Connected({choiceCss, friendClick}) {
             })
             setUsersDataChat(usersFind)
         }
-        console.log(e.target.value === "")
-        console.log(usersDataChat)
     }
 
     return isTabletOrMobile ? (
@@ -204,9 +202,9 @@ export default function Connected({choiceCss, friendClick}) {
         </section>
     ) : (
         <section className={themeReducer ? "connected-dark" : "connected"}>
-            <div className="connected-title-box">
-                <p className={themeReducer ? "connected-title-dark" : "connected-title"}>Connected</p>
-                <Notification />
+            <div className={choiceCss ? "connected-title-box" : "connected-title-box-chat"}>
+                <p className={choiceCss ? themeReducer ? "connected-title-dark" : "connected-title" : themeReducer ? "connected-title-dark-chat" : "connected-title-chat"}>Connected</p>
+                <Notification choiceCss={!choiceCss} />
             </div>
 
             <div className="connected-top">

@@ -62,7 +62,6 @@ export default function MainHome({ isHome }) {
 
     const getPublications = () => {
         if (isHome) {
-            console.log(countPublication)
             axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
                 .then(res => {
                     if (res.data === false  || res.data.length === 0) {

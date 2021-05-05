@@ -51,4 +51,8 @@
     .publi-open-btn {
         width: 20%;
     } 
+    
+    .deleteMsg-box > p {
+        text-align: center;
+    }
 }

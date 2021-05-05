@@ -42,9 +42,16 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
 
     // get new message
     socket.on('newMessage', dataMessage => {
-        const id = slug === undefined ? data.userId : slug
+        const id = slug === undefined 
+        ? data === null
+            ? dataClick.userId  
+            : data.userId
+        : slug = slug.split("-")[0] 
+        console.log(id)
+        console.log(dataMessage.sender.toString() === id.toString())
         if (dataMessage.sender.toString() === id.toString()) {
             setAllMessages([...allMessages, dataMessage])
+            scrollBottom()
         }
     })
     
@@ -55,9 +62,11 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
                 type: "CHANGE_ZINDEX",
                 payload: index
             })
+
             if (typeof dataClick === "undefined") {
                 let dataFriends
                 let findFriend
+
                 if (parseInt(slug.split("-")[1]) !== userDataReducer.userId) return history.push("/chat/empty")
                 
                 slug = slug.split("-")[0] 
@@ -66,6 +75,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
                 findFriend = await dataFriends.find(element => element.userId === parseInt(slug))
 
                 if (typeof findFriend === "undefined") return history.push("/chat/empty")
+
                 setData(findFriend)
                 setMessage({...message, receiver: findFriend.userId})
             } else {
@@ -89,12 +99,18 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             await socket.emit('userConnectedOnChat', userDataReducer.userId)
             setLoad(true)
             // Scrollbar appears at the bottom by default
-            setTimeout(() => {
-                chatRef.current.scrollTop = chatRef.current.scrollHeight
-            }, 250)
+            scrollBottom()
         }
         fetch()
     }, [dataClick]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const scrollBottom = () => {
+        setTimeout(() => {
+            if (chatRef.current !== null) { // Avoid a bug by spamming the responsive
+                chatRef.current.scrollTop = chatRef.current.scrollHeight 
+            }
+        }, 250)
+    }
 
     const fetchDataFriends = async () => {
         return await new Promise(resolve => {
@@ -105,7 +121,11 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
 
     const fetchRoomId = async () => {
         return await new Promise(resolve => {
-            const id = slug === undefined ? data.userId : slug
+            const id = slug === undefined 
+                ? data === null
+                    ? dataClick.userId  
+                    : data.userId
+                : slug
             const dataFetch = axios.post(`http://localhost:3001/api/chat/getRoom/${id}`, {userId: userDataReducer.userId})
             resolve(dataFetch)
         })
@@ -129,9 +149,10 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
     
             socket.emit('sendMessage', message)
             socket.emit('notificationChat', message)
-            axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
+            // axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
             setMessage({...message, text: ""})
             messageRef.current.value = ""
+            scrollBottom()
         }
     } 
 

@@ -1,5 +1,6 @@
 @media screen and (max-width: 860px) {
     .friends {
+        height: 88vh;
         width: 100%;
         padding: 2px;
     }
