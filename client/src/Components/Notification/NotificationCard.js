@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from "react-redux"
+import {useHistory} from "react-router-dom"
 import UserCard from '../Connected/UserCard'
 import moment from "moment"
 import axios from "axios"
@@ -7,6 +8,7 @@ import axios from "axios"
 export default function NotificationCard({ data }) {
 
     const themeReducer = useSelector(state => state.Theme)
+    const history = useHistory()
     const [message, setMessage] = useState("")
     const [load, setLoad] = useState(false)
     const [isChoice, setIsChoice] = useState(false)
@@ -35,8 +37,12 @@ export default function NotificationCard({ data }) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClickInvitation = async choice => {
-        if (choice) setIsChoice(true)
-        else setLoad(false)
+        console.log(data)
+        if (choice) {
+            axios.post(`http://localhost:3001/api/user/friend/add/${data.content.senderId}`, {
+                userId: data.content.receiverId 
+            })
+        } else setLoad(false)
         
         await axios.delete("http://localhost:3001/api/notifications/delete", {data: {
             type: "invitation",
@@ -47,13 +53,17 @@ export default function NotificationCard({ data }) {
 
     }
 
+    const handleOpen = (userId) => {
+        history.push(`/account/${userId}`)
+    }
+
     const messageStyle = themeReducer ? " notification-msg-dark " : " notification-msg "
     
     return ( load ?
         <div className="notification-element">
-            <small className={themeReducer ? "notification-time txt-dark" : "notification-time"}>{moment(data.content.date).fromNow()}</small>
+            <small className={themeReducer ? "notification-time txt-dark" : "notification-time"}>{moment(new Date(data.content.date)).fromNow()}</small>
             <div className="notification-user">
-                <UserCard data={data.user} />   
+                <UserCard open={() => handleOpen(data.user.userId)} data={data.user} />   
             </div>
             <div className="notification-alert">
                 <p className={isView ? messageStyle : messageStyle + "noView" }>{message}</p>

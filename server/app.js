@@ -36,7 +36,6 @@ app.use('/api/notifications', notificationsRoutes)
 let usersInChatRoom = []
 let usersConnected = []
 
-
 io.on('connection', (socket) => { 
     //----
     // Connection
@@ -64,7 +63,6 @@ io.on('connection', (socket) => {
 
     socket.on('userConnectedOnChat', userId => {
         usersInChatRoom[userId] = socket.id   
-        console.log("connexion: " + usersInChatRoom[userId])
     })
 
     // receive message and send message

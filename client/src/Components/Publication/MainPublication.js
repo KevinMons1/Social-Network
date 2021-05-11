@@ -71,6 +71,11 @@ export default function MainPublication() {
     const handleSubmit = e => {
         e.preventDefault()
 
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
+
         if (dataNewPubli.text.length > 2) {
             axios.post(`http://localhost:3001/api/publications/comments/add/${data.publicationId}`, dataNewPubli)
                 .then(res => {
@@ -87,14 +92,24 @@ export default function MainPublication() {
                     axios.post("http://localhost:3001/api/notifications/add", {
                         receiver : data.userId,
                         sender: userDataReducer.userId,
+                        date: dateTime,
                         type: "comment"
                     })
                     socket.emit("notification", {
                         receiver: data.userId,
                         sender: {
-                            user: userDataReducer,
+                            user: {
+                                firstName: userDataReducer.firstName,
+                                lastName: userDataReducer.lastName,
+                                profileImage: userDataReducer.profileImage,
+                                userId: userDataReducer.userId
+                            },
                             content: {
-                                type: "comment"
+                                receiverId: data.userId,
+                                senderId: userDataReducer.userId,
+                                type: "comment",
+                                date: dateTime,
+                                view: 0,
                             }
                         }
                     })

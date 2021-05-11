@@ -18,9 +18,9 @@ const requestQuery = async (query, params) => {
 
 // Add new notification
 exports.addNewNotification = async (req, res) => {
-    const { sender, receiver, type } = req.body
+    const { sender, receiver, type, date } = req.body
     if (sender !== receiver) {
-        const result = await requestQuery("INSERT INTO notifications (senderId, receiverId, type) VALUES (?, ?, ?)", [sender, receiver, type])
+        const result = await requestQuery("INSERT INTO notifications (senderId, receiverId, type, date) VALUES (?, ?, ?, ?)", [sender, receiver, type, date])
     }
 }
 
@@ -31,19 +31,21 @@ exports.getNotifications = async (req, res) => {
     const queryImg = "ui.url as profileImage"
     let allResult = []
 
-    const result = await requestQuery("SELECT * FROM notifications WHERE receiverId = ? ORDER BY notificationId DESC", [id])
+    const result = await requestQuery("SELeCT * FROM notifications WHERE receiverId = ? ORDER BY notificationId DESC", [id])
 
-    for (let i = 0; i < result.length; i++) {
-        const result2 = await requestQuery(`SELECT ${queryUser}, ${queryImg} FROM users u
-            LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
-            WHERE u.userId = ?`, [result[i].senderId, result[i].senderId])
-        allResult.push({
-            user: result2[0],
-            content: result[i]
-        })
-
-        if (i === result.length - 1) res.send(allResult)
-    } 
+    if (result.length > 0) {
+        for (let i = 0; i < result.length; i++) {
+            const result2 = await requestQuery(`SELECT ${queryUser}, ${queryImg} FROM users u
+                LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
+                WHERE u.userId = ?`, [result[i].senderId, result[i].senderId])
+            allResult.push({
+                user: result2[0],
+                content: result[i]
+            })
+    
+            if (i === result.length - 1) res.send(allResult)
+        } 
+    } else res.send([])
 }
 
 // Delete notification

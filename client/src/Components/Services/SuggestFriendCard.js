@@ -17,6 +17,11 @@ export default function SuggestFriendCard({ data }) {
     }
 
     const handleAddFriend = () => {
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
+        
         setWaiting(true)
         axios.post("http://localhost:3001/api/notifications/add", {
             receiver : data.userId,
@@ -26,9 +31,18 @@ export default function SuggestFriendCard({ data }) {
         socket.emit("notification", {
             receiver: data.userId,
             sender: {
-                user: userDataReducer,
+                user: {
+                    firstName: userDataReducer.firstName,
+                    lastName: userDataReducer.lastName,
+                    profileImage: userDataReducer.profileImage,
+                    userId: userDataReducer.userId
+                },
                 content: {
-                    type: "invitation"
+                    receiverId: data.userId,
+                    senderId: userDataReducer.userId,
+                    type: "invitation",
+                    date: dateTime,
+                    view: 0,
                 }
             }
         })

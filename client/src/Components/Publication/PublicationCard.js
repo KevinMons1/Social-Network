@@ -5,7 +5,7 @@ import "../../Styles/publication.css"
 import "../../Styles/Media-Queries/MobileL/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
-import moment from "moment"
+import moment, { now } from "moment"
 import axios from 'axios'
 import {socket} from "../../Api"
 import {useTransition, useSpring, animated} from "react-spring"
@@ -75,6 +75,11 @@ export default function PublicationCard({ data, fullFile }) {
     const handleLike = async () => {
         // Anti spam request
         setIsAnimated(!isAnimated)
+        
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
 
         if (spam <= 4) {
             if (isLike) {
@@ -84,9 +89,18 @@ export default function PublicationCard({ data, fullFile }) {
                     await socket.emit("notification", {
                         receiver: data.userId,
                         sender: {
-                            user: userDataReducer,
+                            user: {
+                                firstName: userDataReducer.firstName,
+                                lastName: userDataReducer.lastName,
+                                profileImage: userDataReducer.profileImage,
+                                userId: userDataReducer.userId
+                            },
                             content: {
-                                type: "like"
+                                receiverId: data.userId,
+                                senderId: userDataReducer.userId,
+                                type: "like",
+                                date: dateTime,
+                                view: 0,
                             }
                         }
                     })
@@ -95,7 +109,8 @@ export default function PublicationCard({ data, fullFile }) {
                 await axios.post("http://localhost:3001/api/notifications/add", {
                     receiver : data.userId,
                     sender: userDataReducer.userId,
-                    type: "like"
+                    type: "like",
+                    date: dateTime
                 })
             }
         }

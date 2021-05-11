@@ -31,34 +31,10 @@ export default function Connected({choiceCss, friendClick}) {
         config: config.stiff
     })
 
-    socket.on('sendMyConnection', friendId => {
-        // See if friendId is already encoding
-        if (load) {
-            let newUserCard
-            let isFind = friendsConnected.find(friend => friend === friendId)
-            if (typeof isFind !== 'number') {
-                setFriendsConnected([...friendsConnected, friendId])
-                let updateUsersCard = usersCard.map((item) => {
-                    if (item.data.userId === friendId) {
-                        newUserCard = {
-                            isConnected: true,
-                            data: item.data
-                        }
-                        return newUserCard
-                    }
-                    else return item
-                })
-                updateUsersCard = updateUsersCard.filter(user => user.data.userId !== friendId)
-                setUsersCard([newUserCard, ...updateUsersCard])
-            }
-        }
-    })
-
-    socket.on("notificationChat", userData => { if (load) handleClickUserChat(userData, true) })
-
     useEffect(() => {
         // Send userId on server for realTime components
         socket.emit('userConnected', userDataReducer.userId)
+        listenConnection()
 
         let friends = []
         const fetchData = async () => {
@@ -78,9 +54,10 @@ export default function Connected({choiceCss, friendClick}) {
                 }
             })
             .catch(err => console.log(err))
+            
             await axios.get(`http://localhost:3001/api/user/connected/friends/chat/${userDataReducer.userId}`)
             .then(res => { 
-                setFriendEmpty(true)       
+                setFriendEmpty(true)   
                 res.data.forEach(friend => {
                     if (friend != null) {
                         setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
@@ -101,12 +78,44 @@ export default function Connected({choiceCss, friendClick}) {
                 friends
             })
             setLoad(true)
+            listenNotification()
             sendMyConnectionOnTime(friends)
         }
         fetchData()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    // To give the connection to those who connected after using it
+    const listenConnection = () => {
+        socket.on('sendMyConnection', friendId => {
+            // See if friendId is already encoding
+            if (load) {
+                let newUserCard
+                let isFind = friendsConnected.find(friend => friend === friendId)
+                if (typeof isFind !== 'number') {
+                    setFriendsConnected([...friendsConnected, friendId])
+                    let updateUsersCard = usersCard.map((item) => {
+                        if (item.data.userId === friendId) {
+                            newUserCard = {
+                                isConnected: true,
+                                data: item.data
+                            }
+                            return newUserCard
+                        }
+                        else return item
+                    })
+                    updateUsersCard = updateUsersCard.filter(user => user.data.userId !== friendId)
+                    setUsersCard([newUserCard, ...updateUsersCard])
+                }
+            }
+        })
+    }
+
+    const listenNotification = () => {
+        socket.on("notificationChat", userData => { 
+            handleClickUserChat(userData, true)
+         })
+    }
+
+    // To give the connection to  those who connected after using it
     const sendMyConnectionOnTime = (friends) => {
         setTimeout(() => {
             socket.emit('sendMyConnection', {
@@ -131,17 +140,19 @@ export default function Connected({choiceCss, friendClick}) {
     }
 
     const handleClickUserChat = (userData, isServer) => {
+        console.log(userData)
         if (isServer) {
             if (userData.sender !== userDataReducer.userId) {
                 setUsersDataChat(user => user.map(item => item.data.userId === userData.sender ? {
-                        isView: true,
-                        data: {
-                            ...item.data,
-                            text: userData.text,
-                            type: userData.type
-                        }
-                    } : item )
+                    isView: true,
+                    data: {
+                        ...item.data,
+                        text: userData.text,
+                        type: userData.type
+                    }
+                } : item )
                 )
+                console.log(usersDataChat)
             }
         } else {
             setUsersDataChat(user => user.map(item => item.data.userId === userData.data.userId ? {

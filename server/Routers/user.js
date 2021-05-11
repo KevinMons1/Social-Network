@@ -5,7 +5,7 @@ const multer = require("../Middleware/multerImage")
 
 // Routes
 
-router.post('/account/friend/add/:id', user.addFriend)
+router.post('/friend/add/:id', user.addFriend)
 router.post('/account/isFriend/:id', user.getIsFriend)
 
 router.get('/account/informations/:id', user.getAccountInformations)

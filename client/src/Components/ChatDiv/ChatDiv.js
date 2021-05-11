@@ -35,28 +35,11 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
         receiver: null,
         type: "text"
     })
-
-    /*
-    ----- Socket.io for a real time chat -----
-    */
-
-    // get new message
-    socket.on('newMessage', dataMessage => {
-        const id = slug === undefined 
-        ? data === null
-            ? dataClick.userId  
-            : data.userId
-        : slug = slug.split("-")[0] 
-        console.log(id)
-        console.log(dataMessage.sender.toString() === id.toString())
-        if (dataMessage.sender.toString() === id.toString()) {
-            setAllMessages([...allMessages, dataMessage])
-            scrollBottom()
-        }
-    })
     
     useEffect(() => {
         setLoad(false) 
+        listenMessage()
+
         const fetch = async () => {
             await dispatch({
                 type: "CHANGE_ZINDEX",
@@ -86,23 +69,45 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             // get roomId
             const dataFetchRoomId = await fetchRoomId()
             const dataRoomId = dataFetchRoomId.data.roomId
-            // get message in room with roomId
-            const dataFetchMessages = await fetchMessages(dataRoomId)
-            const dataMessages = dataFetchMessages.data
-            // not continue if haven't messages
-            if (dataMessages.length > 0) {
-                setAllMessages(dataMessages)
+            // create roomId
+            if (!dataFetchRoomId.data.isNew) {
+                // get message in room with roomId
+                const dataFetchMessages = await fetchMessages(dataRoomId)
+                const dataMessages = dataFetchMessages.data
+                // not continue if haven't messages
+                if (dataMessages.length > 0) {
+                    setAllMessages(dataMessages)
+                } else {
+                    setAllMessages([])
+                }
+                setRoomId(dataRoomId)
+                await socket.emit('userConnectedOnChat', userDataReducer.userId)
+                setLoad(true)
+                // Scrollbar appears at the bottom by default
+                scrollBottom()
             } else {
-                setAllMessages([])
+                await socket.emit('userConnectedOnChat', userDataReducer.userId)
+                setRoomId(dataRoomId)
+                setLoad(true)
             }
-            setRoomId(dataRoomId)
-            await socket.emit('userConnectedOnChat', userDataReducer.userId)
-            setLoad(true)
-            // Scrollbar appears at the bottom by default
-            scrollBottom()
         }
         fetch()
     }, [dataClick]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const listenMessage = () => {
+         // get new message
+        socket.on('newMessage', dataMessage => {
+            const id = slug === undefined 
+            ? data === null
+                ? dataClick.userId  
+                : data.userId
+            : slug = slug.split("-")[0] 
+            if (dataMessage.sender.toString() === id.toString()) {
+                setAllMessages(allMessages => [...allMessages, dataMessage])
+                scrollBottom()
+            }
+        })
+    }
 
     const scrollBottom = () => {
         setTimeout(() => {
@@ -146,10 +151,9 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
         e.preventDefault()
         if (message.text !== "") {
             setAllMessages([...allMessages, message])
-    
             socket.emit('sendMessage', message)
             socket.emit('notificationChat', message)
-            // axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
+            //axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
             setMessage({...message, text: ""})
             messageRef.current.value = ""
             scrollBottom()
@@ -220,7 +224,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             <div className={themeReducer ? `${choiceTop} chatDiv-border-dark` : choiceTop}>
                 {isTabletOrMobile ? <FontAwesomeIcon icon="arrow-left" className="chatDiv-icon-arrow" onClick={() => returnChat()} /> : null}
                 {load ? <UserCard noOpen={true} data={data}/> : null}
-            {choiceCss ? <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon" onClick={() => closeChat()} /> : null}
+                {choiceCss ? <FontAwesomeIcon icon="times-circle" className="chatDiv-close-icon" onClick={() => closeChat()} /> : null}
             </div>
             <div className={themeReducer ? `${choicechat} chatDiv-border-dark` : choicechat} ref={chatRef}>
                {load 

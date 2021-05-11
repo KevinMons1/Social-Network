@@ -22,14 +22,14 @@ export default function UserCard({ noOpen, tallCard, open, text, data, isConnect
     }
 
     return (
-        <div className={themeReducer ? "friend-box-dark" : "friend-box"}>             
+        <div className={themeReducer ? "friend-box-dark" : "friend-box"} onClick={() => handleClick()}>             
             <div className="friend-connected">
                 <div className="friend-info">                  
                     <div className={tallCard ? "connected-img-friend-tall" : "connected-img-friend"}>
                         <img src={data.profileImage} alt="Frame profile of your friend" onClick={open}/>
                     </div>
                     <div className={tallCard ? "connected-name-friend-tall" : "connected-name-friend"}>
-                        <p className={themeReducer ? "connected-name-dark" : null} onClick={() => handleClick()}>{data.lastName} {data.firstName}</p>
+                        <p className={themeReducer ? "connected-name-dark" : null}>{data.lastName} {data.firstName}</p>
                     </div>
                 </div>
                 {tallCard ? null : isConnected ? <div className="connected-circle"></div> : null}

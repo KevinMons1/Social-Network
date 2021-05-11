@@ -27,7 +27,7 @@ exports.getRoom = async (req, res) => {
     const result2 = await requestQuery("SELECT * FROM privateRooms WHERE friendId = ?", [friendId])
     if (result2[0] === undefined) {
         const result3 = await requestQuery("INSERT INTO privateRooms (friendId) VALUES(?)", [friendId])
-        res.send(result3[0])
+        res.send({roomId: result3.insertId, isNew: true})
     } else {
         const result4 = await requestQuery("SELECT roomId FROM privateRooms WHERE friendId = ?", [friendId])
         res.send(result4[0])
@@ -47,6 +47,7 @@ exports.addMessage = async (req, res) => {
     const userId = req.body.sender
     const text = req.body.text
     const type = req.body.type
+    
     const result = await requestQuery(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, ?)`, [roomId, userId, text, type])
 }
 

@@ -144,6 +144,7 @@ UserCard
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    cursor: pointer;
 }
 
 .friend-box, .friend-box-dark {

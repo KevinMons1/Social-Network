@@ -84,19 +84,34 @@ export default function MainAccount() {
         setIsFriend(choice)
     }
 
-    const handleAddFriend = () => {
+    const handleAddFriend = () => {     
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
+        
         setWaiting(true)
         axios.post("http://localhost:3001/api/notifications/add", {
             receiver : slug,
             sender: userDataReducer.userId,
-            type: "invitation"
+            type: "invitation",
+            date: dateTime
         })
         socket.emit("notification", {
             receiver: slug,
             sender: {
-                user: userDataReducer,
+                user: {
+                    firstName: userDataReducer.firstName,
+                    lastName: userDataReducer.lastName,
+                    profileImage: userDataReducer.profileImage,
+                    userId: userDataReducer.userId
+                },
                 content: {
-                    type: "invitation"
+                    receiverId: slug,
+                    senderId: userDataReducer.userId,
+                    type: "invitation",
+                    date: dateTime,
+                    view: 0,
                 }
             }
         })

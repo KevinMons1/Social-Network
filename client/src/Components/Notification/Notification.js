@@ -24,25 +24,20 @@ export default function Notification({ choiceCss }) {
         config: config.stiff
     })
 
-    socket.on("notification", userData => {
-        if (userData.user.userId !== userDataReducer.userId) {
-            const data = userData
-            setData(item => [data, ...item])
-            setCount(count + 1)
-        }
-    })
-
     useEffect(() => {
         setLoad(false)
+        listenNotification()
         const fetch = async () => {
             await axios.get(`http://localhost:3001/api/notifications/all/${userDataReducer.userId}`)
                 .then(res => {
-                    let _count = 0
-                    res.data.forEach(notif => {
-                        if (notif.content.view === 0) _count++
-                    })
-                    setCount(count + _count)
-                    setData(res.data)
+                    if (res.data.length > 0) {
+                        let _count = 0
+                        res.data.forEach(notif => {
+                            if (notif.content.view === 0) _count++
+                        })
+                        setCount(count + _count)
+                        setData(res.data)
+                    }
                 })
                 .catch(err => console.log(err))
             setLoad(true)
@@ -50,14 +45,25 @@ export default function Notification({ choiceCss }) {
         fetch()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    const listenNotification = () => {
+        socket.on("notification", userData => {
+            if (userData.user.userId !== userDataReducer.userId) {
+                setData(item => [userData, ...item])
+                setCount(count => count + 1)
+            }
+        })
+    }
+
     const handleClickHide = () => {
         let changeData = []
         setIsAnimated(!isAnimated)
         setCount(0)
 
-        data.forEach(element => {
-            if (element.content.view === 0) changeData.push(element.content)
-        })
+        if (data.length > 0) {
+            data.forEach(element => {
+                if (element.content.view === 0) changeData.push(element.content)
+            }) 
+        }
 
         axios.put("http://localhost:3001/api/notifications/view/update", changeData)
             .then(res => console.log(res))
@@ -83,7 +89,6 @@ export default function Notification({ choiceCss }) {
                     })
                    : null
                     }
-
                 </animated.div>
             ))}
     </div>
