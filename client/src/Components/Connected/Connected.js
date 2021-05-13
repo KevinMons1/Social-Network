@@ -32,11 +32,13 @@ export default function Connected({choiceCss, friendClick}) {
     })
 
     useEffect(() => {
+        let friends = []
+        let friendsChat = [] // for a shift with socket and render usersDataChat
+
         // Send userId on server for realTime components
         socket.emit('userConnected', userDataReducer.userId)
         listenConnection()
 
-        let friends = []
         const fetchData = async () => {
             await axios.get(`http://localhost:3001/api/user/userFriends/${userDataReducer.userId}`)
             .then(res => {
@@ -64,6 +66,10 @@ export default function Connected({choiceCss, friendClick}) {
                             isView: false,
                             data: friend
                         }])
+                        friendsChat = [...friendsChat, {
+                            isView: false,
+                            data: friend
+                        }]
                         setUsersDataChat(usersDataChat => [...usersDataChat, {
                             isView: false,
                             data: friend
@@ -78,7 +84,6 @@ export default function Connected({choiceCss, friendClick}) {
                 friends
             })
             setLoad(true)
-            listenNotification()
             sendMyConnectionOnTime(friends)
         }
         fetchData()
@@ -140,24 +145,39 @@ export default function Connected({choiceCss, friendClick}) {
     }
 
     const handleClickUserChat = (userData, isServer) => {
-        console.log(userData)
         if (isServer) {
             if (userData.sender !== userDataReducer.userId) {
-                setUsersDataChat(user => user.map(item => item.data.userId === userData.sender ? {
-                    isView: true,
-                    data: {
-                        ...item.data,
-                        text: userData.text,
-                        type: userData.type
-                    }
-                } : item )
-                )
-                console.log(usersDataChat)
+                // Check if this is the first message from a new room 
+                let indexFind = usersDataChat.findIndex(user => user.data.userId === userData.sender)
+                
+                if (indexFind === -1) {
+                    axios.get(`http://localhost:3001/api/user/simple/informations/${userData.sender}`)
+                        .then(res => {
+                            setUsersDataChat(users => [{
+                                isView: true,
+                                data: {
+                                    ...res.data,
+                                    text: userData.text,
+                                    type: userData.type
+                                }
+                            }, ...users.filter(user => user.data.userId !== userData.sender)])
+                        })
+                        .catch(err => console.log(err))
+                } else if (indexFind >= 0) {
+                    setUsersDataChat(users => users.map(item => item.data.userId === userData.sender ? {
+                        isView: true,
+                        data: {
+                            ...item.data,
+                            text: userData.text,
+                            type: userData.type
+                        }
+                    } : item ))
+                }
             }
         } else {
-            setUsersDataChat(user => user.map(item => item.data.userId === userData.data.userId ? {
-                    data: {...item.data},
-                    isView: false
+            setUsersDataChat(users => users.map(item => item.data.userId === userData.data.userId ? {
+                    isView: false,
+                    data: {...item.data}
                 } : item )
             )
         }
@@ -180,7 +200,7 @@ export default function Connected({choiceCss, friendClick}) {
     }
 
     return isTabletOrMobile ? (
-        <section className={themeReducer ? "connected-dark" : "connected"}>
+        <section className={themeReducer ? "connected-dark" : "connected"} onLoad={() => listenNotification()} >
             <div className="connected-top">
                 <div className="friends-boxs">                     
                     {load 
@@ -212,7 +232,7 @@ export default function Connected({choiceCss, friendClick}) {
              </div>
         </section>
     ) : (
-        <section className={themeReducer ? "connected-dark" : "connected"}>
+        <section className={themeReducer ? "connected-dark" : "connected"} onLoad={() => listenNotification()} >
             <div className={choiceCss ? "connected-title-box" : "connected-title-box-chat"}>
                 <p className={choiceCss ? themeReducer ? "connected-title-dark" : "connected-title" : themeReducer ? "connected-title-dark-chat" : "connected-title-chat"}>Connected</p>
                 <Notification choiceCss={!choiceCss} />

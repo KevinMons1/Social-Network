@@ -11,12 +11,10 @@ export default function NotificationCard({ data }) {
     const history = useHistory()
     const [message, setMessage] = useState("")
     const [load, setLoad] = useState(false)
-    const [isChoice, setIsChoice] = useState(false)
     const [isView, setIsView] = useState(true)
 
     useEffect(() => {
         setIsView(data.content.view)
-
         switch (data.content.type) {
             case "like":
                 setMessage(`To liked your post !`)
@@ -37,20 +35,20 @@ export default function NotificationCard({ data }) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClickInvitation = async choice => {
-        console.log(data)
         if (choice) {
-            axios.post(`http://localhost:3001/api/user/friend/add/${data.content.senderId}`, {
+            await axios.post(`http://localhost:3001/api/user/friend/add/${data.content.senderId}`, {
                 userId: data.content.receiverId 
             })
-        } else setLoad(false)
-        
+            .then()
+            .catch(err => console.log(err))
+        } 
+        setLoad(false)
         await axios.delete("http://localhost:3001/api/notifications/delete", {data: {
             type: "invitation",
             receiverId: data.content.receiverId,
             senderId: data.content.senderId,
             date: data.content.date
         }})
-
     }
 
     const handleOpen = (userId) => {
@@ -70,12 +68,10 @@ export default function NotificationCard({ data }) {
                {isView ? null : <div className="notification-new"></div>}
             </div>
            {data.content.type === "invitation" 
-           ? (!isChoice) 
-                ?   <div className="notification-invitation">
-                        <button onClick={() => handleClickInvitation(true)} className="notification-btn notification-btn-accept">Accept</button>
-                        <button onClick={() => handleClickInvitation(false)} className="notification-btn notification-btn-refuse">Refuse</button>
-                    </div>       
-                : null    
+           ? <div className="notification-invitation">
+                <button onClick={() => handleClickInvitation(true)} className="notification-btn notification-btn-accept">Accept</button>
+                <button onClick={() => handleClickInvitation(false)} className="notification-btn notification-btn-refuse">Refuse</button>
+            </div>            
             : null}
         </div>
     : null)

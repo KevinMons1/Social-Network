@@ -49,13 +49,14 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             if (typeof dataClick === "undefined") {
                 let dataFriends
                 let findFriend
+                let _slug
 
                 if (parseInt(slug.split("-")[1]) !== userDataReducer.userId) return history.push("/chat/empty")
                 
-                slug = slug.split("-")[0] 
+                _slug = slug.split("-")[0] 
                 dataFriends = await fetchDataFriends()
                 dataFriends = dataFriends.data
-                findFriend = await dataFriends.find(element => element.userId === parseInt(slug))
+                findFriend = await dataFriends.find(element => element.userId === parseInt(_slug))
 
                 if (typeof findFriend === "undefined") return history.push("/chat/empty")
 
@@ -153,7 +154,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             setAllMessages([...allMessages, message])
             socket.emit('sendMessage', message)
             socket.emit('notificationChat', message)
-            //axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
+            axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
             setMessage({...message, text: ""})
             messageRef.current.value = ""
             scrollBottom()

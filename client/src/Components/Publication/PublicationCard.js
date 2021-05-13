@@ -5,7 +5,7 @@ import "../../Styles/publication.css"
 import "../../Styles/Media-Queries/MobileL/publication.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
-import moment, { now } from "moment"
+import moment from "moment"
 import axios from 'axios'
 import {socket} from "../../Api"
 import {useTransition, useSpring, animated} from "react-spring"

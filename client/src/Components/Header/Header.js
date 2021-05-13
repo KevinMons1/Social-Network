@@ -14,6 +14,7 @@ import "../../Assets/fontawesome"
 import axios from "axios"
 import Auth from "../../Auth"
 import SearchUsers from "./SearchUsers"
+import Notification from '../Notification/Notification'
 
 export default function Header() {
 
@@ -125,7 +126,7 @@ export default function Header() {
                     <input type="checkbox" />
                     <span className="slider round"></span>
                 </label>
-                <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button>
+                {/* <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button> */}
                 <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
             </div>
         </header>
@@ -141,7 +142,7 @@ export default function Header() {
                 </div>
             </div>
 
-            <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button>
+            {/* <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button> */}
             <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
 
             <label className="switch" onChange={handleTheme} >
@@ -185,10 +186,12 @@ export default function Header() {
                             <Link to="/chat/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Chat</Link>
                         </div>
                     </li>
+                    <li className="header-middle-li">
+                        <Notification choiceCss={false} />
+                    </li>
                 </ul>
             </div> 
         </div>
-
     </header>
     )
 }

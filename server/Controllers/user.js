@@ -16,6 +16,19 @@ const requestQuery = async (query, params) => {
     })
 }
 
+// Simple informations a user with userId
+const simpleUserInformations = async (userId) => {
+    return await new Promise((resolve) => {
+        const queryUser = "u.userId, u.lastName, u.firstName"
+        const queryImgProfile = "ui.url as profileImage"
+    
+        const result = requestQuery(`SELECT ${queryUser}, ${queryImgProfile} FROM users u
+            LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
+            WHERE u.userId = ?`, [userId, userId]) 
+        resolve(result)
+    })
+}
+
 // Publication when your modify a status as profile image
 const publicationsDefault = async (id, type, imageUrl, txt) => {
     let hashtag, publiId;
@@ -43,8 +56,6 @@ exports.addFriend = async (req, res) => {
 // Get all information for display each user who speaking white the user
 const getFriendsChatPromisse = async (element, id) => {
     return await new Promise(async resolve => {
-        const queryUser = "u.userId, u.lastName, u.firstName"
-        const queryImg = "ui.url as profileImage"
         let friendId
         let allResult
 
@@ -59,10 +70,7 @@ const getFriendsChatPromisse = async (element, id) => {
                 // Take id of friend
                 friendId = element.user1Id == id ? element.user2Id : element.user1Id
                 // Get informations of friend
-                const result3 = await requestQuery(`
-                    SELECT ${queryUser}, ${queryImg} FROM users u
-                    LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
-                    WHERE u.userId = ?`, [friendId, friendId])
+                const result3 = await simpleUserInformations(friendId)
                 allResult = {...result3[0], text: result2[0].text, type: result2[0].type, date: result2[0].date}
                 resolve(allResult)
             }
@@ -132,8 +140,6 @@ exports.getIsFriend = async (req, res) => {
 exports.getFriends = async (req, res) => {
     const id = req.params.id
     const resultFriendId = await requestQuery("SELECT friendId, user1Id, user2Id FROM friends WHERE user1Id = ? OR user2Id = ?", [id, id]) 
-    const queryUser = "u.userId, u.lastName, u.firstName"
-    const queryImg = "ui.url as profileImage"
     let friendsId;
     let friends = []
     let count = 0
@@ -145,15 +151,20 @@ exports.getFriends = async (req, res) => {
         // To destroy the objects in the received array and seek userId
         friendsId = resultFriendId.map(item => item.user1Id != id ? item.user1Id : item.user2Id)
         friendsId.forEach(async userId => {
-            result = await requestQuery(`SELECT ${queryUser}, ${queryImg} FROM users u
-            LEFT JOIN userImages ui ON ui.userId = ? AND ui.type = "profile"
-            WHERE u.userId = ?`, [userId, userId])
+            result = await simpleUserInformations(userId)
 
             count++
             friends = [...friends, result[0]]
             if (count === friendsId.length) res.send(friends)
         })
     }
+}
+
+// Get informations a user with userId
+exports.getSimpleUserInformations = async (req, res) => {
+    const id = req.params.id
+    const result = await simpleUserInformations(id)
+    res.send(result[0])
 }
 
 // Get friends with whom there is a private Room and take last message for notification
