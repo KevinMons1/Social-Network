@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const http = require('http').Server(app)
+const PORT = 3001
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const path = require("path")
@@ -12,6 +13,7 @@ const io = require('socket.io')(http, {
       origin: '*',
     }
   })
+
 
 // Routes
 const authRoutes = require("./Routers/auth")
@@ -88,9 +90,7 @@ io.on('connection', (socket) => {
 })
 
 // Start server
-http.listen("3001", () => {
-    console.log("Server started on port 3001")
-})
+http.listen(PORT, () => console.log("Running", PORT))
 
 exports.io = io
 

@@ -28,7 +28,7 @@ export default function Notification({ choiceCss }) {
         setLoad(false)
         listenNotification()
         const fetch = async () => {
-            await axios.get(`http://localhost:3001/api/notifications/all/${userDataReducer.userId}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/notifications/all/${userDataReducer.userId}`)
                 .then(res => {
                     if (res.data.length > 0) {
                         let _count = 0
@@ -65,7 +65,7 @@ export default function Notification({ choiceCss }) {
             }) 
         }
 
-        axios.put("http://localhost:3001/api/notifications/view/update", changeData)
+        axios.put(`${process.env.REACT_APP_URL}api/notifications/view/update`, changeData)
             .then(res => console.log(res))
             .catch(err => console.log(err))
     }

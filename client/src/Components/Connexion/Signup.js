@@ -53,7 +53,7 @@ export default function Signup() {
         e.preventDefault()
 
         if (verifyInformations()) {
-            axios.post("http://localhost:3001/api/auth/signup", data)
+            axios.post(`${process.env.REACT_APP_URL}api/auth/signup`, data)
                 .then(res => {
                     setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)

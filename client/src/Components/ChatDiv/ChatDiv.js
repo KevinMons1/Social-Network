@@ -120,7 +120,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
 
     const fetchDataFriends = async () => {
         return await new Promise(resolve => {
-            const dataFecth = axios.get(`http://localhost:3001/api/user/userFriends/${userDataReducer.userId}`)
+            const dataFecth = axios.get(`${process.env.REACT_APP_URL}api/user/userFriends/${userDataReducer.userId}`)
             resolve(dataFecth)
         })
     }
@@ -132,14 +132,14 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
                     ? dataClick.userId  
                     : data.userId
                 : slug
-            const dataFetch = axios.post(`http://localhost:3001/api/chat/getRoom/${id}`, {userId: userDataReducer.userId})
+            const dataFetch = axios.post(`${process.env.REACT_APP_URL}api/chat/getRoom/${id}`, {userId: userDataReducer.userId})
             resolve(dataFetch)
         })
     }
 
     const fetchMessages = async (id) => {
         return await new Promise(resolve => {
-            const dataFetch = axios.get(`http://localhost:3001/api/chat/getContent/${id}`)
+            const dataFetch = axios.get(`${process.env.REACT_APP_URL}api/chat/getContent/${id}`)
             resolve(dataFetch)
         })
     }
@@ -154,7 +154,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
             setAllMessages([...allMessages, message])
             socket.emit('sendMessage', message)
             socket.emit('notificationChat', message)
-            axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, message)
+            axios.post(`${process.env.REACT_APP_URL}api/chat/addMessage/${roomId}`, message)
             setMessage({...message, text: ""})
             messageRef.current.value = ""
             scrollBottom()
@@ -174,7 +174,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
                 let formData = new FormData()
                 formData.append('file', compressedFile)
                 formData.append('id', userDataReducer.userId)
-                axios.post(`http://localhost:3001/api/chat/addImage/${roomId}`, formData)
+                axios.post(`${process.env.REACT_APP_URL}api/chat/addImage/${roomId}`, formData)
                     .then(res => {
                         const newImage = {
                             sender: message.sender,
@@ -202,7 +202,7 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
         }
         socket.emit('sendMessage', newGif)
         socket.emit('notificationChat', newGif)
-        axios.post(`http://localhost:3001/api/chat/addMessage/${roomId}`, newGif)
+        axios.post(`${process.env.REACT_APP_URL}api/chat/addMessage/${roomId}`, newGif)
         setAllMessages([...allMessages, newGif])
     }
 

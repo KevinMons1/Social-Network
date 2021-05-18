@@ -23,10 +23,11 @@ export default function SuggestFriendCard({ data }) {
         let dateTime = date+' '+time;
         
         setWaiting(true)
-        axios.post("http://localhost:3001/api/notifications/add", {
+        axios.post(`${process.env.REACT_APP_URL}api/notifications/add`, {
             receiver : data.userId,
             sender: userDataReducer.userId,
-            type: "invitation"
+            type: "invitation",
+            date: dateTime
         })
         socket.emit("notification", {
             receiver: data.userId,

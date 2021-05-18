@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
+require('dotenv').config()
 
-const JWT_SIGN_SECRET = "tokentemporaryfordev"
+const JWT_SIGN_SECRET = process.env.JWT_SIGN_SECRET
 
 module.exports = {
     // Create unique token

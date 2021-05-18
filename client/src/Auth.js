@@ -11,7 +11,7 @@ class AuthClass {
     login(userData) {
         let data = null
         const fetch = async () => {
-            await axios.post("http://localhost:3001/api/auth/login", userData)
+            await axios.post(`${process.env.REACT_APP_URL}api/auth/login`, userData)
                 .then(res => {
                    data = res.data
                    if (res.data.alert) this.authenticated = true
@@ -29,7 +29,7 @@ class AuthClass {
     loginWithCookie() {
         let data = null
         const fetch = async () => {
-            await axios.post("http://localhost:3001/api/auth/login-token", {cookie: authCookie})
+            await axios.post(`${process.env.REACT_APP_URL}api/auth/login-token`, {cookie: authCookie})
                 .then(res => {
                     if (res.data.authorization) {
                         this.authenticated = true

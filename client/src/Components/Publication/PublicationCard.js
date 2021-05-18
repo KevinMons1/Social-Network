@@ -46,7 +46,7 @@ export default function PublicationCard({ data, fullFile }) {
             setHashtag(_hashtag)
         }        
 
-        axios.post(`http://localhost:3001/api/publications/likes/get/${data.publicationId}`, {userId: userDataReducer.userId})
+        axios.post(`${process.env.REACT_APP_URL}api/publications/likes/get/${data.publicationId}`, {userId: userDataReducer.userId})
             .then(res => {
                 setDataLikes(res.data.like.likesTotal)
                 if (res.data.isLike.length > 0) setIsLike(true)
@@ -57,7 +57,7 @@ export default function PublicationCard({ data, fullFile }) {
 
     const handleDelete = () => {
         if (data.userId === userDataReducer.userId) {
-            axios.delete(`http://localhost:3001/api/publications/account/delete/${data.userId + "-" + data.publicationId}`, {
+            axios.delete(`${process.env.REACT_APP_URL}api/publications/account/delete/${data.userId + "-" + data.publicationId}`, {
                 data: {
                     file: data.publicationFileUrl,
                     type: data.type === "image" ? "image" : "video"
@@ -83,7 +83,7 @@ export default function PublicationCard({ data, fullFile }) {
 
         if (spam <= 4) {
             if (isLike) {
-                await axios.delete(`http://localhost:3001/api/publications/like/delete/${data.publicationId}`, {data: {userId: userDataReducer.userId}})
+                await axios.delete(`${process.env.REACT_APP_URL}api/publications/like/delete/${data.publicationId}`, {data: {userId: userDataReducer.userId}})
             } else if (isLike === false) {
                 if (spam === 0) {
                     await socket.emit("notification", {
@@ -105,8 +105,8 @@ export default function PublicationCard({ data, fullFile }) {
                         }
                     })
                 }
-                await axios.post(`http://localhost:3001/api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
-                await axios.post("http://localhost:3001/api/notifications/add", {
+                await axios.post(`${process.env.REACT_APP_URL}api/publications/like/add/${data.publicationId}`, {userId: userDataReducer.userId})
+                await axios.post(`${process.env.REACT_APP_URL}api/notifications/add`, {
                     receiver : data.userId,
                     sender: userDataReducer.userId,
                     type: "like",
@@ -139,7 +139,6 @@ export default function PublicationCard({ data, fullFile }) {
 
     return load ?
         <div className={cssDelete}>
-
             {deleteAlert ? <PublicationDelete setDeleteAlert={setDeleteAlert} deletePubli={() => handleDelete()} /> : null}
 
             {data.userId === userDataReducer.userId

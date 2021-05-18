@@ -62,7 +62,7 @@ export default function MainHome({ isHome }) {
 
     const getPublications = () => {
         if (isHome) {
-            axios.get(`http://localhost:3001/api/publications/home/${countPublication}`)
+            axios.get(`${process.env.REACT_APP_URL}api/publications/home/${countPublication}`)
                 .then(res => {
                     if (res.data === false  || res.data.length === 0) {
                         setAlertMsg(true)
@@ -91,7 +91,7 @@ export default function MainHome({ isHome }) {
             if (slug.match(regex) && slug !== null && slug !== undefined) {
                 slug = slug.toLowerCase()
 
-                axios.get(`http://localhost:3001/api/publications/hashtag/${countPublication}`, {
+                axios.get(`${process.env.REACT_APP_URL}api/publications/hashtag/${countPublication}`, {
                     params: {
                         hashtag: slug
                         }
@@ -124,7 +124,7 @@ export default function MainHome({ isHome }) {
     }
 
     const getSuggestFriend = async () => {
-        await axios.get(`http://localhost:3001/api/user/suggest/friend/${userDataReducer.userId}`)
+        await axios.get(`${process.env.REACT_APP_URL}api/user/suggest/friend/${userDataReducer.userId}`)
             .then(res => {
                 setDataSuggestFriend(res.data)
             })

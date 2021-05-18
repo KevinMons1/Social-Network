@@ -67,7 +67,7 @@ export default function NewPubliBox({ setPubli }) {
 
         // Publication text
         if (verifyInformations()) {
-            axios.post(`http://localhost:3001/api/publications/add/publication/${userDataReducer.userId}`, data)
+            axios.post(`${process.env.REACT_APP_URL}api/publications/add/publication/${userDataReducer.userId}`, data)
                 .then(res => {
                     if (res.data.alert) {
                         if (dataFile != null) {
@@ -79,7 +79,7 @@ export default function NewPubliBox({ setPubli }) {
                                 let formData = new FormData()
                                 formData.append('video', dataFile)
                                 formData.append('id', res.data.publicationId)
-                                axios.post(`http://localhost:3001/api/publications/add/video`, formData)
+                                axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
                                     .then(res => {
                                         setAletCss(false)
                                         setAlertMsg(res.data.message)
@@ -136,7 +136,7 @@ export default function NewPubliBox({ setPubli }) {
                 let formData = new FormData()
                 formData.append('file', compressedFile)
                 formData.append('id', publicationId)
-                axios.post(`http://localhost:3001/api/publications/add/image`, formData)
+                axios.post(`${process.env.REACT_APP_URL}api/publications/add/image`, formData)
                     .then(res => {
                         setAletCss(false)
                         setAlertMsg(res.data.message)

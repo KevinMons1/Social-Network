@@ -11,14 +11,12 @@ export const socket = io("localhost:3001", {
 // Twitch API
 export const apiTwitch = axios.create({
     headers: {
-        "Client-ID": "w3h4n1skz9glqio8msixevacl3n7e0",
-        "Authorization": "Bearer y0hw866p20jm77qyc5d1qo5jjnb1o7"
+        "Client-ID": process.env.REACT_APP_TWITCH_KEY,
+        "Authorization": process.env.REACT_APP_TWITCH_AUTH
     }
 })
 
-// https://id.twitch.tv/oauth2/authorize?client_id=w3h4n1skz9glqio8msixevacl3n7e0&redirect_uri=https://127.0.0.1/&response_type=token
-
 // Giphy API
 
-export const keyGiphy = "p6c0Ct0mrOiMKSHtVavlcR3On6hNhFQ7"
+export const keyGiphy = process.env.REACT_APP_GIFY_KEY
 

@@ -35,7 +35,7 @@ export default function MainPublication() {
         setLoad(false)
         const fetchData = async () => {
             if (typeof location.state === undefined || location.state === false) {
-                await axios.get(`http://localhost:3001/api/publications/one/${slug}`)
+                await axios.get(`${process.env.REACT_APP_URL}api/publications/one/${slug}`)
                     .then(res => {
                         setIsBack(false)
                         setData(res.data[0])
@@ -58,7 +58,7 @@ export default function MainPublication() {
                 setData(location.state.data)
             }
             
-            await axios.get(`http://localhost:3001/api/publications/comments/${slug}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/publications/comments/${slug}`)
             .then(res => {
                 setDataComments(res.data)
             })
@@ -77,7 +77,7 @@ export default function MainPublication() {
         let dateTime = date+' '+time;
 
         if (dataNewPubli.text.length > 2) {
-            axios.post(`http://localhost:3001/api/publications/comments/add/${data.publicationId}`, dataNewPubli)
+            axios.post(`${process.env.REACT_APP_URL}api/publications/comments/add/${data.publicationId}`, dataNewPubli)
                 .then(res => {
                     setAletCss(false)
                     setAlertMsg("Comment published !")
@@ -89,7 +89,7 @@ export default function MainPublication() {
                         profileImage: userDataReducer.profileImage,
                         date: Date.now()
                     }])
-                    axios.post("http://localhost:3001/api/notifications/add", {
+                    axios.post(`${process.env.REACT_APP_URL}api/notifications/add`, {
                         receiver : data.userId,
                         sender: userDataReducer.userId,
                         date: dateTime,

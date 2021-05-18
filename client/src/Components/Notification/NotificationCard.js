@@ -36,14 +36,14 @@ export default function NotificationCard({ data }) {
 
     const handleClickInvitation = async choice => {
         if (choice) {
-            await axios.post(`http://localhost:3001/api/user/friend/add/${data.content.senderId}`, {
+            await axios.post(`${process.env.REACT_APP_URL}api/user/friend/add/${data.content.senderId}`, {
                 userId: data.content.receiverId 
             })
             .then()
             .catch(err => console.log(err))
         } 
         setLoad(false)
-        await axios.delete("http://localhost:3001/api/notifications/delete", {data: {
+        await axios.delete(`${process.env.REACT_APP_URL}api/notifications/delete`, {data: {
             type: "invitation",
             receiverId: data.content.receiverId,
             senderId: data.content.senderId,

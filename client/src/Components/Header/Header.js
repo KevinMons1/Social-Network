@@ -49,7 +49,7 @@ export default function Header() {
     const handleSearch = e => {
         const regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
         if (txtInput.length >= 1 && txtInput.match(regex)) {
-            axios.get(`http://localhost:3001/api/user/search/${txtInput}`)
+            axios.get(`${process.env.REACT_APP_URL}api/user/search/${txtInput}`)
                 .then(res => {
                     setDataSearch(res.data)
                     setIsSearch(true)
@@ -66,7 +66,7 @@ export default function Header() {
 
     return (!isTabletOrMobile ?
         <header className={themeReducer ? "header-dark" : "header"}>
-            <SearchUsers isSearch={isSearch} data={dataSearch} />
+            <SearchUsers isSearch={isSearch} data={dataSearch} setIsSearch={() => setIsSearch(false)} />
             <div className="header-top">
                 <div className="header-banner-box">
                     <img src={userDataReducer.bannerImage} alt="Your banner frame"/>
@@ -126,13 +126,12 @@ export default function Header() {
                     <input type="checkbox" />
                     <span className="slider round"></span>
                 </label>
-                {/* <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button> */}
                 <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
             </div>
         </header>
     : 
         <header className={themeReducer ? "header-dark" : "header"}>
-            <SearchUsers isSearch={isSearch} setIsSearch={setIsSearch} data={dataSearch} />
+            <SearchUsers isSearch={isSearch} setIsSearch={() => setIsSearch(false)} data={dataSearch} />
 
         <div className="header-content-top">
             <div className={isSearch ? "serach-top isSearch" : "search-top"}>

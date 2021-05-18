@@ -81,7 +81,7 @@ export default function ModifyAccount({ setClose, slug }) {
         
         // Modify informations
         if (verifyInformations()) {    
-            await axios.put(`http://localhost:3001/api/user/account/informations/update/${slug}`, data)
+            await axios.put(`${process.env.REACT_APP_URL}api/user/account/informations/update/${slug}`, data)
                 .then(res => {
                     setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)  
@@ -109,14 +109,14 @@ export default function ModifyAccount({ setClose, slug }) {
                 formData.append('txt', txt)
                 
                 if (choiceImage) {
-                    axios.put(`http://localhost:3001/api/user/account/image/profile/${slug}`, formData)
+                    axios.put(`${process.env.REACT_APP_URL}api/user/account/image/profile/${slug}`, formData)
                     .then(res => {
                         setAletCss(res.data.alert)
                         setAlertMsg(res.data.message)
                     })
                     .catch(err => console.log(err))
                 } else {
-                    axios.put(`http://localhost:3001/api/user/account/image/banner/${slug}`, formData)
+                    axios.put(`${process.env.REACT_APP_URL}api/user/account/image/banner/${slug}`, formData)
                     .then(res => {
                         setAletCss(res.data.alert)
                         setAlertMsg(res.data.message)

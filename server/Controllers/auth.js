@@ -23,6 +23,7 @@ const requestQuery = async (query, params) => {
 const verifyEmail = async (email, choice) => {
     return await new Promise(async (resolve) => {
         const result = await requestQuery("SELECT email FROM users WHERE email = ?", [email])
+
         if (result.length > 0) {
             resolve(choice)
         } else {

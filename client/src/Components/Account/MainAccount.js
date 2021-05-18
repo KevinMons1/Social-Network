@@ -44,7 +44,7 @@ export default function MainAccount() {
           })
 
         const fetchDataAccount = async () => {
-            await axios.get(`http://localhost:3001/api/user/account/informations/${id}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/user/account/informations/${id}`)
                 .then(res => {
                     if (res.data.alert) {
                         return history.push({pathname: '/error404'})
@@ -54,7 +54,7 @@ export default function MainAccount() {
                 })
                 .catch(err => console.log(err))
                 
-            await axios.get(`http://localhost:3001/api/publications/account/${id}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/publications/account/${id}`)
             .then(res => {
                 if (res.data.length === 0) {
                     setIsEmpty(true)
@@ -65,7 +65,7 @@ export default function MainAccount() {
             })
             .catch(err => console.log(err))
             
-            await axios.post(`http://localhost:3001/api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
+            await axios.post(`${process.env.REACT_APP_URL}api/user/account/isFriend/${id}`, {userId: userDataReducer.userId})
                 .then(res => {
                     setIsFriend(res.data)
                 })
@@ -91,7 +91,7 @@ export default function MainAccount() {
         let dateTime = date+' '+time;
         
         setWaiting(true)
-        axios.post("http://localhost:3001/api/notifications/add", {
+        axios.post(`${process.env.REACT_APP_URL}api/notifications/add`, {
             receiver : slug,
             sender: userDataReducer.userId,
             type: "invitation",

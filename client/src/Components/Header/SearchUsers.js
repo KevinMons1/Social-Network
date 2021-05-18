@@ -23,7 +23,7 @@ export default function SearchUsers({ data, isSearch, setIsSearch }) {
     }, [isSearch])
 
     const handleClick = user => {
-        setIsSearch(false)
+        if (isTabletOrMobile) setIsSearch()
         history.push(`/account/${user.userId}`)
     }
 

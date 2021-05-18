@@ -40,7 +40,7 @@ export default function Connected({choiceCss, friendClick}) {
         listenConnection()
 
         const fetchData = async () => {
-            await axios.get(`http://localhost:3001/api/user/userFriends/${userDataReducer.userId}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/user/userFriends/${userDataReducer.userId}`)
             .then(res => {
                 // if res.data === true but this user haven't friends
                 if (res.data) {
@@ -57,7 +57,7 @@ export default function Connected({choiceCss, friendClick}) {
             })
             .catch(err => console.log(err))
             
-            await axios.get(`http://localhost:3001/api/user/connected/friends/chat/${userDataReducer.userId}`)
+            await axios.get(`${process.env.REACT_APP_URL}api/user/connected/friends/chat/${userDataReducer.userId}`)
             .then(res => { 
                 setFriendEmpty(true)   
                 res.data.forEach(friend => {
@@ -151,7 +151,7 @@ export default function Connected({choiceCss, friendClick}) {
                 let indexFind = usersDataChat.findIndex(user => user.data.userId === userData.sender)
                 
                 if (indexFind === -1) {
-                    axios.get(`http://localhost:3001/api/user/simple/informations/${userData.sender}`)
+                    axios.get(`${process.env.REACT_APP_URL}api/user/simple/informations/${userData.sender}`)
                         .then(res => {
                             setUsersDataChat(users => [{
                                 isView: true,

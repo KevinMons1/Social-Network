@@ -35,7 +35,7 @@ export default function MainGallery() {
         idPath = idPath.split('/')
 
         const fetchDataAccount = async () => {
-                await axios.get(`http://localhost:3001/api/publications/account/${idPath[0]}`)
+                await axios.get(`${process.env.REACT_APP_URL}api/publications/account/${idPath[0]}`)
                     .then(res => {
                         if (res.data.length === 0) {
                         } else {
