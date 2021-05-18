@@ -14,7 +14,8 @@
     flex-direction: column;
     align-items: center;
     background-color: #F0F2F5;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .mainAccount-dark {
@@ -24,8 +25,8 @@
     flex-direction: column;
     align-items: center;
     background-color: rgb(37, 37, 37);
-    overflow: scroll;
-}
+    overflow-y: scroll;
+    overflow-x: hidden;}
 
 .account-container {
     width: 100%;

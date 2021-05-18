@@ -1,11 +1,11 @@
 @media screen and (max-width: 550px) { 
     .chatDiv-container {
-        height: 88vh;
+        height: 86vh;
     }
 }
 
 @media screen and (max-width: 470px) {
     .chatDiv-container {
-        height: 89vh;
+        height: 87vh;
     }
 }
