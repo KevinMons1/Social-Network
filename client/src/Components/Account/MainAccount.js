@@ -44,16 +44,20 @@ export default function MainAccount() {
           })
 
         const fetchDataAccount = async () => {
+            let stop = false
             await axios.get(`${process.env.REACT_APP_URL}api/user/account/informations/${id}`)
                 .then(res => {
                     if (res.data.alert) {
+                        stop = true
                         return history.push({pathname: '/error404'})
                     } else {
                         setDataUser(res.data.userData)
                     }
                 })
                 .catch(err => console.log(err))
-                
+
+            if (stop) return
+            
             await axios.get(`${process.env.REACT_APP_URL}api/publications/account/${id}`)
             .then(res => {
                 if (res.data.length === 0) {
@@ -121,7 +125,7 @@ export default function MainAccount() {
         <div className={themeReducer ? "mainAccount-dark" : "mainAccount"}>
             {load ?
                 <div className="account-container">
-                    {openNewPubli ? <NewPubliBox /*publi={openNewPubli}*/ setPubli={setOpenNewPubli} />  : null}
+                    {openNewPubli ? <NewPubliBox setPubli={setOpenNewPubli} /> : null}
                     {openModifyAccount ? <ModifyAccount slug={slug} setClose={setOpenModifyAccount} /> : null}
                     {openRemoveFriend ? <RemoveFriend slug={slug} friendId={dataUser[0].userId} setClose={(choice) => handleDeleteFriend(choice)} /> : null}
 

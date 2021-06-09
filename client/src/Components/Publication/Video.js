@@ -130,7 +130,7 @@ export default function Video({ data, clickNo, isTall }) {
             </video>
             <div ref={videoControlsRef} className="video-controls">
                 <div className="video-bar" ref={videoBarRef} onClick={e => handleClickVideo(e)}>
-                    <div className="video-par-run" ref={barreRef}></div>
+                    <div className="video-bar-run" ref={barreRef}></div>
                 </div>
                 <div className="video-btn-content">
                     <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo(true)}></button>

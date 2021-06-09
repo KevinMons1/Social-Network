@@ -2,7 +2,7 @@ import axios from "axios"
 import io from "socket.io-client"
 
 // Socket.io
-export const socket = io("localhost:3001", {
+export const socket = io(process.env.REACT_APP_URL, {
     forceNew : false , 
     secure : true ,
     transports: [ 'websocket' ] 
@@ -17,6 +17,5 @@ export const apiTwitch = axios.create({
 })
 
 // Giphy API
-
 export const keyGiphy = process.env.REACT_APP_GIFY_KEY
 

@@ -1,6 +1,3 @@
-//TODO -> Protéger ces Routes plus tard
-//TODO -> thème en cookie
-
 import {useEffect, useState} from "react"
 import "./Styles/app.css"
 import "./Styles/Media-Queries/Tablet/app.css"
@@ -8,6 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 import {Route, Switch, useHistory, useLocation} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux"
 import {useTransition, animated, config} from "react-spring"
+import Cookie from "js-cookie"
 
 import ProtectedRoute from "./ProtectedRoute"
 import Auth from "./Auth"
@@ -22,6 +20,7 @@ import Account from "./Components/Account/Index"
 import Gallery from "./Components/Gallery/Index"
 import Friends from "./Components/Friends/Index"
 import Gaming from "./Components/Gaming/Index"
+import Landing from "./Components/Landing/index"
 import Live from "./Components/Gaming/Live"
 import FullFile from "./Components/Services/FullFile"
 import Login from "./Components/Connexion/Login"
@@ -29,17 +28,20 @@ import Signup from "./Components/Connexion/Signup"
 import PasswordForget from "./Components/Connexion/PasswordForget"
 import Error from "./Components/Services/Error"
 import Loader from "./Components/Services/Loader"
+import Informations from "./Components/Services/Informations"
 
 function App() {
 
   const themeReduceur = useSelector(state => state.Theme)
   const zIndexReduceur = useSelector(state => state.ZIndexReduceur)
-  const [load, setLoad] = useState(false)
-  const [authenticated, setAuthenticated] = useState(false)
+  const themeCookie = Cookie.get("theme")
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
+  const [load, setLoad] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false)
+  const [openInformations, setOpenInformations] = useState(false)
   const verifyPathname = () => {
     // Avoid listen pathname /:slug on root chat for not repeat animation and refresh page each change path
     if (location.pathname.includes("/chat/")) {
@@ -57,10 +59,16 @@ function App() {
   useEffect(() => {
     const fetch = async () => {
       let data = await Auth.loginWithCookie()
+      document.body.classList.add(themeReduceur ? "body-dark" : "body")
+      document.body.classList.remove(themeReduceur ? "body" : "body-dark")
       if (Auth.isAuthenticated()) {
         dispatch({
           type: "ADD_DATA",
           payload: data
+        })
+        dispatch({
+          type: 'CHANGE',
+          payload:  themeCookie === "true" ? true : false
         })
         if (location.pathname === "/login") history.push({pathname: '/'})
         setAuthenticated(true)
@@ -73,32 +81,38 @@ function App() {
   return (
     load ? 
       <div className={themeReduceur ? "App-dark" : "App"}>
-        <ProtectedRoute component={FullFile} />
-        <ProtectedRoute component={Header} />
+         {authenticated ? <ProtectedRoute component={FullFile} /> : null}
+         {authenticated ? <ProtectedRoute openInformations={() => setOpenInformations(true)} component={Header} /> : null}
+         {authenticated ? openInformations ? <ProtectedRoute closeInformations={() => setOpenInformations(false)} component={Informations} /> : null : null}
         <div className="container">
           {transitions.map(({item: location, props, key}) => {
             return (
               <animated.div key={key} style={props} className={zIndexReduceur ? "container-anim container-index" : "container-anim"}>
                 <Switch location={location}>
-                  <ProtectedRoute isHome={true} exact path="/" component={Home} /> 
-                  <ProtectedRoute isHome={false} exact path="/hashtag/:slug" component={Home} />
-                  <ProtectedRoute exact path="/publication/:slug" component={Publication} /> 
-                  <ProtectedRoute exact path="/account/:slug" component={Account} />
-                  <ProtectedRoute exact path="/account/:slug/gallery" component={Gallery} />
-                  <ProtectedRoute exact path="/account/:slug/friends" component={Friends} />
-                  <ProtectedRoute exact path="/gaming" component={Gaming} />
-                  <ProtectedRoute excat path="/gaming/live/:slug" component={Live} />
-                  <ProtectedRoute exact path="/chat/:slug" component={Chat} />
-                  {!authenticated ? <Route exact path="/login" component={Login} /> : null}
-                  {!authenticated ? <Route exact path="/signup" component={Signup} /> : null}
-                  {!authenticated ? <Route exact path="/password-forget" component={PasswordForget} /> : null} 
-                  <Route component={Error} />
+                  {authenticated ? <ProtectedRoute isHome={true} exact path="/" component={Home} /> : null}
+                  {authenticated ? <ProtectedRoute isHome={false} exact path="/hashtag/:slug" component={Home} /> : null}
+                  {authenticated ? <ProtectedRoute exact path="/publication/:slug" component={Publication} />  : null}
+                  {authenticated ? <ProtectedRoute exact path="/account/:slug" component={Account} /> : null}
+                  {authenticated ? <ProtectedRoute exact path="/account/:slug/gallery" component={Gallery} /> : null}
+                  {authenticated ? <ProtectedRoute exact path="/account/:slug/friends" component={Friends} /> : null}
+                  {authenticated ? <ProtectedRoute exact path="/gaming" component={Gaming} /> : null}
+                  {authenticated ? <ProtectedRoute excat path="/gaming/live/:slug" component={Live} /> : null}
+                  {authenticated ? <ProtectedRoute exact path="/chat/:slug" component={Chat} /> : null}
+                  {!authenticated ?<Route exact path={"/"} component={Landing} /> : null}
+                  {!authenticated ?<Route exact path={"/login"} component={Login} /> : null}
+                  {!authenticated ?<Route exact path="/signup" component={Signup} /> : null}
+                  {!authenticated ?<Route exact path="/password-forget" component={PasswordForget} /> : null} 
+                  <Route path="*" component={Error} />
                 </Switch>
               </animated.div>
             )
           })}
         </div>
-        {!isTabletOrMobile ? <ProtectedRoute component={Connected} choiceCss={true} /> : null}
+        {authenticated 
+        ? !isTabletOrMobile 
+            ? <ProtectedRoute component={Connected} choiceCss={true} /> 
+            : null
+        : null}
       </div>
   : <Loader />
   )

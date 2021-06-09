@@ -3,9 +3,13 @@ import {Link, useHistory} from "react-router-dom"
 import axios from "axios"
 import "../../Styles/connexion.css"
 import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
+import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.json"
+import {useSelector} from "react-redux"
+import Lottie from "react-lottie"
 
 export default function Signup() {
 
+    const themeReducer = useSelector(state => state.Theme)
     const history = useHistory()
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
@@ -16,6 +20,14 @@ export default function Signup() {
         email: "",
         password: ""
     })
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: AnimPageConnexionDark,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+      }
 
     const verifyInformations = () => {
         const regex = /^[^@&":()!_$*€<>£`'µ§%+=;?#]+$/
@@ -72,9 +84,9 @@ export default function Signup() {
     }
 
     return (
-        <section className="connexion">
-            <div className="connexion-left">
-                <div className="connexion-title">
+        <section className={themeReducer ? "connexion-dark" : "connexion"}>
+            <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>   
+                <div className={themeReducer ? "connexion-title-dark" : "connexion-title"}>
                     <h1>Register</h1>
                 </div>
                 {alertMsg === "" 
@@ -85,38 +97,41 @@ export default function Signup() {
                 }
                 <form className="connexion-form" onSubmit={e => handleSubmit(e)} >
                     <div className="connexion-info">
-                        <label htmlFor="email" className="connexion-label">Mail address</label>
+                        <label htmlFor="email" className={themeReducer ? "connexion-label-dark" : "connexion-label"}>Mail address</label>
                         <input required type="email" name="email" className="connexion-input" onChange={e => handleChange(e)} />
                     </div>
                     <div className="connexion-info connexion-name">
                         <div>
-                            <label htmlFor="lastName" className="connexion-label">Last Name</label>
+                            <label htmlFor="lastName" className={themeReducer ? "connexion-label-dark" : "connexion-label"}>Last Name</label>
                             <input required type="text" name="lastName" className="connexion-input" onChange={e => handleChange(e)}/>
                         </div>
                         <div>
-                            <label htmlFor="firstName" className="connexion-label">First Name</label>
+                            <label htmlFor="firstName" className={themeReducer ? "connexion-label-dark" : "connexion-label"}>First Name</label>
                             <input required type="text" name="firstName" className="connexion-input" onChange={e => handleChange(e)}/>
                         </div>
                     </div>
                     <div className="connexion-info">
-                        <label htmlFor="password" className="connexion-label">Password</label>
+                        <label htmlFor="password" className={themeReducer ? "connexion-label-dark" : "connexion-label"}>Password</label>
                         <input required type="password" name="password" className="connexion-input" onChange={e => handleChange(e)}/>
                     </div>
                     <div className="connexion-info">
-                        <label htmlFor="passwordVerif" className="connexion-label">Verify Password</label>
+                        <label htmlFor="passwordVerif" className={themeReducer ? "connexion-label-dark" : "connexion-label"}>Verify Password</label>
                         <input required type="password" name="passwordVerif" className="connexion-input" onChange={e => setPasswordVerify(e.target.value)} />
                     </div>
                     <div className="connexion-submit">
-                        <button type="submit" className="connexion-btn">SIGN IN</button>
+                        <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN IN</button>
                     </div>
                 </form>
                 <div className="connexion-link-box">
-                    <Link to="/login" className="connexion-link">Login</Link>
+                    <Link to="/login" className={themeReducer ? "connexion-link-dark" : "connexion-link"}>Login</Link>
                 </div>
             </div>
 
             <div className="connexion-right">
-                <img src={AnimPageConnexion} alt="Animation"/>
+                {themeReducer 
+                ? <Lottie options={defaultOptions} height={400} width={400}/>
+                : <img src={AnimPageConnexion} alt="Error 404 page not found"/>
+                } 
             </div>
         </section>
     )

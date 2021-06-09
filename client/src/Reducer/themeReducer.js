@@ -1,4 +1,8 @@
-const INITIAL_STATE = false
+import Cookie from "js-cookie"
+
+const themeCookie = Cookie.get("theme")
+
+const INITIAL_STATE = themeCookie === "true" ? true : false
 
 const themeReducer = (state = INITIAL_STATE, action) => {
 

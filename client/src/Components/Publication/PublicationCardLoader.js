@@ -26,13 +26,13 @@ export default function PublicationCardLoader() {
             <div className="bg-publi-loader"></div>
 
             <div className="social-publi">
-                <div className="icon-publi">
+                <div className="icon-publi-loader">
                     <FontAwesomeIcon className="icon-loader" icon="heart" />
                 </div>
                 <div className="icon-publi">
                     <FontAwesomeIcon className="icon-loader" icon="comment" />
+                </div>
             </div>
-        </div>
     </div>
     )
 }

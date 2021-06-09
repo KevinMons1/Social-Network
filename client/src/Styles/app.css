@@ -5,8 +5,14 @@
     font-family: "Poppins";
 }
 
-body {
+.body {
     overflow: hidden;
+    background-color: #F0F2F5;
+}
+
+.body-dark {
+    overflow: hidden;
+    background-color: #252525;
 }
 
 .App {
@@ -20,7 +26,7 @@ body {
 .App-dark {
     display: flex;
     justify-content: space-between;
-    background-color: rgb(37, 37, 37);
+    background-color: #252525;
 }
 
 .container {
@@ -84,7 +90,7 @@ Scroll bar
 
 /*
 //////////////////////// 
-Scroll bar
+Alert
 //////////////////////// 
 */
 

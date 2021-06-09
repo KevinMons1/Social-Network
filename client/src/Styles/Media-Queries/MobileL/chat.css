@@ -1,11 +1,39 @@
 @media screen and (max-width: 550px) { 
-    .chatDiv-container {
-        height: 86vh;
+    .chat {
+        height: 90vh;
     }
-}
 
-@media screen and (max-width: 470px) {
+    .mainChat {
+        height: 100%;
+    }
+
     .chatDiv-container {
-        height: 87vh;
+        height: 100%;
+    }
+
+    .chatDiv-chat {
+        width: 100%;
+        height: 80%;
+        border-bottom: 1px solid #c2c2c2;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .new-msg-box {
+        height: auto;
+    }
+
+    .chatDiv-write {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: auto;
+    }
+    
+    .chatDiv-write-dark {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: auto;
     }
 }

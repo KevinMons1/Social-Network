@@ -1,5 +1,5 @@
 @media screen and (max-width: 956px) {
-    .connexion-left {
+    .connexion-left, .connexion-left-dark {
         display: flex;
         flex-direction: column;
         justify-content: center;

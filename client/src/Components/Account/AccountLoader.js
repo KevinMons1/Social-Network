@@ -25,15 +25,12 @@ export default function AccountLoader() {
                         <div className="account-icon">
                             <div className="account-icon-box">
                                 <FontAwesomeIcon icon="heart" className="icon-loader"/>
-                                <p className="icon-txt-loader"></p>
                             </div>
                             <div className="account-icon-box">
                                 <FontAwesomeIcon icon="user-friends" className="icon-loader"/>
-                                <p className="icon-txt-loader"></p>
                             </div>
                             <div className="account-icon-box">
                                 <FontAwesomeIcon icon="pen" className="icon-loader"/>
-                                <p className="icon-text-loader"></p>
                             </div>
                         </div>
                         <div className="account-bio">

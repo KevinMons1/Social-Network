@@ -1,5 +1,5 @@
 @media screen and (max-width: 1024px) {
-    .connexion-right {
+    .connexion-right, .connexion-right-dark {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -7,11 +7,11 @@
         height: 100%;
     }
 
-    .connexion-right > img {
+    .connexion-right > img, .connexion-right-dark > img {
         width: 80%;
     }
 
-    .connexion-left {
+    .connexion-left, .connexion-left-dark {
         width: 60%;
     }
 
@@ -20,7 +20,7 @@
         margin: 5px;
     }
 
-    .connexion-label {
+    .connexion-label, .connexion-label-dark {
         margin-bottom: 5px;
         font-size: 20px;
     }
@@ -40,7 +40,7 @@
         flex-direction: column;
     }
 
-    .connexion-title {
+    .connexion-title, .connexion-title-dark {
         margin-bottom: 5px;
     }
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import "../../Styles/header.css"
 import "../../Styles/Media-Queries/Laptop/header.css"
@@ -16,23 +16,35 @@ import Auth from "../../Auth"
 import SearchUsers from "./SearchUsers"
 import Notification from '../Notification/Notification'
 
-export default function Header() {
+export default function Header({ openInformations }) {
 
+    const themeCookie = Cookie.get("theme")
+    const checkRef = useRef()
     const dispatch = useDispatch()
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
-    const [theme, setTheme] = useState(true)
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
+    const [isOk, setIsOk] = useState(false)
     const [txtInput, setTxtInput] = useState("")
     const [isSearch, setIsSearch] = useState(false)
     const [dataSearch, setDataSearch] = useState(null)
-    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
+    const [newTheme, setNewTheme] = useState(null)
+
+    useEffect(() => {
+        if (themeCookie === "true") checkRef.current.click()
+        setNewTheme(themeCookie === "true" ? true : false)
+        setIsOk(true)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     
     const handleTheme = () => {
-        dispatch({
-            type: 'CHANGE',
-            payload: theme
-        })
-        setTheme(!theme)
+        if (isOk) {
+            dispatch({
+                type: 'CHANGE',
+                payload: !newTheme
+            })
+            Cookie.set("theme", !newTheme)
+            setNewTheme(newTheme => !newTheme)
+        }
     }
 
     const handleDisconnect = () => {
@@ -60,7 +72,6 @@ export default function Header() {
 
     const handleKeyDown = e => {
         if (e.repeat) return
-
         if (e.key === "Enter") handleSearch()
     }
 
@@ -123,17 +134,22 @@ export default function Header() {
 
             <div className="header-bottom">
                 <label className="switch" onChange={handleTheme} >
-                    <input type="checkbox" />
+                    <input ref={checkRef} type="checkbox" />
                     <span className="slider round"></span>
                 </label>
-                <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
-            </div>
+                <div className="header-bottom-btns">
+                    <button className={themeReducer ? "header-bottom-btn-dark" : "header-bottom-btn"} onClick={() => openInformations()}><FontAwesomeIcon icon="question-circle"/></button>
+                    <button className={themeReducer ? "header-bottom-btn-dark" : "header-bottom-btn"} onClick={() => handleDisconnect()}><FontAwesomeIcon icon="sign-out-alt"/></button>            </div>
+                </div>
         </header>
     : 
         <header className={themeReducer ? "header-dark" : "header"}>
             <SearchUsers isSearch={isSearch} setIsSearch={() => setIsSearch(false)} data={dataSearch} />
 
         <div className="header-content-top">
+            <button className={themeReducer ? "header-bottom-btn-dark" : "header-bottom-btn"} onClick={() => handleDisconnect()}><FontAwesomeIcon icon="sign-out-alt"/></button>
+            <button className={themeReducer ? "header-bottom-btn-dark" : "header-bottom-btn"} onClick={() => openInformations()}><FontAwesomeIcon icon="question-circle"/></button>
+
             <div className={isSearch ? "serach-top isSearch" : "search-top"}>
                 <div className="search-input">
                     <button onClick={() => handleSearch()} className="search-btn"><FontAwesomeIcon className={isSearch ? "search-icon isSearch-icon" : "search-icon"} icon="search" /></button>
@@ -141,11 +157,8 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* <button className="header-bottom-btn btnHelp"><FontAwesomeIcon icon="question-circle"/> Help</button> */}
-            <button className="header-bottom-btn btnDisconnection" onClick={() => handleDisconnect()}>Disconnection</button>
-
-            <label className="switch" onChange={handleTheme} >
-                <input type="checkbox" />
+            <label className="switch" ref={checkRef} onChange={() => handleTheme()} >
+                <input  type="checkbox" />
                 <span className="slider round"></span>
             </label>
         </div>
@@ -155,34 +168,30 @@ export default function Header() {
                 <ul className="header-middle-ul">
                     <li className="header-middle-li">
                         <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
-                            <FontAwesomeIcon className="home-icon header-middle-icon" icon="home" />
-                        </div>
-                        <div className="header-middle-text">
-                            <Link to="/" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Home</Link>
-                        </div>
-                    </li>
-                    <li className="header-middle-li">
-                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
-                            <FontAwesomeIcon className="header-account-icon header-middle-icon" icon="user-circle" />
-                        </div>
-                        <div className="header-middle-text">
-                            <Link to={{pathname: `/account/${userDataReducer.userId}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Account</Link>
+                            <Link to="/" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"}>
+                                <FontAwesomeIcon className="home-icon header-middle-icon" icon="home" />
+                            </Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
                         <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
-                            <FontAwesomeIcon className="gaming-icon header-middle-icon" icon="gamepad" />
-                        </div>
-                        <div className="header-middle-text">
-                            <Link to="/gaming" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"}>Gaming</Link>
+                            <Link to={{pathname: `/account/${userDataReducer.userId}`}} className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >
+                                <FontAwesomeIcon className="header-account-icon header-middle-icon" icon="user-circle" />
+                            </Link>
                         </div>
                     </li>
                     <li className="header-middle-li">
                         <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
-                            <FontAwesomeIcon className="chat-icon header-middle-icon" icon="comments" />
+                            <Link to="/gaming" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"}>
+                                <FontAwesomeIcon className="gaming-icon header-middle-icon" icon="gamepad" />
+                            </Link>
                         </div>
-                        <div className="header-middle-text">
-                            <Link to="/chat/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >Chat</Link>
+                    </li>
+                    <li className="header-middle-li">
+                        <div className={themeReducer ? "header-middle-icon-box-dark" : "header-middle-icon-box"}>
+                            <Link to="/chat/empty" className={themeReducer ? "header-middle-link-dark" : "header-middle-link"} >
+                                <FontAwesomeIcon className="chat-icon header-middle-icon" icon="comments" />
+                            </Link>
                         </div>
                     </li>
                     <li className="header-middle-li">

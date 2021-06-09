@@ -7,16 +7,19 @@ import "../../Assets/fontawesome"
 import axios from "axios"
 import imageCompression from "browser-image-compression"
 import {useTransition, animated, config} from "react-spring"
+import Loader from "../Services/Loader"
 
 export default function NewPubliBox({ setPubli }) {
 
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const openFile = useRef(null)
+    const textareaRef = useRef(null)
     const hashtagValue = useRef("")
     const [fileIsVisible ,setFileIsVisible] = useState(false)
     const [fileVisible, setFileVisible] = useState(null)
     const [dataFile, setDataFile] = useState(null)
+    const [isSend, setIsSend] = useState(false)
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
     const [newHashtag, setNewHashtag] = useState("")
@@ -65,34 +68,55 @@ export default function NewPubliBox({ setPubli }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        // Publication text
-        if (verifyInformations()) {
-            axios.post(`${process.env.REACT_APP_URL}api/publications/add/publication/${userDataReducer.userId}`, data)
-                .then(res => {
-                    if (res.data.alert) {
-                        if (dataFile != null) {
-                            if (dataFile.type.includes("image")) {
-                                // Image
-                                handleCompressionImage(res.data.publicationId)
+        if (!isSend) {
+            // Publication text
+            if (verifyInformations()) {
+                setIsSend(true)
+                axios.post(`${process.env.REACT_APP_URL}api/publications/add/publication/${userDataReducer.userId}`, data)
+                    .then(res => {
+                        if (res.data.alert) {
+                            if (dataFile != null) {
+                                if (dataFile.type.includes("image")) {
+                                    // Image
+                                    handleCompressionImage(res.data.publicationId)
+                                } else {
+                                    // Video
+                                    let formData = new FormData()
+                                    formData.append('video', dataFile)
+                                    formData.append('id', res.data.publicationId)
+                                    axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
+                                        .then(res => {
+                                            setIsSend(false)
+                                            setData({
+                                                text: "",
+                                                hashtag: []
+                                            })
+                                            setNewHashtag("")
+                                            textareaRef.current.value = ""
+                                            setFileIsVisible(false)
+                                            setDataFile(null)
+                                            setAletCss(false)
+                                            setAlertMsg(res.data.message)
+                                        })
+                                        .catch(err => console.log(err))
+                                }
                             } else {
-                                // Video
-                                let formData = new FormData()
-                                formData.append('video', dataFile)
-                                formData.append('id', res.data.publicationId)
-                                axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
-                                    .then(res => {
-                                        setAletCss(false)
-                                        setAlertMsg(res.data.message)
-                                    })
-                                    .catch(err => console.log(err))
+                                setIsSend(false)
+                                setAletCss(false)
+                                setData({
+                                    text: "",
+                                    hashtag: []
+                                })
+                                setNewHashtag("")
+                                textareaRef.current.value = ""
+                                setFileIsVisible(false)
+                                setDataFile(null)
+                                setAlertMsg("Publications published !")
                             }
-                        } else {
-                            setAletCss(false)
-                            setAlertMsg("Publications published !")
                         }
-                    }
-                })
-                .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err))
+            }
         }
     }
 
@@ -138,6 +162,15 @@ export default function NewPubliBox({ setPubli }) {
                 formData.append('id', publicationId)
                 axios.post(`${process.env.REACT_APP_URL}api/publications/add/image`, formData)
                     .then(res => {
+                        setIsSend(false)
+                        setData({
+                            text: "",
+                            hashtag: []
+                        })
+                        setNewHashtag("")
+                        textareaRef.current.value = ""
+                        setFileIsVisible(false)
+                        setDataFile(null)
                         setAletCss(false)
                         setAlertMsg(res.data.message)
                     })
@@ -148,14 +181,16 @@ export default function NewPubliBox({ setPubli }) {
       
 
     const handleChangeFile = e => {
-        setFileVisible(URL.createObjectURL(e.target.files[0]))
-        setDataFile(e.target.files[0])
-        setFileIsVisible(true)
+        if (typeof e.target.files[0] !== "undefined") {
+            setFileVisible(URL.createObjectURL(e.target.files[0]))
+            setDataFile(e.target.files[0])
+            setFileIsVisible(true)
+        } 
     }
 
     const handleRemoveImg = () => {
-        setDataFile(null)
         setFileIsVisible(false)
+        setDataFile(null)
     }
 
     return (
@@ -165,21 +200,22 @@ export default function NewPubliBox({ setPubli }) {
             ))}
             {transitionContent.map(({item, key, props}) => item && (
                 <animated.div key={key} style={props} className={themeReducer ? "new-publi-content-dark" : "new-publi-content"}>
-                <button className={themeReducer ? "new-publi-icon-btn-dark" : "new-publi-icon-btn"} onClick={handleClosePublication}>
+                <button className={themeReducer ? "new-publi-icon-btn-dark" : "new-publi-icon-btn"} onClick={() => handleClosePublication()}>
                     <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon"/>
-                </button>
+                </button>  
+                {isSend ? <div className="new-publi-loader"><Loader isMini={true} /></div> : null}          
                 {alertMsg === "" 
                 ?   null 
                 :   <div className={alertCss ? "alert-danger" : "alert-success"}>
                         <p>{alertMsg}</p>
                     </div>
                 }
-                <form className="new-publi-form" onSubmit={e => handleSubmit(e)}>          
+                <form className="new-publi-form" onSubmit={e => handleSubmit(e)}>  
                         {fileIsVisible 
                         ? <div className="new-publi-img-box">
-                            <button className="new-publi-icon-btn-img" onClick={handleRemoveImg}>
+                            <button className="new-publi-icon-btn-img" onClick={() => handleRemoveImg()}>
                                 <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon-img"/>
-                            </button>
+                            </button>    
                             {dataFile.type.includes("image") 
                             ?   <img src={fileVisible} alt="Your publication frame" className="new-publi-img"/>
                             :   <video alt="Your publication frame" className="new-publi-img">
@@ -190,7 +226,7 @@ export default function NewPubliBox({ setPubli }) {
                         : null} 
                     <div className={themeReducer ? "new-publi-box-dark" : "new-publi-box"}>
                         <FontAwesomeIcon className={themeReducer ? "icon-new-publi-dark" : "icon-new-publi"} icon="comments" />
-                        <textarea name="text" className={themeReducer ? "new-publi-textarea textarea-dark" : "new-publi-textarea"} placeholder="What do you mean ?" onChange={e => handleChange(e)}></textarea>
+                        <textarea name="text" ref={textareaRef} className={themeReducer ? "new-publi-textarea textarea-dark" : "new-publi-textarea"} placeholder="What do you mean ?" onChange={e => handleChange(e)}></textarea>
                     </div>
                     <div className="bottom-new-publi">
                         <button className="new-publi-btn-noVisible" type="button"><FontAwesomeIcon icon="photo-video" className={themeReducer ? "icon-write-new-publi-dark" : "icon-write-new-publi"} onClick={handleClickFile}/></button>

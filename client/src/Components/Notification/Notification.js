@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import "../../Styles/notifcation.css"
 import "../../Styles/Media-Queries/Laptop/notification.css"
+import "../../Styles/Media-Queries/MobileL/notification.css"
 import {useSelector} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"

@@ -7,6 +7,7 @@ import "../../Assets/fontawesome"
 import axios from "axios"
 import imageCompression from "browser-image-compression"
 import {useTransition, animated, config} from "react-spring"
+import Loader from "../Services/Loader"
 
 export default function ModifyAccount({ setClose, slug }) {
 
@@ -16,6 +17,7 @@ export default function ModifyAccount({ setClose, slug }) {
     const [bannerImage, setBannerImage] = useState(null)
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)
+    const [isSend, setIsSend] = useState(false)
     const [dataProfileImgTxt, setDataProfileImgTxt] = useState("")
     const [dataBannerImgTxt, setDataBannerImgTxt] = useState("")
     const [isAnimated, setIsAnimated] = useState(true)
@@ -69,28 +71,42 @@ export default function ModifyAccount({ setClose, slug }) {
     const handleSubmit = async e => {
         e.preventDefault()
 
-        // Modify image profile
-        if (profileImage !== null) {
-            await handleCompressionImage(profileImage, dataProfileImgTxt, true)           
+        if (!isSend) {
+            // Modify image profile
+            if (profileImage !== null) {
+                await handleCompressionImage(profileImage, dataProfileImgTxt, true)           
+            }
+    
+            // Modify image banner
+            if (bannerImage != null) {
+                await handleCompressionImage(bannerImage, dataBannerImgTxt, false)           
+            }
+            
+            // Modify informations
+            if (verifyInformations()) {  
+                setIsSend(true)  
+                await axios.put(`${process.env.REACT_APP_URL}api/user/account/informations/update/${slug}`, data)
+                    .then(res => {
+                        setIsSend(false)
+                        setData({
+                            lastName: userDataReducer.lastName,
+                            firstName: userDataReducer.firstName,
+                            bio: userDataReducer.bio
+                        })
+                        setDataProfileImgTxt("")
+                        setDataBannerImgTxt("")
+                        setProfileImage(null)
+                        setBannerImage(null)
+                        setAletCss(res.data.alert)
+                        setAlertMsg(res.data.message)  
+                    })
+                    .catch(err => console.log(err))
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 500);
+                }   
         }
 
-        // Modify image banner
-        if (bannerImage != null) {
-            await handleCompressionImage(bannerImage, dataBannerImgTxt, false)           
-        }
-        
-        // Modify informations
-        if (verifyInformations()) {    
-            await axios.put(`${process.env.REACT_APP_URL}api/user/account/informations/update/${slug}`, data)
-                .then(res => {
-                    setAletCss(res.data.alert)
-                    setAlertMsg(res.data.message)  
-                })
-                .catch(err => console.log(err))
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }   
     } 
 
      // Image compression
@@ -111,6 +127,16 @@ export default function ModifyAccount({ setClose, slug }) {
                 if (choiceImage) {
                     axios.put(`${process.env.REACT_APP_URL}api/user/account/image/profile/${slug}`, formData)
                     .then(res => {
+                        setIsSend(false)
+                        setData({
+                            lastName: userDataReducer.lastName,
+                            firstName: userDataReducer.firstName,
+                            bio: userDataReducer.bio
+                        })
+                        setDataProfileImgTxt("")
+                        setDataBannerImgTxt("")
+                        setProfileImage(null)
+                        setBannerImage(null)
                         setAletCss(res.data.alert)
                         setAlertMsg(res.data.message)
                     })
@@ -118,6 +144,16 @@ export default function ModifyAccount({ setClose, slug }) {
                 } else {
                     axios.put(`${process.env.REACT_APP_URL}api/user/account/image/banner/${slug}`, formData)
                     .then(res => {
+                        setIsSend(false)
+                        setData({
+                            lastName: userDataReducer.lastName,
+                            firstName: userDataReducer.firstName,
+                            bio: userDataReducer.bio
+                        })
+                        setDataProfileImgTxt("")
+                        setDataBannerImgTxt("")
+                        setProfileImage(null)
+                        setBannerImage(null)
                         setAletCss(res.data.alert)
                         setAlertMsg(res.data.message)
                     })
@@ -158,6 +194,7 @@ export default function ModifyAccount({ setClose, slug }) {
                     <button className={themeReducer ? "account-modify-icon-btn-dark" : "account-modify-icon-btn"} onClick={handleCloseModifyAccount}>
                         <FontAwesomeIcon icon="times-circle" className="account-modify-close-icon"/>
                     </button>
+                    {isSend ? <div className="new-publi-loader"><Loader isMini={true} /></div> : null}          
                     <form className="account-modify-form" onSubmit={e => handleSubmit(e)}>          
                     {alertMsg === "" 
                     ?   null 
