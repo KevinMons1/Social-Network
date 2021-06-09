@@ -20,6 +20,6 @@ router.get('/hashtag/:id', publications.getPublicationsHashtag)
 router.get('/one/:id', publications.getOnePublication)
 
 router.delete('/like/delete/:id', publications.deleteLike)
-router.delete('/account/delete/:id', publications.deletePublication)
+router.delete('/account/delete', publications.deletePublication)
 
 module.exports = router

@@ -1,4 +1,4 @@
-const db = require("../db")
+const db = require("../Utils/db")
 const fs = require("fs")
 const path = require("path")
 
@@ -187,10 +187,11 @@ exports.deletePublication = async (req, res) => {
     else if (find < 0) fileSplit = file.split("Images/")
 
     const result = await requestQuery("DELETE FROM publications WHERE publicationId = ?", [publicationId])
-    const result2 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="image"`, [publicationId])
-    const result3 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="comment"`, [publicationId])
-    
-    deleteFile(fileSplit[1], type)
+    if (type === "image" || type === "video") {
+        const result2 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="image"`, [publicationId])
+        const result3 = await requestQuery(`DELETE FROM publicationContent WHERE publicationId = ? AND type="comment"`, [publicationId])
+        deleteFile(fileSplit[1], type)
+    }
 
     res.send({message: "Publications deleted !", alert: true})
 

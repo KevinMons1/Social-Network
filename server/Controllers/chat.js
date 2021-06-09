@@ -1,5 +1,4 @@
-const db = require("../db");
-
+const db = require("../Utils/db")
 //
 // Functions exports 
 //

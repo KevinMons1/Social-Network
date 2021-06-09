@@ -1,4 +1,4 @@
-const db = require("../db")
+const db = require("../Utils/db")
 const bcrypt = require("bcryptjs")
 const jwtUtils = require("../Utils/jwt")
 
