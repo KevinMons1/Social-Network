@@ -25,7 +25,7 @@ export default function Landing() {
             </div>
             <div className={themeReducer ? "landing-text-dark" : "landing-text"}>
                 <p>Hey ! I'm Kévin Monsieur and I'm a self-taught developer. <br/> You will see my biggest project in ReactJs, NodeJs, MySql after you login !</p>
-                <p className="landing-text-neon">This project is my 2021 end-of-study work.</p>
+                <p className="landing-text-neon">This project is my 2021 end-of-study work 🎉</p>
             </div>
             <div className="landing-btn">
                 <Link className={themeReducer ? "landing-link-dark" : "landing-link"} to="/login">Login</Link>

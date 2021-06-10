@@ -26,6 +26,7 @@ import FullFile from "./Components/Services/FullFile"
 import Login from "./Components/Connexion/Login"
 import Signup from "./Components/Connexion/Signup"
 import PasswordForget from "./Components/Connexion/PasswordForget"
+import ResetPassword from "./Components/Connexion/ResetPassword"
 import Error from "./Components/Services/Error"
 import Loader from "./Components/Services/Loader"
 import Informations from "./Components/Services/Informations"
@@ -98,10 +99,11 @@ function App() {
                   {authenticated ? <ProtectedRoute exact path="/gaming" component={Gaming} /> : null}
                   {authenticated ? <ProtectedRoute excat path="/gaming/live/:slug" component={Live} /> : null}
                   {authenticated ? <ProtectedRoute exact path="/chat/:slug" component={Chat} /> : null}
-                  {!authenticated ?<Route exact path={"/"} component={Landing} /> : null}
-                  {!authenticated ?<Route exact path={"/login"} component={Login} /> : null}
+                  {!authenticated ?<Route exact path="/" component={Landing} /> : null}
+                  {!authenticated ?<Route exact path="/login" component={Login} /> : null}
                   {!authenticated ?<Route exact path="/signup" component={Signup} /> : null}
                   {!authenticated ?<Route exact path="/password-forget" component={PasswordForget} /> : null} 
+                  {!authenticated ?<Route exact path="/reset-password/:slug" component={ResetPassword} /> : null} 
                   <Route path="*" component={Error} />
                 </Switch>
               </animated.div>

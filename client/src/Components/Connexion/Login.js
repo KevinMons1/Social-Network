@@ -9,6 +9,7 @@ import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
 import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.json"
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
+import GoogleLogin from 'react-google-login';
 
 export default function Login() {
 
@@ -52,6 +53,14 @@ export default function Login() {
         fetch()
     }
 
+    const responseSuccessGoogle = (response) => {
+        console.log(response)
+      }
+
+    const responseErrorGoogle = (res) => {
+        console.log(res)
+    }
+
     return (
         <section className={themeReducer ? "connexion-dark" : "connexion"}>
             <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>
@@ -80,6 +89,13 @@ export default function Login() {
                     <div className="connexion-submit">
                         <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN IN</button>
                     </div>
+                    <GoogleLogin
+                        clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
+                        buttonText="Login with Google"
+                        onSuccess={responseSuccessGoogle}
+                        onFailure={responseErrorGoogle}
+                        cookiePolicy={'single_host_origin'}
+                    />
                 </form>
                 <div className="connexion-link-box">
                     <Link to="/password-forget" className={themeReducer ? "connexion-link-dark" : "connexion-link"}>Password forget ?</Link>
