@@ -10,7 +10,6 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import GoogleLogin from 'react-google-login';
-import axios from 'axios'
 
 export default function Login() {
 
@@ -108,6 +107,7 @@ export default function Login() {
                         <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN IN</button>
                     </div>
                     <GoogleLogin
+                        className="connexion-google"
                         clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
                         buttonText="Login with Google"
                         onSuccess={responseSuccessGoogle}

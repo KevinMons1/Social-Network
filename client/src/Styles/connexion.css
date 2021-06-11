@@ -89,15 +89,19 @@
     flex-direction: row;
 }
 
+.connexion-name > div:nth-child(1) {
+    margin-bottom: 10px;
+}
+
 .connexion-label {
     margin-bottom: 5px;
-    font-size: 25px;
+    font-size: 20px;
     color: #353535;
 }
 
 .connexion-label-dark {
     margin-bottom: 5px;
-    font-size: 25px;
+    font-size: 20px;
     color: #f1f1f1;
 }
 
@@ -181,4 +185,8 @@
 .connexion-link-dark:hover {
     transition: 0.3s;
     color: #f1f1f1;
+}
+
+.connexion-google {
+    margin: 10px;
 }

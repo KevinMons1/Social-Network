@@ -7,7 +7,6 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import GoogleLogin from 'react-google-login';
-import imageCompression from "browser-image-compression"
 
 export default function Signup() {
 
@@ -149,6 +148,7 @@ export default function Signup() {
                         <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN UP</button>
                     </div>
                     <GoogleLogin
+                        className="connexion-google"
                         clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
                         buttonText="Sign up with Google"
                         onSuccess={responseSuccessGoogle}
