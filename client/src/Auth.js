@@ -22,6 +22,20 @@ class AuthClass {
         return fetch()
     }
 
+    loginGoogle(userData) {
+        let data = null
+        const fetch = async () => {
+            await axios.post(`${process.env.REACT_APP_URL}api/auth/login-google`, userData)
+                .then(res => {
+                   data = res.data
+                   if (res.data.alert) this.authenticated = true
+                })
+                .catch(err => console.log(err))
+                return data
+            }
+        return fetch()
+    }
+
     logout() {
         this.authenticated = false
     }

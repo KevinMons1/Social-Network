@@ -10,6 +10,7 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import GoogleLogin from 'react-google-login';
+import axios from 'axios'
 
 export default function Login() {
 
@@ -54,13 +55,30 @@ export default function Login() {
     }
 
     const responseSuccessGoogle = (response) => {
-        console.log(response)
+        const fetch = async () => {
+            const res = await Auth.loginGoogle({
+                tokenId: response.tokenId,
+                email: response.profileObj.email
+            })
+            if (!res.alert) {
+                if (isCheck) {
+                    Cookie.set('user', res.token, {expires: 30})
+                } else {
+                    Cookie.set('user', res.token, {expires: 1})
+                }
+                Cookie.set('theme', false, {expires: 999})
+                window.location.reload()
+            }
+            setAletCss(res.alert)
+            setAlertMsg(res.message)
+        }
+        fetch()
       }
 
-    const responseErrorGoogle = (res) => {
-        console.log(res)
+    const responseErrorGoogle = (response) => {
+        setAletCss(true)
+        setAlertMsg("An error has occurred ! Try again later.")
     }
-
     return (
         <section className={themeReducer ? "connexion-dark" : "connexion"}>
             <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>

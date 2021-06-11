@@ -6,6 +6,8 @@ import AnimPageConnexion from "../../Assets/Images/anim-page-connexion.gif"
 import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.json"
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
+import GoogleLogin from 'react-google-login';
+import imageCompression from "browser-image-compression"
 
 export default function Signup() {
 
@@ -69,7 +71,7 @@ export default function Signup() {
                 .then(res => {
                     setAletCss(res.data.alert)
                     setAlertMsg(res.data.message)
-                    if (res.data.message === "Account created !") {
+                    if (!res.data.alert) {
                         setTimeout(() => {
                             history.push({pathname: '/login'})
                         }, 1500)
@@ -81,6 +83,31 @@ export default function Signup() {
 
     const handleChange = e => {
         setData({...data, [e.target.name]: e.target.value})
+    }
+
+    const responseSuccessGoogle = (response) => {
+        axios.post(`${process.env.REACT_APP_URL}api/auth/signup-google`, {
+            tokenId: response.tokenId,
+            familyName: response.profileObj.familyName,
+            givenName: response.profileObj.givenName,
+            email: response.profileObj.email,
+            imageUrl: response.profileObj.imageUrl
+        })
+        .then(res => {
+            setAletCss(res.data.alert)
+            setAlertMsg(res.data.message)
+            if (!res.data.alert) {
+                setTimeout(() => {
+                    history.push({pathname: '/login'})
+                }, 1500)
+            }
+        })
+        .catch(err => console.log(err))
+      }
+
+    const responseErrorGoogle = (response) => {
+        setAletCss(true)
+        setAlertMsg("An error has occurred ! Try again later.")
     }
 
     return (
@@ -119,8 +146,15 @@ export default function Signup() {
                         <input required type="password" name="passwordVerif" className="connexion-input" onChange={e => setPasswordVerify(e.target.value)} />
                     </div>
                     <div className="connexion-submit">
-                        <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN IN</button>
+                        <button type="submit" className={themeReducer ? "connexion-btn-dark" : "connexion-btn"}>SIGN UP</button>
                     </div>
+                    <GoogleLogin
+                        clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
+                        buttonText="Sign up with Google"
+                        onSuccess={responseSuccessGoogle}
+                        onFailure={responseErrorGoogle}
+                        cookiePolicy={'single_host_origin'}
+                    />
                 </form>
                 <div className="connexion-link-box">
                     <Link to="/login" className={themeReducer ? "connexion-link-dark" : "connexion-link"}>Login</Link>

@@ -160,9 +160,7 @@ export default function ModifyAccount({ setClose, slug }) {
                     .catch(err => console.log(err))
                 }
           })
-          .catch(error => {
-            console.log(error.message);
-          });
+          .catch(error => console.log(error.message))
       }
     
     const handleCloseModifyAccount = () => {
