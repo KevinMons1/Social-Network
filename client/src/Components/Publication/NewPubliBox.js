@@ -65,59 +65,69 @@ export default function NewPubliBox({ setPubli }) {
         }
     }
 
+    const verifySizeFile = () => {
+        if (dataFile != null ) {
+            if (dataFile.size >= 10000000) {
+                setAletCss(true)
+                setAlertMsg("Your file is too large ! Max 10mb")
+                return false
+            }
+        }
+        return true
+    } 
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (!isSend) {
             // Publication text
-            if (verifyInformations()) {
+            if (verifyInformations() && verifySizeFile()) {
                 setIsSend(true)
-                handleCompressionImage(2)
-
-                // axios.post(`${process.env.REACT_APP_URL}api/publications/add/publication/${userDataReducer.userId}`, data)
-                //     .then(res => {
-                //         if (res.data.alert) {
-                //             if (dataFile != null) {
-                //                 if (dataFile.type.includes("image")) {
-                //                     // Image
-                //                     handleCompressionImage(res.data.publicationId)
-                //                 } else {
-                //                     // Video
-                //                     let formData = new FormData()
-                //                     formData.append('video', dataFile)
-                //                     formData.append('id', res.data.publicationId)
-                //                     axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
-                //                         .then(res => {
-                //                             setIsSend(false)
-                //                             setData({
-                //                                 text: "",
-                //                                 hashtag: []
-                //                             })
-                //                             setNewHashtag("")
-                //                             textareaRef.current.value = ""
-                //                             setFileIsVisible(false)
-                //                             setDataFile(null)
-                //                             setAletCss(false)
-                //                             setAlertMsg(res.data.message)
-                //                         })
-                //                         .catch(err => console.log(err))
-                //                 }
-                //             } else {
-                //                 setIsSend(false)
-                //                 setAletCss(false)
-                //                 setData({
-                //                     text: "",
-                //                     hashtag: []
-                //                 })
-                //                 setNewHashtag("")
-                //                 textareaRef.current.value = ""
-                //                 setFileIsVisible(false)
-                //                 setDataFile(null)
-                //                 setAlertMsg("Publications published !")
-                //             }
-                //         }
-                //     })
-                //     .catch(err => console.log(err))
+                    axios.post(`${process.env.REACT_APP_URL}api/publications/add/publication/${userDataReducer.userId}`, data)
+                        .then(res => {
+                            if (res.data.alert) {
+                                if (dataFile != null) {
+                                    if (dataFile.type.includes("image")) {
+                                        // Image
+                                        handleCompressionImage(res.data.publicationId)
+                                    } else {
+                                        // Video
+                                        let formData = new FormData()
+                                        formData.append('file', dataFile)
+                                        formData.append('id', res.data.publicationId)
+    
+                                        axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
+                                            .then(res => {
+                                                setIsSend(false)
+                                                setData({
+                                                    text: "",
+                                                    hashtag: []
+                                                })
+                                                setNewHashtag("")
+                                                textareaRef.current.value = ""
+                                                setFileIsVisible(false)
+                                                setDataFile(null)
+                                                setAletCss(false)
+                                                setAlertMsg(res.data.message)
+                                            })
+                                            .catch(err => console.log(err))
+                                    } 
+                                } else {
+                                    setIsSend(false)
+                                    setAletCss(false)
+                                    setData({
+                                        text: "",
+                                        hashtag: []
+                                    })
+                                    setNewHashtag("")
+                                    textareaRef.current.value = ""
+                                    setFileIsVisible(false)
+                                    setDataFile(null)
+                                    setAlertMsg("Publications published !")
+                                }
+                            }
+                        })
+                        .catch(err => console.log(err))
             }
         }
     }
@@ -161,7 +171,7 @@ export default function NewPubliBox({ setPubli }) {
             .then(compressedFile => {
                 let formData = new FormData()
                 formData.append('file', compressedFile)
-                formData.append('id', 5)
+                formData.append('id', publicationId)
 
                 axios.post(`${process.env.REACT_APP_URL}api/publications/add/image`, formData)
                     .then(res => {

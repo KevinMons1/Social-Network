@@ -35,9 +35,9 @@ export default function Informations({ closeInformations }) {
             ))}
             {transitionContent.map(({item, key, props}) => item && (
                 <animated.div key={key} style={props} className={themeReducer ? "informations-content-dark" : "informations-content"}>
-                <button className={themeReducer ? "new-publi-icon-btn-dark" : "new-publi-icon-btn"} onClick={() => handleClose()}>
-                    <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon"/>
-                </button>                    
+                    <button className={themeReducer ? "new-publi-icon-btn-dark" : "new-publi-icon-btn"} onClick={() => handleClose()}>
+                        <FontAwesomeIcon icon="times-circle" className="new-publi-close-icon"/>
+                    </button>                    
                     <h3 className={themeReducer ? "informations-box-dark" : null}>Credits</h3>
                     <div className={themeReducer ? "informations-box-dark" : "informations-box"}>
                         <p>Developer: Kévin Monsieur</p>
@@ -48,6 +48,7 @@ export default function Informations({ closeInformations }) {
                         <p>Technologies: ReactJs | NodeJs | MySql</p>
                         <p>Version: 1.1</p>
                     </div>
+                    {/* <button>General condition</button> */}
                 </animated.div> 
             ))}
         </div>

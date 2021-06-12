@@ -161,6 +161,16 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
         }
     } 
 
+    const verifySizeFile = (file) => {
+        if (file != null ) {
+            if (file.size >= 10000000) {
+                alert("Your file is too large ! Max 10mb")
+                return false
+            }
+        }
+        return true
+    } 
+
     const handleSubmitImage = e => {
         let imageFile = e.target.files[0]
         let options = {
@@ -171,22 +181,24 @@ export default function ChatDiv({choiceCss, closeChat, dataClick, index, returnC
 
         imageCompression(imageFile, options)
           .then(compressedFile => {
-                let formData = new FormData()
-                formData.append('file', compressedFile)
-                formData.append('id', userDataReducer.userId)
-                axios.post(`${process.env.REACT_APP_URL}api/chat/addImage/${roomId}`, formData)
-                    .then(res => {
-                        const newImage = {
-                            sender: message.sender,
-                            receiver: message.receiver,
-                            text: res.data,
-                            type: "image"
-                        }
-                        socket.emit('sendMessage', newImage)
-                        socket.emit('notificationChat', newImage)
-                        setAllMessages([...allMessages, newImage])
-                    })
-                    .catch(err => console.log(err))
+              if (verifySizeFile(compressedFile)) {
+                  let formData = new FormData()
+                  formData.append('file', compressedFile)
+                  formData.append('id', userDataReducer.userId)
+                  axios.post(`${process.env.REACT_APP_URL}api/chat/addImage/${roomId}`, formData)
+                      .then(res => {
+                          const newImage = {
+                              sender: message.sender,
+                              receiver: message.receiver,
+                              text: res.data,
+                              type: "image"
+                          }
+                          socket.emit('sendMessage', newImage)
+                          socket.emit('notificationChat', newImage)
+                          setAllMessages([...allMessages, newImage])
+                      })
+                      .catch(err => console.log(err))
+              }
           })
           .catch(error => {
             console.log(error.message)

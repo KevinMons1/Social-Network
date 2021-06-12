@@ -68,6 +68,17 @@ export default function ModifyAccount({ setClose, slug }) {
             }             
     }
 
+    const verifySizeFile = (file) => {
+        if (file != null ) {
+            if (file.size >= 10000000) {
+                setAletCss(true)
+                setAlertMsg("Your file is too large ! Max 10mb")
+                return false
+            }
+        }
+        return true
+    } 
+
     const handleSubmit = async e => {
         e.preventDefault()
 
@@ -120,45 +131,47 @@ export default function ModifyAccount({ setClose, slug }) {
 
         imageCompression(imageFile, options)
           .then(compressedFile => {
-                let formData = new FormData()
-                formData.append('file', compressedFile)
-                formData.append('txt', txt)
-                
-                if (choiceImage) {
-                    axios.put(`${process.env.REACT_APP_URL}api/user/account/image/profile/${slug}`, formData)
-                    .then(res => {
-                        setIsSend(false)
-                        setData({
-                            lastName: userDataReducer.lastName,
-                            firstName: userDataReducer.firstName,
-                            bio: userDataReducer.bio
-                        })
-                        setDataProfileImgTxt("")
-                        setDataBannerImgTxt("")
-                        setProfileImage(null)
-                        setBannerImage(null)
-                        setAletCss(res.data.alert)
-                        setAlertMsg(res.data.message)
-                    })
-                    .catch(err => console.log(err))
-                } else {
-                    axios.put(`${process.env.REACT_APP_URL}api/user/account/image/banner/${slug}`, formData)
-                    .then(res => {
-                        setIsSend(false)
-                        setData({
-                            lastName: userDataReducer.lastName,
-                            firstName: userDataReducer.firstName,
-                            bio: userDataReducer.bio
-                        })
-                        setDataProfileImgTxt("")
-                        setDataBannerImgTxt("")
-                        setProfileImage(null)
-                        setBannerImage(null)
-                        setAletCss(res.data.alert)
-                        setAlertMsg(res.data.message)
-                    })
-                    .catch(err => console.log(err))
-                }
+              if (verifySizeFile(compressedFile)) {
+                  let formData = new FormData()
+                  formData.append('file', compressedFile)
+                  formData.append('txt', txt)
+                  
+                  if (choiceImage) {
+                      axios.put(`${process.env.REACT_APP_URL}api/user/account/image/profile/${slug}`, formData)
+                      .then(res => {
+                          setIsSend(false)
+                          setData({
+                              lastName: userDataReducer.lastName,
+                              firstName: userDataReducer.firstName,
+                              bio: userDataReducer.bio
+                          })
+                          setDataProfileImgTxt("")
+                          setDataBannerImgTxt("")
+                          setProfileImage(null)
+                          setBannerImage(null)
+                          setAletCss(res.data.alert)
+                          setAlertMsg(res.data.message)
+                      })
+                      .catch(err => console.log(err))
+                  } else {
+                      axios.put(`${process.env.REACT_APP_URL}api/user/account/image/banner/${slug}`, formData)
+                      .then(res => {
+                          setIsSend(false)
+                          setData({
+                              lastName: userDataReducer.lastName,
+                              firstName: userDataReducer.firstName,
+                              bio: userDataReducer.bio
+                          })
+                          setDataProfileImgTxt("")
+                          setDataBannerImgTxt("")
+                          setProfileImage(null)
+                          setBannerImage(null)
+                          setAletCss(res.data.alert)
+                          setAlertMsg(res.data.message)
+                      })
+                      .catch(err => console.log(err))
+                  }
+              }
           })
           .catch(error => console.log(error.message))
       }
