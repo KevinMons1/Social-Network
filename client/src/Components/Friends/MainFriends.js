@@ -37,10 +37,9 @@ export default function MainFriends() {
         const fetchDataAccount = async () => {
                 await axios.get(`${process.env.REACT_APP_URL}api/user/userFriends/${idPath[0]}`)
                     .then(res => {
-                        if (res.data.length === 0) {
-                        } else {
-                            setIsEmpty(false)
+                        if (res.data.length > 0) {
                             setData(res.data)
+                            setIsEmpty(false)
                         }
                     })
                     .catch(err => console.log(err))

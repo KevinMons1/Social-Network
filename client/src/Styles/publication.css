@@ -283,6 +283,7 @@ info-publi
 .text-publi {
     margin: 15px 0 30px 0;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .text-pointer {
@@ -591,6 +592,35 @@ NewPubliBox
     border: 1px solid #fff;
     border-radius: 5px;
     outline: none;
+}
+
+.new-publi-hashtag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.new-publi-hashtag > button {
+    border: none;
+    background: transparent;
+}
+
+.new-publi-hashtag-delete {
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.new-publi-hashtag-delete-dark {
+    color: #f1f1f1;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.new-publi-hashtag-delete:hover, .new-publi-hashtag-delete-dark:hover {
+    transition: 0.3s;
+    opacity: 1;
 }
 
 .new-publi-hashtag-txt {

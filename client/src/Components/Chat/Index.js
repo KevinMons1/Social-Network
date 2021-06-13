@@ -5,6 +5,7 @@ import "../../Styles/chat.css"
 import "../../Styles/Media-Queries/Tablet/chat.css"
 import "../../Styles/Media-Queries/MobileL/chat.css"
 import { useMediaQuery } from 'react-responsive'
+import {Helmet} from "react-helmet"
 
 //Components
 import MainChat from "./MainChat"
@@ -15,6 +16,7 @@ export default withRouter(function Index() {
 
     const userDataReducer = useSelector(state => state.UserData)
     const [friendClick, setFriendClick] = useState(false)
+    const [changeTitle, setChangeTitle] = useState("Chat - empty")
     const [data, setData] = useState(null)
     const { slug } = useParams()
     const history = useHistory()
@@ -26,8 +28,9 @@ export default withRouter(function Index() {
             setData(history.location.state)
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+    
     const handleFriendClick = (data) => {
+        setChangeTitle(`Chat - ${data.lastName} ${data.firstName}`)
         history.push({pathname: `/chat/${data.userId}-${userDataReducer.userId}`, state: data})
     }
 
@@ -45,6 +48,9 @@ export default withRouter(function Index() {
         </section>
     ) : (
         <section className="chat">
+             <Helmet>
+                <title>{changeTitle}</title>
+            </Helmet>
             <Connected choiceCss={false} friendClick={(data) => handleFriendClick(data)} />
             {friendClick ? <MainChat data={data} /> : <ChatEmpty />}
         </section>

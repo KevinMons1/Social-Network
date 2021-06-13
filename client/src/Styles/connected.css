@@ -147,6 +147,18 @@ UserCard
     cursor: pointer;
 }
 
+.friends-boxs, .friends-boxs-dark {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    cursor: pointer;
+}
+
+.friends-boxs-dark {
+    color: #f1f1f1;
+}
+
 .friend-box, .friend-box-dark {
     width: 100%;
     margin: 2px;

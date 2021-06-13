@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import "../../Styles/services.css"
+import "../../Styles/Media-Queries/Tablet/services.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import {useTransition, animated, config} from "react-spring"
@@ -45,7 +47,6 @@ export default function Informations({ closeInformations }) {
                             <p>Linkedin:</p>
                             <a href="https://www.linkedin.com/in/k%C3%A9vin-monsieur-a9134a181/" target="blank">here 😃</a>
                         </div>
-                        <p>Technologies: ReactJs | NodeJs | MySql</p>
                         <p>Version: 1.1</p>
                     </div>
                     {/* <button>General condition</button> */}

@@ -247,7 +247,7 @@ export default function ModifyAccount({ setClose, slug }) {
                                 <textarea type="bio" name="bio" className="account-modify-input" defaultValue={userDataReducer.bio} onChange={e => handleChange(e)} />
                             </div>
                         </div>
-                        <button className={themeReducer ? "account-modify-btn-dark" : "account-modify-btn"}>UPDATE</button>
+                        <button disabled={isSend} className={themeReducer ? "account-modify-btn-dark" : "account-modify-btn"}>UPDATE</button>
                     </form>
                 </animated.div>
             ))}

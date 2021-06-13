@@ -15,7 +15,7 @@ import ModifyAccount from "./ModifyAccount"
 import AccountLoader from "./AccountLoader"
 import RemoveFriend from "./RemoveFriend"
 
-export default function MainAccount() {
+export default function MainAccount({ changeTitle }) {
     
     const location = useLocation()
     const history = useHistory()
@@ -51,6 +51,7 @@ export default function MainAccount() {
                         stop = true
                         return history.push({pathname: '/error404'})
                     } else {
+                        changeTitle(`${res.data.userData[0].lastName} ${res.data.userData[0].firstName} `)
                         setDataUser(res.data.userData)
                     }
                 })

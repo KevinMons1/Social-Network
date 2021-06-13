@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import "../../Styles/gaming.css"
 import ReactTwitchEmbedVideo from "react-twitch-embed-video"
 import {Link, useParams} from "react-router-dom"
 import {useSelector, useDispatch} from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
+import {Helmet} from "react-helmet"
 
 export default function Live() {
 
@@ -21,6 +22,9 @@ export default function Live() {
 
     return (
         <section className="gaming">
+            <Helmet>
+                <title>Gaming - {slug}</title>
+            </Helmet>
             <div className={themeReducer? "mainLive-dark" : "mainLive"}>
                 <div className="live-stream">
                     <ReactTwitchEmbedVideo 

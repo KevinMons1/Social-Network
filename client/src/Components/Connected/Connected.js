@@ -18,7 +18,7 @@ export default function Connected({choiceCss, friendClick}) {
     const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const [load, setLoad] = useState(false)
     const [isAnimated, setIsAnimated] = useState(false)
-    const [friendEmpty, setFriendEmpty] = useState(false)
+    const [friendEmpty, setFriendEmpty] = useState(0)
     const [usersCard, setUsersCard] = useState([])
     const [usersDataChat, setUsersDataChat] = useState([])
     const [usersChatDefault, setUsersChatDefault] = useState([])
@@ -41,44 +41,43 @@ export default function Connected({choiceCss, friendClick}) {
 
         const fetchData = async () => {
             await axios.get(`${process.env.REACT_APP_URL}api/user/userFriends/${userDataReducer.userId}`)
-            .then(res => {
-                // if res.data === true but this user haven't friends
-                if (res.data) {
-                    res.data.forEach(friend => {
-                        setUsersCard(usersCard => [...usersCard, {
-                            isConnected: false,
-                            data: friend
-                        }])
-                        friends.push(friend.userId)
-                    })         
-                } else {
-                    setFriendEmpty(true)
-                }
-            })
-            .catch(err => console.log(err))
-            
-            await axios.get(`${process.env.REACT_APP_URL}api/user/connected/friends/chat/${userDataReducer.userId}`)
-            .then(res => { 
-                setFriendEmpty(true)   
-                res.data.forEach(friend => {
-                    if (friend != null) {
-                        setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
-                            isView: false,
-                            data: friend
-                        }])
-                        friendsChat = [...friendsChat, {
-                            isView: false,
-                            data: friend
-                        }]
-                        setUsersDataChat(usersDataChat => [...usersDataChat, {
-                            isView: false,
-                            data: friend
-                        }])      
-                        setFriendEmpty(false)    
+                .then(res => {
+                    // if res.data === true but this user haven't friends
+                    if (res.data.length > 0) {
+                        res.data.forEach(friend => {
+                            setUsersCard(usersCard => [...usersCard, {
+                                isConnected: false,
+                                data: friend
+                            }])
+                            friends.push(friend.userId)
+                            axios.get(`${process.env.REACT_APP_URL}api/user/connected/friends/chat/${userDataReducer.userId}`)
+                                .then(res => {   
+                                    if (res.data.length > 0) {
+                                        res.data.forEach(friend => {
+                                            if (friend != null) {
+                                                setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
+                                                    isView: false,
+                                                    data: friend
+                                                }])
+                                                friendsChat = [...friendsChat, {
+                                                    isView: false,
+                                                    data: friend
+                                                }]
+                                                setUsersDataChat(usersDataChat => [...usersDataChat, {
+                                                    isView: false,
+                                                    data: friend
+                                                }])      
+                                            }
+                                            setFriendEmpty(2)    
+                                        })               
+                                    } else setFriendEmpty(1)
+                                })
+                                .catch(err => console.log(err))
+                        })         
                     }
-                })               
-            })
-            .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
+            
             await socket.emit("sendMyConnection",  {
                 userId: userDataReducer.userId,
                 friends
@@ -202,11 +201,13 @@ export default function Connected({choiceCss, friendClick}) {
     return isTabletOrMobile ? (
         <section className={themeReducer ? "connected-dark" : "connected"} onLoad={() => listenNotification()} >
             <div className="connected-top">
-                <div className="friends-boxs">                     
+                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
                     {load 
-                    ? usersCard.map((item, index) => {
-                        return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
-                        })   
+                    ? friendEmpty >= 1
+                        ? usersCard.map((item, index) => {
+                            return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
+                            })   
+                        : <small>You have no friends...</small>
                     : null}  
                 </div>
                 <div className="connected-search">
@@ -218,15 +219,15 @@ export default function Connected({choiceCss, friendClick}) {
                 {transitionContent.map(({item, key, props}) => item &&(
                     <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
                 ))}
-                <div className="friends-boxs">             
+                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
                     {load 
                     ? friendEmpty 
-                        ? <small>You are not friends !</small>
-                        :  usersDataChat.map((item, index) => {
+                        ?  usersDataChat.map((item, index) => {
                             return  <div key={index} onClick={() => handleClickUserChat(item, false)}>
                                         <UserCard isConnected={false} isView={item.isView} data={item.data} text={true} open={() => handleOpenChat(item.data)} />
                                     </div>
                             }) 
+                        : <small>You have no discussions...</small>
                     : null}  
                 </div>  
              </div>
@@ -239,11 +240,13 @@ export default function Connected({choiceCss, friendClick}) {
             </div>
 
             <div className="connected-top">
-                <div className="friends-boxs">                     
+                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
                     {load 
-                    ? usersCard.map((item, index) => {
-                        return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
-                        })   
+                    ? friendEmpty >= 1
+                        ? usersCard.map((item, index) => {
+                            return <UserCard key={index} isConnected={item.isConnected} data={item.data} text={false} open={() => handleOpenChat(item.data)} />
+                            })   
+                        : <small>You have no friends...</small>
                     : null}  
                 </div>
                 <div className="connected-search">
@@ -255,15 +258,15 @@ export default function Connected({choiceCss, friendClick}) {
                 {transitionContent.map(({item, key, props}) => item &&(
                     <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
                 ))}
-                <div className="friends-boxs">             
+                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
                     {load 
                     ? friendEmpty 
-                        ? <small>You are not friends !</small>
-                        :  usersDataChat.map((item, index) => {
+                        ?  usersDataChat.map((item, index) => {
                             return  <div key={index} onClick={() => handleClickUserChat(item, false)}>
                                         <UserCard isConnected={false} isView={item.isView} data={item.data} text={true} open={() => handleOpenChat(item.data)} />
                                     </div>
                             }) 
+                        : <small>You have no discussions...</small>
                     : null}  
                 </div>  
              </div>

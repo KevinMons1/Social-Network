@@ -98,7 +98,7 @@ export default function NewPubliBox({ setPubli }) {
     
                                         axios.post(`${process.env.REACT_APP_URL}api/publications/add/video`, formData)
                                             .then(res => {
-                                                setIsSend(false)
+                                                setIsSend(false)      
                                                 setData({
                                                     text: "",
                                                     hashtag: []
@@ -144,14 +144,19 @@ export default function NewPubliBox({ setPubli }) {
     }
 
     const handleChangeHashtag = () => {
-        if (data.hashtag.length >= 3) {
-            setAletCss(true)
-            setAlertMsg("You cannot use more than 3 hashtags !")
+        if (newHashtag.length > 0) {
+            if (data.hashtag.length >= 3) {
+                setAletCss(true)
+                setAlertMsg("You cannot use more than 3 hashtags !")
+            } else {
+                let hashtagSplit = newHashtag.split(" ").join("");
+                setData({...data, hashtag: [...data.hashtag, hashtagSplit]})
+            }
+            hashtagValue.current.value = ""
         } else {
-            let hashtagSplit = newHashtag.split(" ").join("");
-            setData({...data, hashtag: [...data.hashtag, hashtagSplit]})
+            setAletCss(true)
+            setAlertMsg("You did not write a hashtag !")
         }
-        hashtagValue.current.value = ""
     }
 
     const handleClickFile = () => {
@@ -188,13 +193,6 @@ export default function NewPubliBox({ setPubli }) {
                         setAlertMsg(res.data.message)
                     })
                     .catch(err => console.log(err))
-
-            const reader = new FileReader()
-            reader.readAsDataURL(compressedFile)
-            reader.onloadend = () => {
-            }
-
-
           })
             .catch(err => {console.log(err)})
       }
@@ -211,6 +209,13 @@ export default function NewPubliBox({ setPubli }) {
     const handleRemoveImg = () => {
         setFileIsVisible(false)
         setDataFile(null)
+    }
+
+    const handleClickDeleteHashtag = (item) => {
+        const newArray = data.hashtag.filter(word => word !== item)
+        setData({...data, hashtag: newArray})
+        setNewHashtag("")
+        hashtagValue.current.value = ""
     }
 
     return (
@@ -256,14 +261,17 @@ export default function NewPubliBox({ setPubli }) {
                         <div className="new-publi-hashtag-txt-box">
                             {data.hashtag.map((item, index) => {
                                 return (
-                                    <p key={index} className={themeReducer ? "new-publi-hashtag-txt-dark" : "new-publi-hashtag-txt" }>{item}</p>
+                                    <div key={index} className="new-publi-hashtag">
+                                        <p className={themeReducer ? "new-publi-hashtag-txt-dark" : "new-publi-hashtag-txt" }>{item}</p>
+                                        <button type="button" onClick={() => handleClickDeleteHashtag(item)}><FontAwesomeIcon icon="times-circle" className={themeReducer ? "new-publi-hashtag-delete-dark" : "new-publi-hashtag-delete"} /></button>
+                                    </div>
                                 )
                             })}
                         </div>
                         <input className={themeReducer ? "new-publi-input-hashtag-dark" : "new-publi-input-hashtag"} ref={hashtagValue} name="hashtag" type="text" placeholder="#..." onChange={e => setNewHashtag(e.target.value)}/>
                         <button type="button" className={themeReducer ? "new-publi-hashtag-btn-dark" : "new-publi-hashtag-btn"} onClick={() => handleChangeHashtag()}>ADD</button>
                     </div>
-                    <button className={themeReducer ? "new-publi-btn-dark" : "new-publi-btn"}>PUBLISH</button>
+                    <button disabled={isSend} className={themeReducer ? "new-publi-btn-dark" : "new-publi-btn"}>PUBLISH</button>
                 </form>
             </animated.div>
             ))}   

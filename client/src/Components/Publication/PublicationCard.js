@@ -169,7 +169,7 @@ export default function PublicationCard({ data, fullFile }) {
                     </div>
                 </div>
 
-                <div onClick={() => data.type === "video" ? handleClickPublication() : null} className={data.type === "video" ? "text-pointer text-publi" : "text-publi"}>
+                <div onClick={() => handleClickPublication()} className={data.type === "video" ? "text-pointer text-publi" : "text-publi"}>
                     <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
                 </div>
             </div>
