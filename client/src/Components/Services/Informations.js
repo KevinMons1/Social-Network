@@ -47,7 +47,7 @@ export default function Informations({ closeInformations }) {
                             <p>Linkedin:</p>
                             <a href="https://www.linkedin.com/in/k%C3%A9vin-monsieur-a9134a181/" target="blank">here 😃</a>
                         </div>
-                        <p>Version: 1.1</p>
+                        <p>Version: 1.2</p>
                     </div>
                     {/* <button>General condition</button> */}
                 </animated.div> 

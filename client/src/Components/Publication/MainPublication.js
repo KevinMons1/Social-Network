@@ -10,6 +10,7 @@ import moment from "moment"
 import Loader from "../Services/Loader"
 import axios from "axios"
 import {socket} from "../../Api"
+import {Helmet} from "react-helmet"
 
 export default function MainPublication() {
 
@@ -176,6 +177,12 @@ export default function MainPublication() {
 
     return (load ?
         <div className={themeReducer ? "publi-open-dark" : "publi-open"}>
+            <Helmet>
+                <title>Publication of {data.firstName} {data.lastName}</title>
+                <meta property="og:image" content={data.metaData.image}></meta>
+                <meta property="og:description" content={data.metaData.description}></meta>
+                <meta property="og:title" content={data.metaData.title}></meta>
+            </Helmet>
             <div className="publi-icon">
                 {isBack ? <FontAwesomeIcon onClick={() => handleBack()} icon="arrow-left" className={themeReducer ? "txt-dark gallery-icon" : "gallery-icon"}/> : null}
             </div>

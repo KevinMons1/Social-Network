@@ -5,6 +5,7 @@ import {useSelector} from "react-redux"
 import ErrorGif from "../../Assets/Images/error.gif"
 import ErrorGifDark from "../../Assets/Images/error-dark.json"
 import Lottie from "react-lottie"
+import {Helmet} from "react-helmet"
 
 export default withRouter(function Error() {
     const themeReducer = useSelector(state => state.Theme)
@@ -19,6 +20,9 @@ export default withRouter(function Error() {
     
     return (
         <section className={themeReducer ? "error-dark" : "error"}>
+            <Helmet>
+                <title>Error 404</title>
+            </Helmet>
             {themeReducer 
             ? <Lottie options={defaultOptions} height={400} width={400}/>
             : <img src={ErrorGif} alt="Error 404 page not found"/>

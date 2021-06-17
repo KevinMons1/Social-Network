@@ -6,6 +6,7 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import axios from "axios"
+import {Helmet} from "react-helmet"
 
 export default function PasswordForget() {
 
@@ -54,6 +55,9 @@ export default function PasswordForget() {
 
     return (
         <section className={themeReducer ? "connexion-dark" : "connexion"}>
+            <Helmet>
+                <title>Password forget</title>
+            </Helmet>
             <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>
                 <div className={themeReducer ? "connexion-title-dark" : "connexion-title"}>
                     <h1>Password Forget</h1>

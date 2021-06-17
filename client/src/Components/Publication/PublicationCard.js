@@ -44,8 +44,8 @@ export default function PublicationCard({ data, fullFile }) {
         if (data.hashtag.length > 0) {
             let _hashtag = data.hashtag.split(";")
             setHashtag(_hashtag)
-        }        
-
+        }    
+    
         axios.post(`${process.env.REACT_APP_URL}api/publications/likes/get/${data.publicationId}`, {userId: userDataReducer.userId})
             .then(res => {
                 setDataLikes(res.data.like.likesTotal)
@@ -53,7 +53,7 @@ export default function PublicationCard({ data, fullFile }) {
                 setLoad(true)
             })
             .catch(err => console.log(err))
-        }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleDelete = () => {
         if (data.userId === userDataReducer.userId) {
@@ -119,10 +119,12 @@ export default function PublicationCard({ data, fullFile }) {
 
     const handleClickPublication = () => {
         if (fullFile) {
-           dispatch({
-               type: "OPEN_FULL_FILE",
-               payload: data
-           })
+            if (data.type === "video" || data.type === "image") {
+                dispatch({
+                    type: "OPEN_FULL_FILE",
+                    payload: data
+                })
+            }
         } else {
             history.push(`/publication/${data.publicationId}`, {
                 data: data,
@@ -168,19 +170,33 @@ export default function PublicationCard({ data, fullFile }) {
                         : null}
                     </div>
                 </div>
-
-                <div onClick={() => handleClickPublication()} className={data.type === "video" ? "text-pointer text-publi" : "text-publi"}>
-                    <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
-                </div>
+                {data.metaData 
+                ?   <div className="text-publi">
+                        <a href={data.metaData.url} target="blank" className={themeReducer ? 'txt-dark' : null}>{data.text}</a>
+                    </div>
+                :   <div onClick={() => handleClickPublication()} className="text-publi">
+                        <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>
+                    </div>
+                }
+                
             </div>
-                {data.publicationFileUrl != null 
+                {data.publicationFileUrl !== null 
                 ?  <div className="bg-publi">
                     {data.type === "image"
                     ?   <img className="bg-publi-img" src={data.publicationFileUrl} onClick={() => handleClickPublication()} alt="Publication frame"/>
                     :   <Video data={data} />     
                     }
                   </div>
-                : null}
+                : data.metaData 
+                    ?   <div className="bg-publi">
+                            <a href={data.metaData.url} target="blank" className="publi-metaData">
+                                {data.metaData.image
+                                ?   <img className="bg-publi-img" src={data.metaData.image} alt="Publication frame"/>
+                                :   null} 
+                            <p>{data.metaData.title}</p>
+                            </a>
+                        </div>
+                    : null}
 
                 <div className="social-publi">
                     <div className="icon-publi-box">
@@ -203,7 +219,7 @@ export default function PublicationCard({ data, fullFile }) {
                             )}
                         </div>
                     </div>
-                    <div className="icon-publi-box">
+                    <div className="icon-publi-box" onClick={() => handleClickPublication()}>
                         <FontAwesomeIcon className="comment-publi icon-publi" icon="comment" />
                         <p className={themeReducer ? 'txt-dark' : null}>{data.commentsTotal}</p>
                     </div>

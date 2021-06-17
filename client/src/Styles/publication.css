@@ -86,6 +86,19 @@
     cursor: pointer;
 }
 
+.publi-metaData {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #000;
+    background-color: rgb(240, 240, 240);
+    text-decoration: none;
+}
+
+.publi-metaData > p {
+    padding: 5px;
+}
+
 .video-content {
     position: relative;
     display: flex;
@@ -281,7 +294,7 @@ info-publi
 }
 
 .text-publi {
-    margin: 15px 0 30px 0;
+    margin: 15px 0 15px 0;
     font-size: 15px;
     cursor: pointer;
 }

@@ -10,6 +10,7 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import GoogleLogin from 'react-google-login';
+import {Helmet} from "react-helmet"
 
 export default function Login() {
 
@@ -36,6 +37,7 @@ export default function Login() {
 
     const handleSubmit = e => {
         e.preventDefault()
+
         const fetch = async () => {
             const res = await Auth.login(data)
             if (!res.alert) {
@@ -45,7 +47,7 @@ export default function Login() {
                     Cookie.set('user', res.token, {expires: 1})
                 }
                 Cookie.set('theme', false, {expires: 999})
-                window.location.reload()
+                //window.location.reload()
             }
             setAletCss(res.alert)
             setAlertMsg(res.message)
@@ -66,7 +68,7 @@ export default function Login() {
                     Cookie.set('user', res.token, {expires: 1})
                 }
                 Cookie.set('theme', false, {expires: 999})
-                window.location.reload()
+                //window.location.reload()
             }
             setAletCss(res.alert)
             setAlertMsg(res.message)
@@ -80,6 +82,9 @@ export default function Login() {
     }
     return (
         <section className={themeReducer ? "connexion-dark" : "connexion"}>
+            <Helmet>
+                <title>Login</title>
+            </Helmet>
             <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>
                 <div className={themeReducer ? "connexion-title-dark" : "connexion-title"}>
                     <h1>Login</h1>

@@ -7,6 +7,7 @@ import AnimPageConnexionDark from "../../Assets/Images/anim-page-connexion-dark.
 import {useSelector} from "react-redux"
 import Lottie from "react-lottie"
 import GoogleLogin from 'react-google-login';
+import {Helmet} from "react-helmet"
 
 export default function Signup() {
 
@@ -85,13 +86,7 @@ export default function Signup() {
     }
 
     const responseSuccessGoogle = (response) => {
-        axios.post(`${process.env.REACT_APP_URL}api/auth/signup-google`, {
-            tokenId: response.tokenId,
-            familyName: response.profileObj.familyName,
-            givenName: response.profileObj.givenName,
-            email: response.profileObj.email,
-            imageUrl: response.profileObj.imageUrl
-        })
+        axios.post(`${process.env.REACT_APP_URL}api/auth/signup-google`, {tokenId: response.tokenId})
         .then(res => {
             setAletCss(res.data.alert)
             setAlertMsg(res.data.message)
@@ -111,6 +106,9 @@ export default function Signup() {
 
     return (
         <section className={themeReducer ? "connexion-dark" : "connexion"}>
+            <Helmet>
+                <title>Signup</title>
+            </Helmet>
             <div className={themeReducer ? "connexion-left-dark" : "connexion-left"}>   
                 <div className={themeReducer ? "connexion-title-dark" : "connexion-title"}>
                     <h1>Register</h1>

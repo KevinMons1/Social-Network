@@ -26,11 +26,11 @@ export default withRouter(function Index() {
         if (slug.toString() !== "empty") {
             setFriendClick(true)
             setData(history.location.state)
+            setChangeTitle(`Chat - ${history.location.state.lastName} ${history.location.state.firstName}`)
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
     
     const handleFriendClick = (data) => {
-        setChangeTitle(`Chat - ${data.lastName} ${data.firstName}`)
         history.push({pathname: `/chat/${data.userId}-${userDataReducer.userId}`, state: data})
     }
 
@@ -48,7 +48,7 @@ export default withRouter(function Index() {
         </section>
     ) : (
         <section className="chat">
-             <Helmet>
+            <Helmet>
                 <title>{changeTitle}</title>
             </Helmet>
             <Connected choiceCss={false} friendClick={(data) => handleFriendClick(data)} />
