@@ -99,11 +99,11 @@ function App() {
                   {authenticated ? <ProtectedRoute exact path="/gaming" component={Gaming} /> : null}
                   {authenticated ? <ProtectedRoute excat path="/gaming/live/:slug" component={Live} /> : null}
                   {authenticated ? <ProtectedRoute exact path="/chat/:slug" component={Chat} /> : null}
-                  {!authenticated ?<Route exact path="/" component={Landing} /> : null}
-                  {!authenticated ?<Route exact path="/login" component={Login} /> : null}
-                  {!authenticated ?<Route exact path="/signup" component={Signup} /> : null}
-                  {!authenticated ?<Route exact path="/password-forget" component={PasswordForget} /> : null} 
-                  {!authenticated ?<Route exact path="/reset-password/:slug" component={ResetPassword} /> : null} 
+                  {!authenticated ? <Route exact path="/" component={Landing} /> : null}
+                  {!authenticated ? <Route exact path="/login" component={Login} /> : null}
+                  {!authenticated ? <Route exact path="/signup" component={Signup} /> : null}
+                  {!authenticated ? <Route exact path="/password-forget" component={PasswordForget} /> : null} 
+                  {!authenticated ? <Route exact path="/reset-password/:slug" component={ResetPassword} /> : null} 
                   <Route path="*" component={Error} />
                 </Switch>
               </animated.div>

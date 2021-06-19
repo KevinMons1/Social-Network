@@ -47,7 +47,7 @@ export default function Login() {
                     Cookie.set('user', res.token, {expires: 1})
                 }
                 Cookie.set('theme', false, {expires: 999})
-                //window.location.reload()
+                window.location.reload()
             }
             setAletCss(res.alert)
             setAlertMsg(res.message)
@@ -68,7 +68,7 @@ export default function Login() {
                     Cookie.set('user', res.token, {expires: 1})
                 }
                 Cookie.set('theme', false, {expires: 999})
-                //window.location.reload()
+                window.location.reload()
             }
             setAletCss(res.alert)
             setAlertMsg(res.message)

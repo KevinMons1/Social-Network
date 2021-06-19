@@ -137,6 +137,11 @@ export default function PublicationCard({ data, fullFile }) {
         history.push(`/hashtag/${item}`)
     }
 
+    const handleCutStr = text => {
+        if (text.includes("https://") && text.indexOf(" https://") >= 0) return <p className={themeReducer ? 'txt-dark' : null} onClick={() => handleClickPublication()}>{text}</p>
+        else return <a href={data.metaData.url} target="blank">{text}</a>
+    }
+
     const cssDelete = deleteMsg ? themeReducer ? "publi-dark" : "publi" : "publi-none"
 
     return load ?
@@ -172,7 +177,7 @@ export default function PublicationCard({ data, fullFile }) {
                 </div>
                 {data.metaData 
                 ?   <div className="text-publi">
-                        <a href={data.metaData.url} target="blank" className={themeReducer ? 'txt-dark' : null}>{data.text}</a>
+                        {handleCutStr(data.text)}
                     </div>
                 :   <div onClick={() => handleClickPublication()} className="text-publi">
                         <p className={themeReducer ? 'txt-dark' : null}>{data.text}</p>

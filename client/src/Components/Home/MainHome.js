@@ -28,6 +28,7 @@ export default function MainHome({ isHome }) {
     const [data, setData] = useState([])
     const [dataSuggestFriend, setDataSuggestFriend] = useState([])
     const [alertMsg, setAlertMsg] = useState(false)
+    const [lockedBottom, setLockecBottom] = useState(true)
 
     window.onbeforeunload = (event) => {
         const e = event || window.event;
@@ -81,6 +82,7 @@ export default function MainHome({ isHome }) {
                                 break;
                         }
                     }
+                    setLockecBottom(true)
                     setCountPublication(countPublication + 3)
                 })
                 .catch(err => console.log(err))
@@ -134,7 +136,8 @@ export default function MainHome({ isHome }) {
     // Scroll infini -> get publications with scroll
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
-        if (clientHeight + scrollTop >= scrollHeight - 20) {
+        if (clientHeight + scrollTop >= scrollHeight - 50) {
+            setLockecBottom(false)
             getPublications()
         }
     }
@@ -154,7 +157,7 @@ export default function MainHome({ isHome }) {
     }
 
     return (
-        <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => handleScroll()}>
+        <div ref={scrollRef} className={themeReducer ? "mainHome-dark" : "mainHome"} onScroll={() => lockedBottom ? handleScroll() : null}>
         
             <div className="mainHome-top">
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}

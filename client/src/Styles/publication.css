@@ -90,6 +90,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 100%;
     color: #000;
     background-color: rgb(240, 240, 240);
     text-decoration: none;
@@ -294,6 +296,7 @@ info-publi
 }
 
 .text-publi {
+    display: flex;
     margin: 15px 0 15px 0;
     font-size: 15px;
     cursor: pointer;

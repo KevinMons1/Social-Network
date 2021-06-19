@@ -51,7 +51,7 @@ export default function MainAccount({ changeTitle }) {
                         stop = true
                         return history.push({pathname: '/error404'})
                     } else {
-                        changeTitle(`${res.data.userData[0].lastName} ${res.data.userData[0].firstName} `)
+                        changeTitle(`${res.data.userData[0].firstName} ${res.data.userData[0].lastName}`)
                         setDataUser(res.data.userData)
                     }
                 })
@@ -90,10 +90,10 @@ export default function MainAccount({ changeTitle }) {
     }
 
     const handleAddFriend = () => {     
-        let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let dateTime = date+' '+time;
+        let today = new Date()
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        let dateTime = date+' '+time
         
         setWaiting(true)
         axios.post(`${process.env.REACT_APP_URL}api/notifications/add`, {
