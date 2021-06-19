@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import "../../Styles/publication.css"
 import "../../Styles/Media-Queries/Tablet/publication.css"
 import {useSelector} from "react-redux"
@@ -19,6 +19,7 @@ export default function MainPublication() {
     const location = useLocation()
     const history = useHistory()
     const { slug } = useParams()
+    const commentRef = useRef()
     const [isBack, setIsBack] = useState(false)
     const [data, setData] = useState(null)
     const [load, setLoad] = useState(false)
@@ -78,6 +79,7 @@ export default function MainPublication() {
         let dateTime = date+' '+time;
 
         if (dataNewPubli.text.length > 2) {
+            commentRef.current.value = ""
             axios.post(`${process.env.REACT_APP_URL}api/publications/comments/add/${data.publicationId}`, dataNewPubli)
                 .then(res => {
                     setAletCss(false)
@@ -224,7 +226,7 @@ export default function MainPublication() {
                     <form className="write-publi" onSubmit={e => handleSubmit(e)}>
                         <FontAwesomeIcon className={themeReducer ? "icon-new-publi txt-dark" : "icon-new-publi"} icon="comments" />
                         <div className="input-new-publi" type="text">
-                            <textarea className={themeReducer ? "publi-open-textarea input-dark border-none-dark" : "publi-open-textarea"} placeholder="What do you mean ?" name="text" id="text" onChange={e => handleChange(e)}></textarea>
+                            <textarea ref={commentRef} className={themeReducer ? "publi-open-textarea input-dark border-none-dark" : "publi-open-textarea"} placeholder="What do you mean ?" name="text" id="text" onChange={e => handleChange(e)}></textarea>
                         </div>
                         <button className={themeReducer ? "publi-open-btn btn-dark" : "publi-open-btn"} type="submit">SEND</button>
                     </form>

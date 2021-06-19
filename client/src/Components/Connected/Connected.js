@@ -37,7 +37,6 @@ export default function Connected({choiceCss, friendClick}) {
 
         // Send userId on server for realTime components
         socket.emit('userConnected', userDataReducer.userId)
-        listenConnection()
 
         const fetchData = async () => {
             await axios.get(`${process.env.REACT_APP_URL}api/user/userFriends/${userDataReducer.userId}`)
@@ -55,7 +54,7 @@ export default function Connected({choiceCss, friendClick}) {
                                     if (res.data.length > 0) {
                                         res.data.forEach(friend => {
                                             if (friend != null) {
-                                                setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
+                                                setUsersChatDefault([...usersChatDefault, {
                                                     isView: false,
                                                     data: friend
                                                 }])
@@ -63,7 +62,7 @@ export default function Connected({choiceCss, friendClick}) {
                                                     isView: false,
                                                     data: friend
                                                 }]
-                                                setUsersDataChat(usersDataChat => [...usersDataChat, {
+                                                setUsersDataChat([...usersDataChat, {
                                                     isView: false,
                                                     data: friend
                                                 }])      
@@ -112,6 +111,7 @@ export default function Connected({choiceCss, friendClick}) {
             }
         })
     }
+    listenConnection()
 
     const listenNotification = () => {
         socket.on("notificationChat", userData => { 
@@ -127,7 +127,7 @@ export default function Connected({choiceCss, friendClick}) {
                 friends
             }) 
             sendMyConnectionOnTime(friends)
-        }, 300000);
+        }, 30000);
     }
 
     const handleCloseChat = () => {
