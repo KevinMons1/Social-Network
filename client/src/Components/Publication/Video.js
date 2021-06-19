@@ -10,22 +10,22 @@ export default function Video({ data, clickNo, isTall }) {
     const videoRef = useRef()
     const videoVolumeRef = useRef()
     const videoBarRef = useRef()
-    const btnPlayRef = useRef()
     const barreRef = useRef()
     const dispatch = useDispatch()
     const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
     const [mute, setMute] = useState(false)
     const [toTall, setToTall] = useState(false)
     const [isClicked, setIsClicked] = useState(false)
+    const [isPlay, setIsPlay] = useState(false)
 
     const handleVideo = (isClickWithBtn) => {
         if (!clickNo) {
             if (isClickWithBtn) {
                 if (videoRef.current.paused) {
-                    btnPlayRef.current.className = "video-btn video-btn-play video-pause"
+                    setIsPlay(true)
                     videoRef.current.play()
                 } else {
-                    btnPlayRef.current.className = "video-btn video-btn-play video-play"
+                    setIsPlay(false)
                     videoRef.current.pause()
                 }              
             } else {
@@ -51,7 +51,7 @@ export default function Video({ data, clickNo, isTall }) {
             barreRef.current.style.width = juicePos * 100 + "%"
     
             if (videoRef.current.ended) {
-                btnPlayRef.current.className = "video-btn video-btn-play video-play"
+                setIsPlay(false)
             }
         }
     }
@@ -93,7 +93,7 @@ export default function Video({ data, clickNo, isTall }) {
                 type: "CLOSE_FULL_FILE"
             })
         } else {
-            btnPlayRef.current.className = "video-btn video-btn-play video-play"
+            setIsPlay(true)
             videoRef.current.pause()
             dispatch({
                 type: "OPEN_FULL_FILE",
@@ -108,7 +108,7 @@ export default function Video({ data, clickNo, isTall }) {
                 type: "CLOSE_FULL_FILE"
             })
         } else {
-            btnPlayRef.current.className = "video-btn video-btn-play video-play"
+            setIsPlay(true)
             videoRef.current.pause()
             dispatch({
                 type: "OPEN_FULL_FILE",
@@ -133,7 +133,7 @@ export default function Video({ data, clickNo, isTall }) {
                     <div className="video-bar-run" ref={barreRef}></div>
                 </div>
                 <div className="video-btn-content">
-                    <button ref={btnPlayRef} className="video-btn video-btn-play" onClick={() => handleVideo(true)}></button>
+                    <button className="video-btn video-btn-play" onClick={() => handleVideo(true)}><FontAwesomeIcon icon={isPlay ? "pause" : "play"} /></button>
                     <button className="video-btn video-btn-mute" onClick={() => handleMute()}>
                         {mute 
                         ?   <FontAwesomeIcon icon="volume-mute" />
@@ -142,7 +142,7 @@ export default function Video({ data, clickNo, isTall }) {
                     </button>
                     <input type="range" className="video-volume" min="0" max="100" defaultValue="50" step="1" ref={videoVolumeRef} onChange={() => handleChangeVolume()} />
                     <button className="video-btn" onClick={() => handleClickTall()}>
-                        <div className="video-rectangle"></div>
+                        <div className="video-fullScreen"></div>
                     </button>
                 </div>
             </div>

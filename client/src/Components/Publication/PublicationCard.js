@@ -138,7 +138,8 @@ export default function PublicationCard({ data, fullFile }) {
     }
 
     const handleCutStr = text => {
-        if (text.includes("https://") && text.indexOf(" https://") >= 0) return <p className={themeReducer ? 'txt-dark' : null} onClick={() => handleClickPublication()}>{text}</p>
+        console.log(text)
+        if (text.includes("https://") && text.indexOf(" ") >= 0) return <p className={themeReducer ? 'txt-dark' : null} onClick={() => handleClickPublication()}>{text}</p>
         else return <a href={data.metaData.url} target="blank">{text}</a>
     }
 
