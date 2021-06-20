@@ -1,4 +1,5 @@
 const db = require("../Utils/db")
+
 //
 // Functions globale
 //

@@ -1,4 +1,8 @@
 const db = require("../Utils/db")
+const fs = require("fs")
+const path = require("path")
+const { cloudinary } = require('../Utils/cloudinary')
+
 //
 // Functions exports 
 //
@@ -52,10 +56,26 @@ exports.addMessage = async (req, res) => {
 
 // Add image
 exports.addImage = async (req, res) => {
-    const roomId = req.params.id
+    const file = req.file
     const userId = req.body.id
-    const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
+    const roomId = req.params.id
 
-    const result = await requestQuery(`INSERT INTO roomMessages (roomId, userId, text, type) VALUES(?, ?, ?, "image")`, [roomId, userId, imageUrl])
-    res.send(imageUrl)   
+    cloudinary.uploader.upload(file.path, {
+        upload_preset: "publications_images"
+    }, async (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            const resultQuery = await requestQuery(`INSERT INTO roomMessages (roomId, userId, cloudinaryPublicId, text, type) VALUES(?, ?, ?, ?, "image")`, [roomId, userId, result.public_id, imageUrl])
+            const pathStorage = path.join(__dirname, `../Images/${file.filename}`)
+
+            // Delete image storage in folder Images
+            fs.unlink(pathStorage, (err) => {
+                console.log(err)
+                return
+            })
+            res.send(result.url)  
+        }
+    })
+ 
 }

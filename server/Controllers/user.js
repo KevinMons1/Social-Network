@@ -1,4 +1,7 @@
 const db = require("../Utils/db")
+const path = require("path")
+const fs = require("fs")
+const { cloudinary } = require('../Utils/cloudinary')
 
 //
 // Functions exports 
@@ -97,7 +100,7 @@ exports.getAccountInformations = async (req, res) => {
             LEFT JOIN userImages ip ON ip.userId = ? AND ip.type = "profile"
             LEFT JOIN userImages ib ON ib.userId = ? AND ib.type = "banner"
             WHERE u.userId = ?`, [id, id, id])
-            // If result.lenght > 0 but this user not exist !
+            // If result.length > 0 but this user not exist !
             if (result.length > 0) {
                 // Search if he have publications
                 const result2 = await requestQuery(`SELECT publicationId FROM publications WHERE userId = ?`, [id])
@@ -144,8 +147,8 @@ exports.getFriends = async (req, res) => {
     let friends = []
     let count = 0
     let result;
-
-    if (resultFriendId.lenght === 0) {
+    
+    if (resultFriendId.length === 0) {
         res.send(false)
     } else {
         // To destroy the objects in the received array and seek userId
@@ -181,7 +184,7 @@ exports.getFriendsChat = async (req, res) => {
         result2 = await getFriendsChatPromisse(element, id)
         if (result2 != false) allResult.push(result2)  
         i++
-        if (count == i) {
+        if (count === i) {
             const _allResult = await allResult.sort((a, b) => b.date - a.date)
             res.send(_allResult)
         }
@@ -257,24 +260,54 @@ exports.updateAccountInformations = async (req, res) => {
 
 // Update image profile
 exports.uploadImageProfile = async (req, res) => {
-    const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
-    const id = req.params.id 
+    const file = req.file
     const txt = req.body.txt
+    const id = req.params.id
 
-    const result = await requestQuery(`UPDATE userImages SET url = ? WHERE userId = ? AND type = "profile"`, [imageUrl, id])
-    await publicationsDefault(id, "profile", imageUrl, txt)
-    res.send({message: "Modified information !", alert: false})
+    cloudinary.uploader.upload(file.path, {
+        upload_preset: "profile"
+    }, async (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            const pathStorage = path.join(__dirname, `../Images/${file.filename}`)
+            const resultQuery = await requestQuery(`UPDATE userImages SET url = ?, cloudinaryPublicId = ? WHERE userId = ? AND type = "profile"`, [result.url, result.public_id, id])
+            await publicationsDefault(id, "profile", result.url, txt)
+
+            // Delete image storage in folder Images
+            fs.unlink(pathStorage, (err) => {
+                console.log(err)
+                return
+            })
+            res.send({message: "Modified information !", alert: false})
+        }
+    })
 }
 
 // Update image banner
 exports.uploadImageBanner = async (req, res) => {
-    const imageUrl = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`
-    const id = req.params.id 
+    const file = req.file
     const txt = req.body.txt
-    
-    const result = await requestQuery(`UPDATE userImages SET url = ? WHERE userId = ? AND type = "banner"`, [imageUrl, id])
-    await publicationsDefault(id, "profile", imageUrl, txt)
-    res.send({message: "Modified information !", alert: false})
+    const id = req.params.id
+
+    cloudinary.uploader.upload(file.path, {
+        upload_preset: "banner"
+    }, async (err, result) => {
+        if (err) {
+            throw err
+        } else {
+            const pathStorage = path.join(__dirname, `../Images/${file.filename}`)
+            const resultQuery = await requestQuery(`UPDATE userImages SET url = ?, cloudinaryPublicId = ? WHERE userId = ? AND type = "banner"`, [result.url, result.public_id, id])
+            await publicationsDefault(id, "banner", result.url, txt)
+
+            // Delete image storage in folder Images
+            fs.unlink(pathStorage, (err) => {
+                console.log(err)
+                return
+            })
+            res.send({message: "Modified information !", alert: false})
+        }
+    })
 }
 
 // Delete friend

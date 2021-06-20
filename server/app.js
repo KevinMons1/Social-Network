@@ -1,10 +1,11 @@
+require('dotenv').config()
 const express = require("express")
 const app = express()
 const http = require('http').Server(app)
-const PORT = 3001
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const path = require("path")
+const port = process.env.PORT || 8080
 const io = require('socket.io')(http, {
     log: false,
     agent: false,
@@ -23,8 +24,8 @@ const chatRouter = require("./Routers/chat")
 const notificationsRoutes = require("./Routers/notifications")
 
 app.use(cors())
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
+app.use(bodyParser.json({ limit: '50mb' }))
 app.use('/Images', express.static(path.join(__dirname, 'Images'))) // Send folder Images on server
 app.use('/Videos', express.static(path.join(__dirname, 'Videos'))) // Send folder Videos on server
 
@@ -90,7 +91,6 @@ io.on('connection', (socket) => {
 })
 
 // Start server
-http.listen(PORT, () => console.log("Running", PORT))
+http.listen(port)
 
 exports.io = io
-

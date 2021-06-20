@@ -9,7 +9,7 @@ const multerVideo = require("../Middleware/multerVideo")
 router.post('/add/publication/:id', publications.addNewPublication)
 router.post('/comments/add/:id', publications.addNewComments)
 router.post('/add/image', multerImage.single('file'), publications.addPublicationImage)
-router.post('/add/video', multerVideo.single('video'), publications.addPublicationVideo)
+router.post('/add/video', multerVideo.single('file'), publications.addPublicationVideo)
 router.post('/like/add/:id', publications.addLike)
 router.post('/likes/get/:id', publications.getLikes)
 
@@ -20,6 +20,6 @@ router.get('/hashtag/:id', publications.getPublicationsHashtag)
 router.get('/one/:id', publications.getOnePublication)
 
 router.delete('/like/delete/:id', publications.deleteLike)
-router.delete('/account/delete', publications.deletePublication)
+router.delete('/delete', publications.deletePublication)
 
 module.exports = router
