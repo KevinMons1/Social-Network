@@ -49,12 +49,13 @@ export default function Connected({choiceCss, friendClick}) {
                                 data: friend
                             }])
                             friends.push(friend.userId)
+                            }) 
                             axios.get(`${process.env.REACT_APP_URL}api/user/connected/friends/chat/${userDataReducer.userId}`)
                                 .then(res => {   
                                     if (res.data.length > 0) {
                                         res.data.forEach(friend => {
                                             if (friend != null) {
-                                                setUsersChatDefault([...usersChatDefault, {
+                                                setUsersChatDefault(usersChatDefault => [...usersChatDefault, {
                                                     isView: false,
                                                     data: friend
                                                 }])
@@ -62,7 +63,7 @@ export default function Connected({choiceCss, friendClick}) {
                                                     isView: false,
                                                     data: friend
                                                 }]
-                                                setUsersDataChat([...usersDataChat, {
+                                                setUsersDataChat(usersDataChat => [...usersDataChat, {
                                                     isView: false,
                                                     data: friend
                                                 }])      
@@ -71,11 +72,10 @@ export default function Connected({choiceCss, friendClick}) {
                                         })               
                                     } else setFriendEmpty(1)
                                 })
-                                .catch(err => console.log(err))
-                        })         
-                    }
-                })
-                .catch(err => console.log(err))
+                                .catch(err => console.log(err))                              
+                        }
+                    })
+                    .catch(err => console.log(err))
             
             await socket.emit("sendMyConnection",  {
                 userId: userDataReducer.userId,

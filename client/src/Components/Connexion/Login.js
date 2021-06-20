@@ -13,7 +13,6 @@ import GoogleLogin from 'react-google-login';
 import {Helmet} from "react-helmet"
 
 export default function Login() {
-
     const themeReducer = useSelector(state => state.Theme)
     const [alertMsg, setAlertMsg] = useState("")
     const [alertCss, setAletCss] = useState(true)

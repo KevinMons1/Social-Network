@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
 import moment from "moment"
 import axios from 'axios'
+import { useMediaQuery } from 'react-responsive'
 import {socket} from "../../Api"
 import {useTransition, useSpring, animated} from "react-spring"
 import PublicationCardLoader from "./PublicationCardLoader"
@@ -20,6 +21,7 @@ export default function PublicationCard({ data, fullFile }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
+    const isTabletOrMobile = useMediaQuery({ query: "(max-width: 450px)" })
     const [hashtag, setHashtag] = useState("")
     const [deleteAlert, setDeleteAlert] = useState(false)
     const [deleteMsg, setDeleteMsg] = useState(true)
@@ -40,9 +42,17 @@ export default function PublicationCard({ data, fullFile }) {
     })
 
     useEffect(() => {
+        setLoad(false)
         // To separate a long string into several hashtags if there is a need
         if (data.hashtag.length > 0) {
             let _hashtag = data.hashtag.split(";")
+            _hashtag = _hashtag.map(item => {
+                if (item.length >= 8) {
+                    if (isTabletOrMobile) return item.substring(0, 8) + " ..."
+                    else return item.substring(0, 15) + " ..."
+                } 
+                else return item
+            })
             setHashtag(_hashtag)
         }    
     
@@ -53,7 +63,7 @@ export default function PublicationCard({ data, fullFile }) {
                 setLoad(true)
             })
             .catch(err => console.log(err))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isTabletOrMobile]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleDelete = () => {
         if (data.userId === userDataReducer.userId) {
@@ -133,8 +143,9 @@ export default function PublicationCard({ data, fullFile }) {
         }
     }
 
-    const handleClickHastag = item => {
-        history.push(`/hashtag/${item}`)
+    const handleClickHastag = index => {
+        let _hashtag = data.hashtag.split(";")
+        history.push(`/hashtag/${_hashtag[index]}`)
     }
 
     const handleCutStr = text => {
@@ -170,7 +181,7 @@ export default function PublicationCard({ data, fullFile }) {
                     <div className="right-publi">
                         {hashtag.length >= 1 
                         ?    hashtag.map((item, index) => {
-                                return <p onClick={() => handleClickHastag(item)} key={index} className={themeReducer ? 'txt-dark right-publi-hashtag' : "right-publi-hashtag"}>#{item}</p>
+                                return <p onClick={() => handleClickHastag(index)} key={index} className={themeReducer ? 'txt-dark right-publi-hashtag' : "right-publi-hashtag"}>#{item}</p>
                             })
                         : null}
                     </div>

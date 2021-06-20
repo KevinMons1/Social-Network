@@ -200,14 +200,14 @@ export default function MainAccount({ changeTitle }) {
                     <div className="account-publi">
                         {parseInt(slug) !== userDataReducer.userId
                         ? null
-                        :   <div className="new-publi">
+                        : !openNewPubli ? <div className="new-publi">
                                 <div className="write-publi" onClick={() => setOpenNewPubli(true)}>
                                     <FontAwesomeIcon className={themeReducer ? "icon-new-publi txt-dark" : "icon-new-publi"} icon="comments" />
                                     <div className="input-new-publi" type="text">
                                         <p className={themeReducer ? "write-publi-placeholder txt-dark" : "write-publi-placeholder"}>What do you mean ?</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> : null
                         }
                     </div>
 

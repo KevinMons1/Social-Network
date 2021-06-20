@@ -278,6 +278,7 @@ info-publi
 .right-publi {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     font-size: 12px;
 }
 

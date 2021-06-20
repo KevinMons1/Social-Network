@@ -155,3 +155,8 @@ Publication
     align-items: center;
     width: 100%;
 }
+
+.home-loader-publication {
+    position: relative;
+    margin: 15px;
+}

@@ -58,7 +58,7 @@ export default function Signup() {
             }
         } else {
             setAletCss(true)
-            setAlertMsg("Your lastName and firstName must contain at least 2 characters !")
+            setAlertMsg("Your first and last name must contain more than 2 characters!")
             return false
         }
     }

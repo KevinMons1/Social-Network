@@ -34,7 +34,7 @@ export default function MainHome({ isHome }) {
         const e = event || window.event;
         e.preventDefault();
         if (e) history.replace({...history.location, state: false})
-      }
+    }
 
     useEffect(() => {
         if (location.state) {
@@ -55,7 +55,6 @@ export default function MainHome({ isHome }) {
                 await dispatch({type: "RESET"})
                 await getPublications()
                 await getSuggestFriend()
-                setLoad(true)
                 }
             fetchData()
         }
@@ -84,6 +83,7 @@ export default function MainHome({ isHome }) {
                     }
                     setLockecBottom(true)
                     setCountPublication(countPublication + 3)
+                    setLoad(true)
                 })
                 .catch(err => console.log(err))
 
@@ -117,6 +117,7 @@ export default function MainHome({ isHome }) {
                         }
                     }
                     setCountPublication(countPublication + 3)
+                    setLoad(true)
                 })
                 .catch(err => console.log(err))
             } else {
@@ -163,12 +164,12 @@ export default function MainHome({ isHome }) {
                 {newPubli ? <NewPubliBox publi={newPubli} setPubli={setNewPubli} />  : null}
 
                 <div className="new-publi">
-                    <div className="write-publi" onClick={() => setNewPubli(true)}>
+                   {!newPubli ? <div className="write-publi" onClick={() => setNewPubli(true)}>
                         <FontAwesomeIcon className={themeReducer ? "icon-new-publi txt-dark" : "icon-new-publi"} icon="comments" />
                         <div className="input-new-publi" type="text">
                             <p className={themeReducer ? "write-publi-placeholder txt-dark" : "write-publi-placeholder"}>What do you mean ?</p>
                         </div>
-                    </div>
+                    </div> : null}
                 </div>
             <div>
                 {load 
@@ -199,6 +200,12 @@ export default function MainHome({ isHome }) {
                             )
                         })
                     :   <Loader />}
+
+                   {!lockedBottom 
+                    ? <div className="home-loader-publication">
+                        <Loader isMini={true} />
+                       </div>
+                    : null}
                     {alertMsg ? <p className="home-alertMsg">There is no more publication! Come back later :)</p> : null}
                 </div>
             </div>
