@@ -46,26 +46,28 @@ export default function ModifyAccount({ setClose, slug }) {
         let bio = data.bio
 
         if (surname !== userDataReducer.firstName || name !== userDataReducer.lastName || bio !== userDataReducer.bio) {
-         if (surname.length > 2 && name.length > 2) {
+            if (surname.length > 2 && name.length > 2) {
                 if (surname.match(regex) && name.match(regex)) {
-                    if (bio.length < 250) {
-                        return true
-                    } else {
-                        setAletCss(true)
-                        setAlertMsg("Your bio cannot exceed 250 characters !")
-                        return false
-                    }
-                    } else {
-                        setAletCss(true)
-                        setAlertMsg("Do not use special characters for your name and surname !")
-                        return false
-                    }
-                }  else {
+                    if (bio !== null) {
+                        if (bio.length < 250) {
+                            return true
+                        } else {
+                            setAletCss(true)
+                            setAlertMsg("Your bio cannot exceed 250 characters !")
+                            return false
+                        }
+                    } return true
+                } else {
                     setAletCss(true)
-                    setAlertMsg("Your name and surname must contain at least 2 characters !")
+                    setAlertMsg("Do not use special characters for your name and surname !")
                     return false
-                }   
-            }             
+                }
+            }  else {
+                setAletCss(true)
+                setAlertMsg("Your name and surname must contain at least 2 characters !")
+                return false
+            }   
+        }             
     }
 
     const verifySizeFile = (file) => {
@@ -83,6 +85,7 @@ export default function ModifyAccount({ setClose, slug }) {
         e.preventDefault()
 
         if (!isSend) {
+            setIsSend(true)
             // Modify image profile
             if (profileImage !== null) {
                 await handleCompressionImage(profileImage, dataProfileImgTxt, true)           

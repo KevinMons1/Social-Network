@@ -110,7 +110,6 @@ Bottom
 
 .connected-bottom {
     height: 60%;
-    padding: 0 15px;
 }
 
 .friend-lastMsg-txt {
@@ -122,6 +121,7 @@ Bottom
 }
 
 .connected-chat {
+    width: 20%;
     height: 56%;
     background-color: #F0F2F5;
     z-index: 5;
@@ -153,6 +153,10 @@ UserCard
     overflow-x: hidden;
     overflow-y: scroll;
     cursor: pointer;
+}
+
+.friends-bottom {
+    padding: 0 15px;
 }
 
 .friends-boxs-dark {

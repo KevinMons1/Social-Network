@@ -219,7 +219,7 @@ export default function Connected({choiceCss, friendClick}) {
                 {transitionContent.map(({item, key, props}) => item &&(
                     <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
                 ))}
-                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
+                <div className={themeReducer ? "friends-boxs-dark friends-bottom" : "friends-boxs, friends-bottom"}>             
                     {load 
                     ? friendEmpty 
                         ?  usersDataChat.map((item, index) => {
@@ -258,7 +258,7 @@ export default function Connected({choiceCss, friendClick}) {
                 {transitionContent.map(({item, key, props}) => item &&(
                     <animated.div className={themeReducer ? "connected-chat-dark" : "connected-chat"} key={key} style={props}>{userCardClick}</animated.div>
                 ))}
-                <div className={themeReducer ? "friends-boxs-dark" : "friends-boxs"}>             
+                <div className={themeReducer ? "friends-boxs-dark friends-bottom" : "friends-boxs friends-bottom"}>             
                     {load 
                     ? friendEmpty 
                         ?  usersDataChat.map((item, index) => {
