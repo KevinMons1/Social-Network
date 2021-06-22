@@ -284,7 +284,7 @@ Bottom
     content: "";
     height: 26px;
     width: 26px;
-    left: 4px;
+    left: 1px;
     bottom: 0;
     top: 5%;
     background-color: #f6ff72;
@@ -301,9 +301,9 @@ input:focus + .slider {
 }
   
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    -webkit-transform: translateX(29px);
+    -ms-transform: translateX(29px);
+    transform: translateX(29px);
 }
   
 .slider.round {

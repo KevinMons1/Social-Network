@@ -7,7 +7,7 @@ import "../../Styles/Media-Queries/MobileL/header.css"
 import "../../Styles/Media-Queries/MobileM/header.css"
 import "../../Styles/Media-Queries/MobileS/header.css"
 import { useMediaQuery } from 'react-responsive'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import Cookie from "js-cookie"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import "../../Assets/fontawesome"
@@ -21,6 +21,7 @@ export default function Header({ openInformations }) {
     const themeCookie = Cookie.get("theme")
     const checkRef = useRef()
     const dispatch = useDispatch()
+    const history = useHistory()
     const themeReducer = useSelector(state => state.Theme)
     const userDataReducer = useSelector(state => state.UserData)
     const isTabletOrMobile = useMediaQuery({ query: "(max-width: 860px)" })
@@ -48,6 +49,7 @@ export default function Header({ openInformations }) {
     }
 
     const handleDisconnect = () => {
+        history.push("/")
         Auth.logout()
     }
 

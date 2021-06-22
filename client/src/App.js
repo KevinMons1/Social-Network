@@ -51,7 +51,7 @@ function App() {
     } else return true
   }
   const transitions = useTransition(location, location => location.pathname, {
-    from: verifyPathname() ? {opacity: 0, transform: 'translate3d(-50%, 0, 0)', position: 'absolute'} : {opacity: 1, transform: 'translate3d(0, 0, 0)', position: 'absolute'},
+    from: verifyPathname() ? {opacity: 0, transform: 'translate3d(-50%, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
     enter: verifyPathname() ? {opacity: 1, transform: 'translate3d(0, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
     leave: verifyPathname() ? {opacity: 0, transform: 'translate3d(50%, 0, 0)'} : {opacity: 1, transform: 'translate3d(0, 0, 0)'},
     config: config.stiff
@@ -60,8 +60,10 @@ function App() {
   useEffect(() => {
     const fetch = async () => {
       let data = await Auth.loginWithCookie()
+
       document.body.classList.add(themeReduceur ? "body-dark" : "body")
       document.body.classList.remove(themeReduceur ? "body" : "body-dark")
+
       if (Auth.isAuthenticated()) {
         dispatch({
           type: "ADD_DATA",

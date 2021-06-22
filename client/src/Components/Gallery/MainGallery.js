@@ -15,14 +15,14 @@ export default function MainGallery() {
     const history = useHistory()
     const dispatch = useDispatch()
     const [load, setLoad] = useState(false)
-    const [isEmpty, setIsEmpty] = useState(false)
+    const [isEmptyImage, setIsEmptyImage] = useState(true)
+    const [isEmptyVideo, setIsEmptyVideo] = useState(true)
     const [data, setData] = useState([])
 
     useEffect(() => { 
         // Get informations for account
         let path, idPath
         setLoad(false)
-        setIsEmpty(true)
         
         dispatch({
             type: "CHANGE_ZINDEX",
@@ -35,11 +35,25 @@ export default function MainGallery() {
         idPath = idPath.split('/')
 
         const fetchDataAccount = async () => {
+            let count = 0 // For stop and detect when forEach find Image and Video
+            let count2 = 0 // For stop and detect when forEach find Image and Video
                 await axios.get(`${process.env.REACT_APP_URL}api/publications/account/${idPath[0]}`)
                     .then(res => {
-                        if (res.data.length === 0) {
-                        } else {
-                            setIsEmpty(false)
+                        console.log(res.data)
+                        if (res.data.length > 0) {
+                            res.data.forEach(publication => {
+                                if (publication.publicationFileUrl !== null) {
+                                    if (publication.type === "image" && count === 0) {
+                                        setIsEmptyImage(false)
+                                        count++
+                                    }
+                                    if (publication.type === "video" && count2 === 1) {
+                                        setIsEmptyVideo(false)
+                                        count2++
+                                    }
+                                    return
+                                }
+                            })
                             setData(res.data)
                         }
                     })
@@ -82,8 +96,8 @@ export default function MainGallery() {
             <div className="gallery-container">
                 <h2 className={themeReducer ? "txt-dark" : null}>Images</h2>
                 <div className="gallery-content">
-                    {isEmpty 
-                    ?   <p className="gallery-empty">This gallery seems very empty to me ...</p>
+                    {isEmptyImage 
+                    ?   <p className={themeReducer ? "gallery-empty txt-dark" : "gallery-empty"}>This gallery seems very empty to me ...</p>
                     :   data.map((item, index) => {
                         return (
                             item.type === "image" 
@@ -98,8 +112,8 @@ export default function MainGallery() {
                 <div className="gallery-container gallery-container-video">
                     <h2 className={themeReducer ? "txt-dark" : null}>Videos</h2>
                     <div className="gallery-content">                        
-                        {isEmpty 
-                        ?   <p className="gallery-empty">This gallery seems very empty to me ...</p>
+                        {isEmptyVideo
+                        ?   <p className={themeReducer ? "gallery-empty txt-dark" : "gallery-empty"}>This gallery seems very empty to me ...</p>
                         :   data.map((item, index) => {
                                 return (
                                     item.type === "video"

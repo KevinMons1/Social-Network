@@ -250,7 +250,7 @@ export default function Connected({choiceCss, friendClick}) {
                     : null}  
                 </div>
                 <div className="connected-search">
-                    <input onChange={e => handleChangeInput(e)} className="connected-search-input" type="text" placeholder="Search..."/>
+                    <input onChange={e => handleChangeInput(e)} className="connected-search-input" type="text" placeholder="Search a friend..."/>
                 </div>
             </div>
              
@@ -260,7 +260,7 @@ export default function Connected({choiceCss, friendClick}) {
                 ))}
                 <div className={themeReducer ? "friends-boxs-dark friends-bottom" : "friends-boxs friends-bottom"}>             
                     {load 
-                    ? friendEmpty 
+                    ? usersDataChat.length > 0 
                         ?  usersDataChat.map((item, index) => {
                             return  <div key={index} onClick={() => handleClickUserChat(item, false)}>
                                         <UserCard isConnected={false} isView={item.isView} data={item.data} text={true} open={() => handleOpenChat(item.data)} />

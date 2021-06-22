@@ -200,9 +200,17 @@ export default function NewPubliBox({ setPubli }) {
 
     const handleChangeFile = e => {
         if (typeof e.target.files[0] !== "undefined") {
-            setFileVisible(URL.createObjectURL(e.target.files[0]))
-            setDataFile(e.target.files[0])
-            setFileIsVisible(true)
+            const checkExtensionImage = e.target.files[0].type.indexOf("image/")
+            const checkExtensionVideo = e.target.files[0].type.indexOf("video/")
+
+            if (checkExtensionImage !== -1 || checkExtensionVideo !== -1) {
+                setFileVisible(URL.createObjectURL(e.target.files[0]))
+                setDataFile(e.target.files[0])
+                setFileIsVisible(true)
+            } else {
+                setAletCss(true)
+                setAlertMsg("Invalid file !")
+            }
         } 
     }
 
@@ -254,8 +262,8 @@ export default function NewPubliBox({ setPubli }) {
                         <textarea name="text" ref={textareaRef} className={themeReducer ? "new-publi-textarea textarea-dark" : "new-publi-textarea"} placeholder="What do you mean ?" onChange={e => handleChange(e)}></textarea>
                     </div>
                     <div className="bottom-new-publi">
-                        <button className="new-publi-btn-noVisible" type="button"><FontAwesomeIcon icon="photo-video" className={themeReducer ? "icon-write-new-publi-dark" : "icon-write-new-publi"} onClick={handleClickFile}/></button>
-                        <label name="newPubliFile" className={themeReducer ? "txt-dark" : null}>Add a file</label>
+                        <button className="new-publi-btn-noVisible" type="button"><FontAwesomeIcon onClick={handleClickFile} icon="photo-video" className={themeReducer ? "icon-write-new-publi-dark" : "icon-write-new-publi"}/></button>
+                        <label onClick={handleClickFile} name="newPubliFile" style={{cursor: "pointer"}} className={themeReducer ? "txt-dark" : null}>Add a file</label>
                         <input type="file" name="newPubliFile" id="newPubliFile" style={{display: "none"}} ref={openFile} onChange={e => handleChangeFile(e)} />
                     </div>
                     <div className={themeReducer ? "new-publi-hashtag-box-dark" : "new-publi-hashtag-box"}>
