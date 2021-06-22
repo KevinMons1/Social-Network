@@ -49,8 +49,6 @@ export default function Header({ openInformations }) {
 
     const handleDisconnect = () => {
         Auth.logout()
-        Cookie.remove('user')
-        window.location.reload();
     }
 
     const handleChangeInput = e => {

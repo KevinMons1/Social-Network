@@ -255,6 +255,7 @@ export default function NewPubliBox({ setPubli }) {
                     </div>
                     <div className="bottom-new-publi">
                         <button className="new-publi-btn-noVisible" type="button"><FontAwesomeIcon icon="photo-video" className={themeReducer ? "icon-write-new-publi-dark" : "icon-write-new-publi"} onClick={handleClickFile}/></button>
+                        <label name="newPubliFile" className={themeReducer ? "txt-dark" : null}>Add a file</label>
                         <input type="file" name="newPubliFile" id="newPubliFile" style={{display: "none"}} ref={openFile} onChange={e => handleChangeFile(e)} />
                     </div>
                     <div className={themeReducer ? "new-publi-hashtag-box-dark" : "new-publi-hashtag-box"}>
@@ -269,7 +270,7 @@ export default function NewPubliBox({ setPubli }) {
                             })}
                         </div>
                         <input className={themeReducer ? "new-publi-input-hashtag-dark" : "new-publi-input-hashtag"} ref={hashtagValue} name="hashtag" type="text" placeholder="#..." onChange={e => setNewHashtag(e.target.value)}/>
-                        <button type="button" className={themeReducer ? "new-publi-hashtag-btn-dark" : "new-publi-hashtag-btn"} onClick={() => handleChangeHashtag()}>ADD</button>
+                        <button type="button" className={themeReducer ? "new-publi-hashtag-btn-dark" : "new-publi-hashtag-btn"} onClick={() => handleChangeHashtag()}>Add</button>
                     </div>
                     <button disabled={isSend} className={themeReducer ? "new-publi-btn-dark" : "new-publi-btn"}>PUBLISH</button>
                 </form>

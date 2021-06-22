@@ -213,7 +213,7 @@ export default function MainAccount({ changeTitle }) {
 
                     {isEmpty
                     ?   <div className="account-empty">
-                            <p className={themeReducer ? "txt-dark" : null}>This account seems very empty to me ...</p>
+                            <p className={themeReducer ? "txt-dark" : null}>This account seems very empty to me ... 😥</p>
                         </div>
                     : dataPublications.map((item, index) => {
                         return (

@@ -218,36 +218,36 @@ export default function ModifyAccount({ setClose, slug }) {
                     }
                         <div className="acount-modify-info">
                             <div className="account-modify-info-box">
-                                <div className="account-modify-img">
+                                <div className={themeReducer ? "account-modify-img-dark" : "account-modify-img"}>
                                     <div className="account-modify-img-box">
                                         <label htmlFor="profileImage" className={themeReducer ? "account-modify-label txt-dark" : "account-modify-label"}>Profile Image</label>
                                         <input type="file" name="profileImage" onChange={e => setProfileImage(e.target.files[0])} id="profileImage" className={themeReducer ? "account-modify-inputFile txt-dark" : "account-modify-inputFile"}/>
                                     </div>
                                     <div>
-                                        <input type="text" name="profileImage_txt" className="account-modify-input" onChange={e => handleChangeProfileImgTxt(e)} placeholder="What do you mean ?"/>
+                                        <input type="text" name="profileImage_txt" className={themeReducer ? "account-modify-input-dark" : "account-modify-input"} onChange={e => handleChangeProfileImgTxt(e)} placeholder="What do you mean ?"/>
                                     </div>
                                 </div>
-                                <div className="account-modify-img">
+                                <div className={themeReducer ? "account-modify-img-dark" : "account-modify-img"}>
                                     <div className="account-modify-img-box">
                                         <label htmlFor="bannerImage" className={themeReducer ? "account-modify-label txt-dark" : "account-modify-label"}>Banner Image</label>
                                         <input type="file" name="bannerImage" onChange={e => setBannerImage(e.target.files[0])} id="bannerImage" className={themeReducer ? "account-modify-inputFile txt-dark" : "account-modify-inputFile"}/>
                                     </div>
                                     <div>
-                                        <input type="text" name="bannerImage_txt" className="account-modify-input" onChange={e => handleChangeBannerImgTxt(e)} placeholder="What do you mean ?"/>
+                                        <input type="text" name="bannerImage_txt" className={themeReducer ? "account-modify-input-dark" : "account-modify-input"} onChange={e => handleChangeBannerImgTxt(e)} placeholder="What do you mean ?"/>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <label htmlFor="lastName" className={themeReducer ? "account-modify-label txt-dark" : "account-modify-label"}>Last Name</label>
-                                <input required type="text" name="lastName" className="account-modify-input" defaultValue={userDataReducer.lastName} onChange={e => handleChange(e)} />
+                                <input required type="text" name="lastName" className={themeReducer ? "account-modify-input-dark" : "account-modify-input"} defaultValue={userDataReducer.lastName} onChange={e => handleChange(e)} />
                             </div>
                             <div>
                                 <label htmlFor="firstName" className={themeReducer ? "account-modify-label txt-dark" : "account-modify-label"}>First Name</label>
-                                <input required type="text" name="firstName" className="account-modify-input" defaultValue={userDataReducer.firstName} onChange={e => handleChange(e)} />
+                                <input required type="text" name="firstName" className={themeReducer ? "account-modify-input-dark" : "account-modify-input"} defaultValue={userDataReducer.firstName} onChange={e => handleChange(e)} />
                             </div>
                             <div>
                                 <label htmlFor="bio" className={themeReducer ? "account-modify-label txt-dark" : "account-modify-label"}>Bio</label>
-                                <textarea type="bio" name="bio" className="account-modify-input" defaultValue={userDataReducer.bio} onChange={e => handleChange(e)} />
+                                <textarea type="bio" name="bio" className={themeReducer ? "account-modify-input-dark" : "account-modify-input"} defaultValue={userDataReducer.bio} onChange={e => handleChange(e)} />
                             </div>
                         </div>
                         <button disabled={isSend} className={themeReducer ? "account-modify-btn-dark" : "account-modify-btn"}>UPDATE</button>

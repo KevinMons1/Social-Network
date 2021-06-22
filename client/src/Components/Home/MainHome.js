@@ -206,7 +206,7 @@ export default function MainHome({ isHome }) {
                         <Loader isMini={true} />
                        </div>
                     : null}
-                    {alertMsg ? <p className="home-alertMsg">There is no more publication! Come back later :)</p> : null}
+                    {alertMsg ? <p className={themeReducer ? "home-alertMsg txt-dark" : "home-alertMsg"}>There is no more publication! Come back later 👌</p> : null}
                 </div>
             </div>
         </div>

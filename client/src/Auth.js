@@ -38,6 +38,8 @@ class AuthClass {
 
     logout() {
         this.authenticated = false
+        Cookie.remove('user')
+        window.location.reload()
     }
 
     loginWithCookie() {

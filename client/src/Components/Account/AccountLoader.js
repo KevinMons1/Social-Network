@@ -11,13 +11,13 @@ export default function AccountLoader() {
     return (
         <div className="account-content">
             <div className={themeReducer ? "account-top-dark" : "account-top"}>
-                <div className="account-bg-loader"></div>
+                <div className={themeReducer ? "account-bg-loader account-loader-dark" : "account-bg-loader"}></div>
                 <div className="account-info">
                     <div className="account-info-top">
-                        <div className={themeReducer ? "account-info-img-dark-loader" : "account-info-img-loader"}>
+                        <div className={themeReducer ? "account-info-img-loader account-info-img-loader-dark" : "account-info-img-loader"}>
                         </div>
                         <div>
-                            <p className="account-name-loader"></p>
+                            <p className={themeReducer ? "account-name-loader account-loader-dark" : "account-name-loader"}></p>
                         </div>
 
                     </div>
@@ -34,8 +34,8 @@ export default function AccountLoader() {
                             </div>
                         </div>
                         <div className="account-bio">
-                        <p className="text-loader1"></p><br/>
-                        <p className="text-loader2"></p>
+                        <p className={themeReducer ? "text-loader1 account-loader-dark" : "text-loader1"}></p><br/>
+                        <p className={themeReducer ? "text-loader2 account-loader-dark" : "text-loader2"}></p><br/>
                         </div>
                     </div>
                 </div>

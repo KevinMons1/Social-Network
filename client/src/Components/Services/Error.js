@@ -9,6 +9,7 @@ import {Helmet} from "react-helmet"
 
 export default withRouter(function Error() {
     const themeReducer = useSelector(state => state.Theme)
+
     const defaultOptions = {
         loop: true,
         autoplay: true, 
@@ -28,7 +29,7 @@ export default withRouter(function Error() {
             : <img src={ErrorGif} alt="Error 404 page not found"/>
             } 
             <div className="error-txt">
-                <h1>Error 404, page not found !</h1>
+                <h1 className={themeReducer ? "error-h1-dark" : null}>Error 404, page not found !</h1>
                 <button className="error-btn">
                     <Link className="error-btn-link" to="/" >Go to back</Link>
                 </button>

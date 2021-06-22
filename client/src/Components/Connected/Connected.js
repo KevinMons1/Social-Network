@@ -250,7 +250,7 @@ export default function Connected({choiceCss, friendClick}) {
                     : null}  
                 </div>
                 <div className="connected-search">
-                    <input onChange={e => handleChangeInput(e)} className={themeReducer.Theme ? "connected-search-input txt-dark" : "connected-search-input"} type="text" placeholder="Search..."/>
+                    <input onChange={e => handleChangeInput(e)} className="connected-search-input" type="text" placeholder="Search..."/>
                 </div>
             </div>
              

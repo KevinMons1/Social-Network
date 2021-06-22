@@ -451,12 +451,20 @@ NewPubliBox
 }
 
 .new-publi-icon-btn {
-    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
     border: none;
     outline: none;
 }
 
 .new-publi-icon-btn-dark {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
     margin-bottom: 5px;
     background-color: #252525;
     border: none;
@@ -555,7 +563,7 @@ NewPubliBox
 }
 
 .bottom-new-publi {
-    margin: 3px;
+    margin: 5px;
 }
 
 .write-publi {
@@ -968,6 +976,7 @@ Delete publication
     border-radius: 3px;
     margin: 5px;
     padding: 5px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     outline: none;
@@ -1017,4 +1026,8 @@ Loader
 
 .icon-publi-loader {
     margin-right: 20px;
+}
+
+.publi-loader-dark {
+    background-color: #616161!important;
 }
