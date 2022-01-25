@@ -1,15 +1,16 @@
+
 # My project
 
 This project is my 2021 end-of-study work 🎉 to obtain my BAC
 
-I challenged myself to create a complete social network like Facebook with technologies that I learned. This project is [here](https://kevin-monsieur-project-social-network.com/)
+I challenged myself to create a complete social network like Facebook with technologies that I learned. [This project is here](https://kevin-monsieur-project-social-network.com/)
 
 ## Technologies
 
 ```bash
 ReactJs 💕
-NodeJs 😎
-MySQL 😜
+NodeJs (API REST, reel time with Socket.io) 😎
+SQL (MySQL) 😜
 ```
 ## Me
 
